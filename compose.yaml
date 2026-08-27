@@ -1,0 +1,37 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: paisalon_app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - postgres
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: paisalon_nginx
+    ports:
+      - '8080:80'
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+
+  postgres:
+    image: postgres:17
+    container_name: paisalon_postgres
+    environment:
+      POSTGRES_DB: paisalon
+      POSTGRES_USER: paisalon
+      POSTGRES_PASSWORD: paisalon
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
