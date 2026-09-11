@@ -2,18 +2,21 @@
 
 namespace App\Services;
 
+use App\Enums\ReservationStatus;
 use App\Models\BusinessHour;
+use App\Models\Customer;
 use App\Models\Holiday;
 use App\Models\Menu;
 use App\Models\Reservation;
 use App\Models\Staff;
-use App\Models\Customer;
 use Carbon\CarbonInterface;
-use Illuminate\Validation\ValidationException;
-use App\Enums\ReservationStatus;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use App\Mail\ReservationConfirmationMail;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationService
 {
@@ -35,7 +38,7 @@ class ReservationService
 
         $startAt = $data['start_at'] instanceof CarbonInterface
             ? $data['start_at']->copy()
-            : \Carbon\Carbon::parse($data['start_at']);
+            : Carbon::parse($data['start_at']);
 
         $this->validateReservationAvailability(
             $staff,
@@ -45,12 +48,15 @@ class ReservationService
 
         $endAt = $startAt->copy()->addMinutes($menu->duration);
 
+        $cancellationToken = $this->generateCancellationToken();
+
         return DB::transaction(function () use (
             $data,
             $staff,
             $menu,
             $startAt,
             $endAt,
+            $cancellationToken
         ) {
             $lockedStaff = Staff::query()
                 ->whereKey($staff->id)
@@ -70,25 +76,14 @@ class ReservationService
                 ]);
             }
 
-            $customer = Customer::query()
-                ->where('email', $data['customer_email'])
-                ->first();
-
-            if ($customer === null) {
-                $customer = Customer::create([
-                    'name' => $data['customer_name'],
-                    'email' => $data['customer_email'],
-                ]);
-            }
-
-            $cancellationToken = $this->generateCancellationToken();
+            $customer = Customer::query()->firstOrCreate(
+                ['email' => $data['customer_email']],
+                ['name' => $data['customer_name']]
+            );
 
             $reservation = new Reservation();
-
             $reservation->reservation_number = $this->generateReservationNumber($startAt);
             $reservation->cancellation_token = Hash::make($cancellationToken);
-            $reservation->customer_id = $customer->id;
-            $reservation->status = ReservationStatus::RESERVED;
             $reservation->customer_id = $customer->id;
             $reservation->customer_name = $data['customer_name'];
             $reservation->customer_email = $data['customer_email'];
@@ -96,8 +91,15 @@ class ReservationService
             $reservation->menu_id = $menu->id;
             $reservation->start_at = $startAt;
             $reservation->end_at = $endAt;
+            $reservation->status = ReservationStatus::RESERVED;
 
             $reservation->save();
+
+            Mail::to($reservation->customer_email)
+                ->send(new ReservationConfirmationMail(
+                    $reservation,
+                    $cancellationToken,
+                ));
 
             return $reservation;
         });
@@ -117,7 +119,11 @@ class ReservationService
             ]);
         }
 
-        $endAt = $startAt->copy()->addMinutes($menu->duration);
+        if ($this->isHoliday($startAt)) {
+            throw ValidationException::withMessages([
+                'start_at' => '選択した日は休業日です。',
+            ]);
+        }
 
         $businessHours = $this->getBusinessHours($startAt);
 
@@ -131,6 +137,8 @@ class ReservationService
             ]);
         }
 
+        $endAt = $startAt->copy()->addMinutes($menu->duration);
+
         $openAt = $startAt->copy()
             ->setTimeFromTimeString($businessHours['open_time']);
 
@@ -140,12 +148,6 @@ class ReservationService
         if ($startAt < $openAt || $endAt > $closeAt) {
             throw ValidationException::withMessages([
                 'start_at' => '選択した日時は営業時間外です。',
-            ]);
-        }
-
-        if ($this->isHoliday($startAt)) {
-            throw ValidationException::withMessages([
-                'start_at' => '選択した日は休業日です。',
             ]);
         }
 
@@ -202,7 +204,7 @@ class ReservationService
     private function isHoliday(CarbonInterface $date): bool
     {
         return Holiday::query()
-            ->whereDate('date', $date->toDateString())
+            ->whereDate('date', $date)
             ->exists();
     }
 
