@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Customer;
+use App\Models\Reservation;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,8 +45,21 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
-
-function something()
+/**
+ * テスト用予約データ作成ヘルパー
+ */
+function createReservation(array $attributes): Reservation
 {
-    // ..
+    if (! isset($attributes['customer_id'])) {
+        $customer = Customer::create([
+            'name' => $attributes['customer_name'] ?? 'テスト顧客',
+            'email' => $attributes['customer_email'] ?? 'customer@example.com',
+        ]);
+        $attributes['customer_id'] = $customer->id;
+    }
+
+    $reservation = new Reservation();
+    $reservation->forceFill($attributes)->save();
+
+    return $reservation;
 }

@@ -14,6 +14,7 @@ use App\Models\BusinessHour;
 use Illuminate\Validation\ValidationException;
 use App\Mail\ReservationConfirmationMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -50,24 +51,6 @@ function validPayload(array $overrides = []): array
         'customer_name' => 'テスト顧客',
         'customer_email' => 'customer@example.com',
     ], $overrides);
-}
-
-// テスト用の既存予約データ作成ヘルパー（NOT NULL制約とfillableを全考慮）
-function createReservation(array $attributes): Reservation
-{
-    // customer_id が未指定の場合はダミーCustomerを自動作成してセット
-    if (!isset($attributes['customer_id'])) {
-        $customer = Customer::create([
-            'name' => $attributes['customer_name'] ?? '既存顧客',
-            'email' => $attributes['customer_email'] ?? 'existing@example.com',
-        ]);
-        $attributes['customer_id'] = $customer->id;
-    }
-
-    $reservation = new Reservation();
-    $reservation->forceFill($attributes)->save();
-
-    return $reservation;
 }
 
 it('スタッフが対応できないメニューでは予約できない', function () {
@@ -473,4 +456,46 @@ it('予約登録がロールバックされた場合は予約確認メールを�
             ->where('staff_id', $this->staff->id)
             ->exists()
     )->toBeFalse();
+});
+
+it('予約確認メールの送信に失敗しても予約は登録されエラーをログに記録する', function () {
+    Mail::shouldReceive('to')
+        ->once()
+        ->andReturnSelf();
+
+    Mail::shouldReceive('send')
+        ->once()
+        ->andThrow(new RuntimeException('メール送信失敗'));
+
+    Log::shouldReceive('error')
+        ->once()
+        ->withArgs(function (string $message, array $context) {
+            return $message === '予約確認メールの送信に失敗しました。'
+                && isset($context['reservation_number'])
+                && isset($context['customer_email'])
+                && isset($context['error'])
+                && ! isset($context['cancellation_token']);
+        });
+
+    $startAt = now()->addDays(7)->setTime(10, 0);
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $reservation = $this->service->reserve(validPayload([
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $startAt,
+    ]));
+
+    expect($reservation)->toBeInstanceOf(Reservation::class);
+
+    expect(
+        Reservation::query()
+            ->whereKey($reservation->id)
+            ->exists()
+    )->toBeTrue();
 });

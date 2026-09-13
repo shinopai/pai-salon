@@ -11,6 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\CancellationCompletedMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 uses(RefreshDatabase::class);
 
@@ -624,4 +625,72 @@ it('キャンセル処理がロールバックされた場合はメールを送�
         ->toBe(ReservationStatus::RESERVED);
 
     Mail::assertNothingSent();
+});
+
+it('キャンセル完了メールの送信に失敗してもキャンセル状態を維持しエラーをログに記録する', function () {
+    Mail::shouldReceive('to')
+        ->once()
+        ->andReturnSelf();
+
+    Mail::shouldReceive('send')
+        ->once()
+        ->andThrow(new RuntimeException('メール送信失敗'));
+
+    Log::shouldReceive('error')
+        ->once()
+        ->withArgs(function (string $message, array $context) {
+            return $message === 'キャンセル完了メールの送信に失敗しました。'
+                && isset($context['reservation_number'])
+                && isset($context['customer_email'])
+                && isset($context['error'])
+                && ! isset($context['cancellation_token']);
+        });
+
+    $user = User::create([
+        'email' => 'staff@example.com',
+        'password' => Hash::make('password'),
+    ]);
+
+    $staff = new Staff();
+    $staff->user_id = $user->id;
+    $staff->role = \App\Enums\StaffRole::STAFF;
+    $staff->name = 'テストスタッフ';
+    $staff->save();
+
+    $menu = Menu::create([
+        'name' => 'テストメニュー',
+        'duration' => 60,
+    ]);
+
+    $customer = Customer::create([
+        'name' => '既存顧客',
+        'email' => 'existing@example.com',
+    ]);
+
+    $reservation = new Reservation();
+    $reservation->reservation_number = 'RSV-20260909-MAIL-FAIL';
+    $reservation->customer_id = $customer->id;
+    $reservation->customer_name = $customer->name;
+    $reservation->customer_email = $customer->email;
+    $reservation->staff_id = $staff->id;
+    $reservation->menu_id = $menu->id;
+    $reservation->start_at = now()->addDay()->setTime(10, 0);
+    $reservation->end_at = now()->addDay()->setTime(11, 0);
+    $reservation->status = ReservationStatus::RESERVED;
+    $reservation->cancellation_token = Hash::make('test-token');
+    $reservation->save();
+
+    $this->travelTo(
+        $reservation->start_at->copy()->subDay()->setTime(12, 0)
+    );
+
+    $service = new CancellationService();
+
+    $service->cancel($reservation);
+
+    expect($reservation->fresh()->status)
+        ->toBe(ReservationStatus::CANCELLED);
+
+    expect($reservation->fresh()->cancelled_at)
+        ->not->toBeNull();
 });

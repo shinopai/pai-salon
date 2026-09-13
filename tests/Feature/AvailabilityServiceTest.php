@@ -38,23 +38,6 @@ afterEach(function () {
     Carbon::setTestNow();
 });
 
-// テスト用予約データ作成ヘルパー（fillableやNOT NULL制約の回避）
-function createReservation(array $attributes): Reservation
-{
-    if (! isset($attributes['customer_id'])) {
-        $customer = Customer::create([
-            'name' => $attributes['customer_name'] ?? 'テスト顧客',
-            'email' => $attributes['customer_email'] ?? 'customer@example.com',
-        ]);
-        $attributes['customer_id'] = $customer->id;
-    }
-
-    $reservation = new Reservation();
-    $reservation->forceFill($attributes)->save();
-
-    return $reservation;
-}
-
 it('30分刻みで空き枠を算出する', function () {
     BusinessHour::create([
         'day_of_week' => 3,

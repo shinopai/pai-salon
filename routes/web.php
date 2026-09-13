@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationCancellationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,4 +18,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+// 予約キャンセル
+Route::get(
+    '/reservations/cancel/{reservation_number}/{token}',
+    [ReservationCancellationController::class, 'show']
+)->name('reservations.cancel.show');
+
+Route::post(
+    '/reservations/cancel/{reservation_number}/{token}',
+    [ReservationCancellationController::class, 'cancel']
+)->name('reservations.cancel');
+
+require __DIR__ . '/auth.php';

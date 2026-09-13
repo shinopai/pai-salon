@@ -135,24 +135,24 @@ it('予約確認メールに顧客名が含まれる', function () {
         ->toContain('山田太郎');
 });
 
-// it('予約確認メールに元のキャンセル用トークンを使用したURLが含まれる', function () {
-//     $data = createReservationForMailTest();
+it('予約確認メールに元のキャンセル用トークンを使用したURLが含まれる', function () {
+    $data = createReservationForMailTest();
 
-//     $reservation = $data['reservation'];
-//     $rawToken = $data['rawToken'];
+    $reservation = $data['reservation'];
+    $rawToken = $data['rawToken'];
 
-//     $mail = new ReservationConfirmationMail(
-//         $reservation,
-//         $rawToken,
-//     );
+    $mail = new ReservationConfirmationMail(
+        $reservation,
+        $rawToken,
+    );
 
-//     $html = $mail->render();
+    $html = $mail->render();
 
-//     $expectedUrl = route('reservations.cancel.show', [
-//         'reservation_number' => $reservation->reservation_number,
-//         'token' => $rawToken,
-//     ]);
+    $expectedUrl = route('reservations.cancel.show', [
+        'reservation_number' => $reservation->reservation_number,
+        'token' => $rawToken,
+    ]);
 
-//     expect($html)
-//         ->toContain($expectedUrl);
-// });
+    expect($html)
+        ->toContain($expectedUrl);
+});

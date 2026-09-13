@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use App\Mail\ReservationConfirmationMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ReservationService
 {
@@ -50,7 +51,7 @@ class ReservationService
 
         $cancellationToken = $this->generateCancellationToken();
 
-        return DB::transaction(function () use (
+        $reservation = DB::transaction(function () use (
             $data,
             $staff,
             $menu,
@@ -95,14 +96,24 @@ class ReservationService
 
             $reservation->save();
 
+            return $reservation;
+        });
+
+        try {
             Mail::to($reservation->customer_email)
                 ->send(new ReservationConfirmationMail(
                     $reservation,
                     $cancellationToken,
                 ));
+        } catch (\Throwable $e) {
+            Log::error('予約確認メールの送信に失敗しました。', [
+                'reservation_number' => $reservation->reservation_number,
+                'customer_email' => $reservation->customer_email,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
-            return $reservation;
-        });
+        return $reservation;
     }
 
     /**

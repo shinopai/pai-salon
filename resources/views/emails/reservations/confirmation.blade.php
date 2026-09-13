@@ -21,13 +21,13 @@
 </p>
 
 <p>
-  {{-- <a
+  <a
     href="{{ route('reservations.cancel.show', [
         'reservation_number' => $reservation->reservation_number,
         'token' => $cancellationToken,
     ]) }}">
     予約キャンセルページ
-  </a> --}}
+  </a>
 </p>
 
 <p>よろしくお願いいたします。</p>
