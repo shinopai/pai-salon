@@ -28,6 +28,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/staff/dashboard', [StaffController::class, 'dashboard'])
         ->name('staff.dashboard');
 
+    // プロフィール
+    Route::get('/staff/profile', [StaffController::class, 'profile'])
+        ->name('staff.profile');
+
+    // プロフィール編集
+    Route::get('/staff/profile/edit', [StaffController::class, 'profileEdit'])
+        ->name('staff.profile.edit');
+
+    // プロフィール更新
+    Route::put('/staff/profile', [StaffController::class, 'profileUpdate'])
+        ->name('staff.profile.update');
+
+    // 対応メニュー一覧
+    Route::get('/staff/menus', [StaffController::class, 'menus'])
+        ->name('staff.menus.index');
+
     // 予約一覧
     Route::get('/staff/reservations', [StaffReservationController::class, 'index'])
         ->name('staff.reservations.index');

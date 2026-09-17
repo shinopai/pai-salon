@@ -8,6 +8,7 @@ use Illuminate\View\View;
 use App\Http\Requests\StaffReservationUpdateRequest;
 use App\Services\ReservationService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 
 class StaffReservationController extends Controller
 {
@@ -23,6 +24,8 @@ class StaffReservationController extends Controller
 
     public function show(Reservation $reservation): View
     {
+        Gate::authorize('view', $reservation);
+
         return view('staff.reservations.show', compact('reservation'));
     }
 
