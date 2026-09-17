@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationCancellationController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffReservationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,6 +19,26 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    /**
+     * スタッフ
+     */
+
+    // ダッシュボード
+    Route::get('/staff/dashboard', [StaffController::class, 'dashboard'])
+        ->name('staff.dashboard');
+
+    // 予約一覧
+    Route::get('/staff/reservations', [StaffReservationController::class, 'index'])
+        ->name('staff.reservations.index');
+
+    // 予約詳細
+    Route::get('/staff/reservations/{reservation}', [StaffReservationController::class, 'show'])
+        ->name('staff.reservations.show');
+
+    // 予約更新
+    Route::put('/staff/reservations/{reservation}', [StaffReservationController::class, 'update'])
+        ->name('staff.reservations.update');
 });
 
 /**

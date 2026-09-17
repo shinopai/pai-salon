@@ -117,6 +117,81 @@ class ReservationService
     }
 
     /**
+     * 予約を更新する。
+     *
+     * @param array{
+     *     staff_id: int,
+     *     menu_id: int,
+     *     start_at: CarbonInterface|string,
+     *     customer_name: string,
+     *     customer_email: string
+     * } $data
+     */
+    public function update(Reservation $reservation, array $data): Reservation
+    {
+        $menu = Menu::query()->findOrFail($data['menu_id']);
+        $staff = Staff::query()->findOrFail($data['staff_id']);
+
+        if (
+            $reservation->status !== ReservationStatus::RESERVED
+            && $data['status'] !== $reservation->status
+        ) {
+            throw ValidationException::withMessages([
+                'status' => 'この予約はステータスを変更できません。',
+            ]);
+        }
+
+        $startAt = $data['start_at'] instanceof CarbonInterface
+            ? $data['start_at']->copy()
+            : Carbon::parse($data['start_at']);
+
+        $this->validateReservationAvailability(
+            $staff,
+            $menu,
+            $startAt,
+        );
+
+        $endAt = $startAt->copy()->addMinutes($menu->duration);
+
+        return DB::transaction(function () use (
+            $reservation,
+            $staff,
+            $menu,
+            $startAt,
+            $endAt,
+            $data
+        ) {
+            $lockedStaff = Staff::query()
+                ->whereKey($staff->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $existingReservations = Reservation::query()
+                ->where('staff_id', $lockedStaff->id)
+                ->where('id', '!=', $reservation->id)
+                ->where('status', '!=', ReservationStatus::CANCELLED)
+                ->where('start_at', '<', $endAt)
+                ->where('end_at', '>', $startAt)
+                ->get();
+
+            if ($existingReservations->isNotEmpty()) {
+                throw ValidationException::withMessages([
+                    'start_at' => '選択した時間帯はすでに予約されています。',
+                ]);
+            }
+
+            $reservation->staff_id = $lockedStaff->id;
+            $reservation->menu_id = $menu->id;
+            $reservation->start_at = $startAt;
+            $reservation->end_at = $endAt;
+            $reservation->status = $data['status'];
+            $reservation->save();
+
+            return $reservation;
+        });
+    }
+
+    /**
      * 予約可能条件を確定時点で再判定する。
      */
     private function validateReservationAvailability(
