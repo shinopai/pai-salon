@@ -5,6 +5,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationCancellationController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffReservationController;
+use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,6 +15,26 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+/**
+ * 管理者
+ */
+
+// スタッフ一覧
+Route::get('/admin/staffs', [AdminStaffController::class, 'index'])
+    ->name('admin.staffs.index');
+
+// スタッフ登録画面
+Route::get('/admin/staffs/create', [AdminStaffController::class, 'create'])
+    ->name('admin.staffs.create');
+
+// スタッフ登録
+Route::post('/admin/staffs', [AdminStaffController::class, 'store'])
+    ->name('admin.staffs.store');
+
+// スタッフ詳細
+Route::get('/admin/staffs/{staff}', [AdminStaffController::class, 'show'])
+    ->name('admin.staffs.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
