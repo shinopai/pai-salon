@@ -138,3 +138,41 @@ test('管理者はスタッフ詳細を表示できる', function () {
 
     $response->assertSee('テストスタッフ');
 });
+
+test('管理者はスタッフ編集画面を表示できる', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $staffUser = User::factory()->create([
+        'email' => 'staff@example.com',
+    ]);
+
+    $staff = Staff::forceCreate([
+        'user_id' => $staffUser->id,
+        'name' => 'テストスタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->get(
+        route('admin.staffs.edit', $staff)
+    );
+
+    $response->assertOk();
+
+    $response->assertViewIs('admin.staffs.edit');
+
+    $response->assertViewHas('staff', $staff);
+
+    $response->assertSee('テストスタッフ');
+    $response->assertSee('staff@example.com');
+    $response->assertSee(StaffRole::STAFF->value);
+});

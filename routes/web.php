@@ -36,6 +36,10 @@ Route::post('/admin/staffs', [AdminStaffController::class, 'store'])
 Route::get('/admin/staffs/{staff}', [AdminStaffController::class, 'show'])
     ->name('admin.staffs.show');
 
+// スタッフ編集
+Route::get('/admin/staffs/{staff}/edit', [AdminStaffController::class, 'edit'])
+    ->name('admin.staffs.edit');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
