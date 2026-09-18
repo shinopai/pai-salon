@@ -186,3 +186,13 @@ it('他スタッフの予約詳細にはアクセスできない', function () {
         ->get("/staff/reservations/{$reservation->id}")
         ->assertForbidden();
 });
+
+test('未認証ユーザーはスタッフ画面にアクセスできない', function () {
+    $response = $this->get(
+        route('staff.dashboard')
+    );
+
+    $response->assertRedirect(
+        route('login')
+    );
+});
