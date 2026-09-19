@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Staff;
 use Illuminate\View\View;
 use App\Http\Requests\StaffRequest;
+use App\Http\Requests\AdminStaffUpdateRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class StaffController extends Controller
 {
@@ -43,5 +45,25 @@ class StaffController extends Controller
     public function edit(Staff $staff): View
     {
         return view('admin.staffs.edit', compact('staff'));
+    }
+
+    public function update(
+        AdminStaffUpdateRequest $request,
+        Staff $staff
+    ): RedirectResponse {
+        $data = $request->validated();
+
+        DB::transaction(function () use ($data, $staff) {
+            $staff->forceFill([
+                'name' => $data['name'],
+                'role' => $data['role'],
+            ])->save();
+
+            $staff->user->update([
+                'email' => $data['email'],
+            ]);
+        });
+
+        return redirect()->route('admin.staffs.show', $staff);
     }
 }

@@ -176,3 +176,143 @@ test('管理者はスタッフ編集画面を表示できる', function () {
     $response->assertSee('staff@example.com');
     $response->assertSee(StaffRole::STAFF->value);
 });
+
+test('管理者はスタッフ情報を更新できる', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $staffUser = User::factory()->create([
+        'email' => 'staff@example.com',
+    ]);
+
+    $staff = Staff::forceCreate([
+        'user_id' => $staffUser->id,
+        'name' => '更新前スタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.staffs.update', $staff),
+        [
+            'name' => '更新後スタッフ',
+            'email' => 'updated@example.com',
+            'role' => StaffRole::ADMIN->value,
+        ]
+    );
+
+    $response->assertRedirect(
+        route('admin.staffs.show', $staff)
+    );
+
+    $this->assertDatabaseHas('staffs', [
+        'id' => $staff->id,
+        'name' => '更新後スタッフ',
+        'role' => StaffRole::ADMIN->value,
+    ]);
+
+    $this->assertDatabaseHas('users', [
+        'id' => $staffUser->id,
+        'email' => 'updated@example.com',
+    ]);
+});
+
+test('管理者はスタッフ自身の現在のメールアドレスを維持して更新できる', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $staffUser = User::factory()->create([
+        'email' => 'staff@example.com',
+    ]);
+
+    $staff = Staff::forceCreate([
+        'user_id' => $staffUser->id,
+        'name' => '更新前スタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.staffs.update', $staff),
+        [
+            'name' => '更新後スタッフ',
+            'email' => 'staff@example.com',
+            'role' => StaffRole::STAFF->value,
+        ]
+    );
+
+    $response->assertRedirect(
+        route('admin.staffs.show', $staff)
+    );
+
+    $this->assertDatabaseHas('staffs', [
+        'id' => $staff->id,
+        'name' => '更新後スタッフ',
+        'role' => StaffRole::STAFF->value,
+    ]);
+
+    $this->assertDatabaseHas('users', [
+        'id' => $staffUser->id,
+        'email' => 'staff@example.com',
+    ]);
+});
+
+test('管理者は他のユーザーが使用中のメールアドレスには更新できない', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $staffUser = User::factory()->create([
+        'email' => 'staff@example.com',
+    ]);
+
+    $staff = Staff::forceCreate([
+        'user_id' => $staffUser->id,
+        'name' => '更新前スタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $otherUser = User::factory()->create([
+        'email' => 'other@example.com',
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.staffs.update', $staff),
+        [
+            'name' => '更新後スタッフ',
+            'email' => $otherUser->email,
+            'role' => StaffRole::STAFF->value,
+        ]
+    );
+
+    $response->assertSessionHasErrors('email');
+
+    $this->assertDatabaseHas('users', [
+        'id' => $staffUser->id,
+        'email' => 'staff@example.com',
+    ]);
+});

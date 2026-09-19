@@ -40,6 +40,10 @@ Route::get('/admin/staffs/{staff}', [AdminStaffController::class, 'show'])
 Route::get('/admin/staffs/{staff}/edit', [AdminStaffController::class, 'edit'])
     ->name('admin.staffs.edit');
 
+// スタッフ更新
+Route::put('/admin/staffs/{staff}', [AdminStaffController::class, 'update'])
+    ->name('admin.staffs.update');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
