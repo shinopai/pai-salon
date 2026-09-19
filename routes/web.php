@@ -16,35 +16,38 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    /**
-     * 管理者
-     */
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        /**
+         * 管理者
+         */
 
-    // スタッフ一覧
-    Route::get('/admin/staffs', [AdminStaffController::class, 'index'])
-        ->name('admin.staffs.index');
+        // スタッフ一覧
+        Route::get('/staffs', [AdminStaffController::class, 'index'])
+            ->name('staffs.index');
 
-    // スタッフ登録画面
-    Route::get('/admin/staffs/create', [AdminStaffController::class, 'create'])
-        ->name('admin.staffs.create');
+        // スタッフ登録画面
+        Route::get('/staffs/create', [AdminStaffController::class, 'create'])
+            ->name('staffs.create');
 
-    // スタッフ登録
-    Route::post('/admin/staffs', [AdminStaffController::class, 'store'])
-        ->name('admin.staffs.store');
+        // スタッフ登録
+        Route::post('/staffs', [AdminStaffController::class, 'store'])
+            ->name('staffs.store');
 
-    // スタッフ詳細
-    Route::get('/admin/staffs/{staff}', [AdminStaffController::class, 'show'])
-        ->name('admin.staffs.show');
+        // スタッフ詳細
+        Route::get('/staffs/{staff}', [AdminStaffController::class, 'show'])
+            ->name('staffs.show');
 
-    // スタッフ編集
-    Route::get('/admin/staffs/{staff}/edit', [AdminStaffController::class, 'edit'])
-        ->name('admin.staffs.edit');
+        // スタッフ編集
+        Route::get('/staffs/{staff}/edit', [AdminStaffController::class, 'edit'])
+            ->name('staffs.edit');
 
-    // スタッフ更新
-    Route::put('/admin/staffs/{staff}', [AdminStaffController::class, 'update'])
-        ->name('admin.staffs.update');
-});
+        // スタッフ更新
+        Route::put('/staffs/{staff}', [AdminStaffController::class, 'update'])
+            ->name('staffs.update');
+    });
 
 
 Route::middleware('auth')->group(function () {

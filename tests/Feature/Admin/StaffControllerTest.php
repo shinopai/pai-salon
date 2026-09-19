@@ -356,3 +356,30 @@ test('管理者は管理者スタッフ一覧にアクセスできる', function
 
     $response->assertOk();
 });
+
+it('管理者が登録したスタッフが指定したUserと紐付く', function () {
+    $adminUser = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $adminUser->id,
+        'name' => '管理者',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $user = User::factory()->create([
+        'email' => 'staff@example.com',
+    ]);
+
+    $this->actingAs($adminUser)
+        ->post(route('admin.staffs.store'), [
+            'user_id' => $user->id,
+            'name' => '新規スタッフ',
+            'role' => StaffRole::STAFF->value,
+        ])
+        ->assertRedirect(route('admin.staffs.index'));
+
+    $staff = Staff::where('name', '新規スタッフ')->first();
+
+    expect($staff)->not->toBeNull()
+        ->and($staff->user_id)->toBe($user->id);
+});
