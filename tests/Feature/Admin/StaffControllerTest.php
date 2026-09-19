@@ -316,3 +316,43 @@ test('管理者は他のユーザーが使用中のメールアドレスには�
         'email' => 'staff@example.com',
     ]);
 });
+
+test('一般スタッフは管理者スタッフ一覧にアクセスできない', function () {
+    $user = User::factory()->create([
+        'email' => 'staff@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '一般スタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->get(
+        route('admin.staffs.index')
+    );
+
+    $response->assertForbidden();
+});
+
+test('管理者は管理者スタッフ一覧にアクセスできる', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->get(
+        route('admin.staffs.index')
+    );
+
+    $response->assertOk();
+});
