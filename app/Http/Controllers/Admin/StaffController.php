@@ -66,4 +66,11 @@ class StaffController extends Controller
 
         return redirect()->route('admin.staffs.show', $staff);
     }
+
+    public function destroy(Staff $staff): RedirectResponse
+    {
+        $staff->delete();
+
+        return redirect()->route('admin.staffs.index');
+    }
 }

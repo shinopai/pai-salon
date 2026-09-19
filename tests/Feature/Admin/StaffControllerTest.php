@@ -1,8 +1,11 @@
 <?php
 
+use App\Models\Menu;
 use App\Models\Staff;
 use App\Models\User;
 use App\Enums\StaffRole;
+use App\Enums\ReservationStatus;
+use Illuminate\Support\Facades\DB;
 
 it('管理者スタッフ一覧を表示できる', function () {
     $user = User::factory()->create([
@@ -382,4 +385,83 @@ it('管理者が登録したスタッフが指定したUserと紐付く', functi
 
     expect($staff)->not->toBeNull()
         ->and($staff->user_id)->toBe($user->id);
+});
+
+it('管理者は予約のないスタッフを削除でき、Userは残る', function () {
+    $adminUser = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $adminUser->id,
+        'name' => '管理者',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $user = User::factory()->create([
+        'email' => 'delete-target@example.com',
+    ]);
+
+    $staff = Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '削除対象スタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $staff->menus()->attach($menu->id);
+
+    $this->actingAs($adminUser)
+        ->delete(route('admin.staffs.destroy', $staff))
+        ->assertRedirect(route('admin.staffs.index'));
+
+    expect(Staff::find($staff->id))->toBeNull()
+        ->and(User::find($user->id))->not->toBeNull()
+        ->and(
+            DB::table('staff_menus')
+                ->where('staff_id', $staff->id)
+                ->exists()
+        )->toBeFalse();
+});
+
+it('管理者は予約があるスタッフを削除できない', function () {
+    $adminUser = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $adminUser->id,
+        'name' => '管理者',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $user = User::factory()->create();
+
+    $staff = Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '予約ありスタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    createReservation([
+        'reservation_number' => 'RSV-20260919-DELETE',
+        'cancellation_token' => 'hashed-token-delete',
+        'customer_name' => 'テスト顧客',
+        'customer_email' => 'customer@example.com',
+        'staff_id' => $staff->id,
+        'menu_id' => $menu->id,
+        'start_at' => '2026-09-19 10:00:00',
+        'end_at' => '2026-09-19 11:00:00',
+        'status' => ReservationStatus::RESERVED,
+    ]);
+
+    $this->actingAs($adminUser)
+        ->delete(route('admin.staffs.destroy', $staff));
+
+    expect(Staff::find($staff->id))->not->toBeNull();
 });

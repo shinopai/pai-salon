@@ -47,6 +47,10 @@ Route::middleware(['auth', 'admin'])
         // スタッフ更新
         Route::put('/staffs/{staff}', [AdminStaffController::class, 'update'])
             ->name('staffs.update');
+
+        // スタッフ削除
+        Route::delete('/staffs/{staff}', [AdminStaffController::class, 'destroy'])
+            ->name('staffs.destroy');
     });
 
 
