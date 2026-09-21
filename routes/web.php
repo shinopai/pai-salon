@@ -7,6 +7,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffReservationController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\MenuController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -68,6 +69,10 @@ Route::middleware(['auth', 'admin'])
         // 顧客更新
         Route::put('/customers/{customer}', [CustomerController::class, 'update'])
             ->name('customers.update');
+
+        // メニュー一覧
+        Route::get('/menus', [MenuController::class, 'index'])
+            ->name('menus.index');
     });
 
 
