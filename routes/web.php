@@ -6,6 +6,7 @@ use App\Http\Controllers\ReservationCancellationController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffReservationController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
+use App\Http\Controllers\Admin\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -51,6 +52,22 @@ Route::middleware(['auth', 'admin'])
         // スタッフ削除
         Route::delete('/staffs/{staff}', [AdminStaffController::class, 'destroy'])
             ->name('staffs.destroy');
+
+        // 顧客一覧
+        Route::get('/customers', [CustomerController::class, 'index'])
+            ->name('customers.index');
+
+        // 顧客詳細
+        Route::get('/customers/{customer}', [CustomerController::class, 'show'])
+            ->name('customers.show');
+
+        // 顧客編集
+        Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])
+            ->name('customers.edit');
+
+        // 顧客更新
+        Route::put('/customers/{customer}', [CustomerController::class, 'update'])
+            ->name('customers.update');
     });
 
 
