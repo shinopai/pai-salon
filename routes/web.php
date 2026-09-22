@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\StaffMenuController;
+use App\Http\Controllers\Admin\BusinessHourController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -106,6 +107,10 @@ Route::middleware(['auth', 'admin'])
         // スタッフメニュー更新
         Route::put('/staff-menus', [StaffMenuController::class, 'update'])
             ->name('staff-menus.update');
+
+        // 営業時間一覧
+        Route::get('/business-hours', [BusinessHourController::class, 'index'])
+            ->name('business-hours.index');
     });
 
 
