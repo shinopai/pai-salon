@@ -4,6 +4,7 @@ use App\Enums\StaffRole;
 use App\Models\Menu;
 use App\Models\Staff;
 use App\Models\User;
+use App\Enums\ReservationStatus;
 
 test('管理者はメニュー一覧を表示できる', function () {
     $user = User::factory()->create([
@@ -509,5 +510,77 @@ test('メニュー更新時に所要時間が1未満の場合は更新できな�
         'id' => $menu->id,
         'name' => 'カット',
         'duration' => 60,
+    ]);
+});
+
+test('管理者は予約がないメニューを削除できる', function () {
+    $user = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'テストメニュー',
+        'duration' => 60,
+    ]);
+
+    $response = $this->actingAs($user)
+        ->delete(route('admin.menus.destroy', $menu));
+
+    $response
+        ->assertRedirect(route('admin.menus.index'))
+        ->assertSessionHasNoErrors();
+
+    $this->assertDatabaseMissing('menus', [
+        'id' => $menu->id,
+    ]);
+});
+
+test('管理者は予約があるメニューを削除できない', function () {
+    $user = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $otherUser = User::factory()->create();
+
+    $otherStaff = Staff::forceCreate([
+        'user_id' => $otherUser->id,
+        'name' => '担当スタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'テストメニュー',
+        'duration' => 60,
+    ]);
+
+    createReservation([
+        'reservation_number' => 'RSV-20260917-OTHER',
+        'cancellation_token' => 'hashed-token-other',
+        'customer_name' => 'テスト顧客',
+        'customer_email' => 'customer@example.com',
+        'staff_id' => $otherStaff->id,
+        'menu_id' => $menu->id,
+        'start_at' => '2026-09-18 10:00:00',
+        'end_at' => '2026-09-18 11:00:00',
+        'status' => ReservationStatus::RESERVED,
+    ]);
+
+    $response = $this->actingAs($user)
+        ->delete(route('admin.menus.destroy', $menu));
+
+    $response
+        ->assertRedirect(route('admin.menus.index'))
+        ->assertSessionHas('error', 'このメニューは予約に使用されているため削除できません。');
+
+    $this->assertDatabaseHas('menus', [
+        'id' => $menu->id,
     ]);
 });

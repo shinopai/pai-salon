@@ -43,4 +43,17 @@ class MenuController extends Controller
 
         return redirect()->route('admin.menus.show', $menu);
     }
+
+    public function destroy(Menu $menu)
+    {
+        if ($menu->reservations()->exists()) {
+            return redirect()
+                ->route('admin.menus.index')
+                ->with('error', 'このメニューは予約に使用されているため削除できません。');
+        }
+
+        $menu->delete();
+
+        return redirect()->route('admin.menus.index');
+    }
 }

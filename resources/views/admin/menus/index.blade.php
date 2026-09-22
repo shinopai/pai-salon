@@ -8,6 +8,10 @@
 </head>
 
 <body>
+  @if (session('error'))
+    <p>{{ session('error') }}</p>
+  @endif
+
   <h1>メニュー一覧</h1>
 
   <table>
@@ -15,6 +19,7 @@
       <tr>
         <th>メニュー名</th>
         <th>所要時間</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -22,6 +27,13 @@
         <tr>
           <td>{{ $menu->name }}</td>
           <td>{{ $menu->duration }}分</td>
+          <td>
+            <form method="POST" action="{{ route('admin.menus.destroy', $menu) }}">
+              @csrf
+              @method('DELETE')
+              <button type="submit">削除</button>
+            </form>
+          </td>
         </tr>
       @endforeach
     </tbody>

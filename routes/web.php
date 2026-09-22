@@ -93,6 +93,10 @@ Route::middleware(['auth', 'admin'])
         // メニュー更新
         Route::put('/menus/{menu}', [MenuController::class, 'update'])
             ->name('menus.update');
+
+        // メニュー削除
+        Route::delete('/menus/{menu}', [MenuController::class, 'destroy'])
+            ->name('menus.destroy');
     });
 
 
