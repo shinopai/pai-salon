@@ -81,6 +81,10 @@ Route::middleware(['auth', 'admin'])
         // メニュー登録
         Route::post('/menus', [MenuController::class, 'store'])
             ->name('menus.store');
+
+        // メニュー詳細
+        Route::get('/menus/{menu}', [MenuController::class, 'show'])
+            ->name('menus.show');
     });
 
 

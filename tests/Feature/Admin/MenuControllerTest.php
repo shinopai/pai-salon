@@ -235,3 +235,35 @@ test('所要時間が1未満の場合はメニューを登録できない', func
         'name' => '新メニュー',
     ]);
 });
+
+test('管理者はメニュー詳細を表示できる', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->get(
+        route('admin.menus.show', $menu)
+    );
+
+    $response->assertOk();
+
+    $response->assertViewIs('admin.menus.show');
+
+    $response->assertViewHas('menu', $menu);
+
+    $response->assertSee('カット');
+    $response->assertSee('60分');
+});

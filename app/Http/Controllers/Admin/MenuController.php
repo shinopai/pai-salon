@@ -26,4 +26,9 @@ class MenuController extends Controller
 
         return redirect()->route('admin.menus.index');
     }
+
+    public function show(Menu $menu)
+    {
+        return view('admin.menus.show', compact('menu'));
+    }
 }
