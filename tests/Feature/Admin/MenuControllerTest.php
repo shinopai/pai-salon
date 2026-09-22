@@ -267,3 +267,247 @@ test('管理者はメニュー詳細を表示できる', function () {
     $response->assertSee('カット');
     $response->assertSee('60分');
 });
+
+test('管理者はメニュー編集画面を表示できる', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->get(
+        route('admin.menus.edit', $menu)
+    );
+
+    $response->assertOk();
+
+    $response->assertViewIs('admin.menus.edit');
+
+    $response->assertViewHas('menu', $menu);
+
+    $response->assertSee('カット');
+    $response->assertSee('60');
+});
+
+test('管理者はメニューを更新できる', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.menus.update', $menu),
+        [
+            'name' => 'カット＋トリートメント',
+            'duration' => 90,
+        ]
+    );
+
+    $response->assertRedirect(
+        route('admin.menus.show', $menu)
+    );
+
+    $this->assertDatabaseHas('menus', [
+        'id' => $menu->id,
+        'name' => 'カット＋トリートメント',
+        'duration' => 90,
+    ]);
+});
+
+test('メニュー更新時にメニュー名が未入力の場合は更新できない', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.menus.update', $menu),
+        [
+            'name' => '',
+            'duration' => 90,
+        ]
+    );
+
+    $response->assertSessionHasErrors('name');
+
+    $this->assertDatabaseHas('menus', [
+        'id' => $menu->id,
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+});
+
+test('メニュー更新時にメニュー名が101文字以上の場合は更新できない', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.menus.update', $menu),
+        [
+            'name' => str_repeat('あ', 101),
+            'duration' => 90,
+        ]
+    );
+
+    $response->assertSessionHasErrors('name');
+
+    $this->assertDatabaseHas('menus', [
+        'id' => $menu->id,
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+});
+
+test('メニュー更新時に所要時間が未入力の場合は更新できない', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.menus.update', $menu),
+        [
+            'name' => '新カット',
+            'duration' => '',
+        ]
+    );
+
+    $response->assertSessionHasErrors('duration');
+
+    $this->assertDatabaseHas('menus', [
+        'id' => $menu->id,
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+});
+
+test('メニュー更新時に所要時間が整数でない場合は更新できない', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.menus.update', $menu),
+        [
+            'name' => '新カット',
+            'duration' => '90.5',
+        ]
+    );
+
+    $response->assertSessionHasErrors('duration');
+
+    $this->assertDatabaseHas('menus', [
+        'id' => $menu->id,
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+});
+
+test('メニュー更新時に所要時間が1未満の場合は更新できない', function () {
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.menus.update', $menu),
+        [
+            'name' => '新カット',
+            'duration' => 0,
+        ]
+    );
+
+    $response->assertSessionHasErrors('duration');
+
+    $this->assertDatabaseHas('menus', [
+        'id' => $menu->id,
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+});

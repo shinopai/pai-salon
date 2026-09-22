@@ -85,6 +85,14 @@ Route::middleware(['auth', 'admin'])
         // メニュー詳細
         Route::get('/menus/{menu}', [MenuController::class, 'show'])
             ->name('menus.show');
+
+        // メニュー編集
+        Route::get('/menus/{menu}/edit', [MenuController::class, 'edit'])
+            ->name('menus.edit');
+
+        // メニュー更新
+        Route::put('/menus/{menu}', [MenuController::class, 'update'])
+            ->name('menus.update');
     });
 
 

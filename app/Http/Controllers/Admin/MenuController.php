@@ -31,4 +31,16 @@ class MenuController extends Controller
     {
         return view('admin.menus.show', compact('menu'));
     }
+
+    public function edit(Menu $menu)
+    {
+        return view('admin.menus.edit', compact('menu'));
+    }
+
+    public function update(MenuRequest $request, Menu $menu)
+    {
+        $menu->update($request->validated());
+
+        return redirect()->route('admin.menus.show', $menu);
+    }
 }
