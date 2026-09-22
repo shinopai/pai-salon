@@ -118,3 +118,23 @@ test('管理者はスタッフの対応可能メニューを解除できる', fu
 
     expect($staff->menus()->whereKey($menu->id)->exists())->toBeFalse();
 });
+
+test('同じスタッフとメニューの組み合わせは重複登録できない', function () {
+    $user = User::factory()->create();
+
+    $staff = Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $staff->menus()->attach($menu->id);
+
+    expect(fn() => $staff->menus()->attach($menu->id))
+        ->toThrow(\Illuminate\Database\QueryException::class);
+});
