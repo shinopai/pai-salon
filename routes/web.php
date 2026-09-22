@@ -8,6 +8,7 @@ use App\Http\Controllers\StaffReservationController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\StaffMenuController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -97,6 +98,10 @@ Route::middleware(['auth', 'admin'])
         // メニュー削除
         Route::delete('/menus/{menu}', [MenuController::class, 'destroy'])
             ->name('menus.destroy');
+
+        // スタッフメニュー一覧
+        Route::get('/staff-menus', [StaffMenuController::class, 'index'])
+            ->name('staff-menus.index');
     });
 
 
