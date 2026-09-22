@@ -102,6 +102,10 @@ Route::middleware(['auth', 'admin'])
         // スタッフメニュー一覧
         Route::get('/staff-menus', [StaffMenuController::class, 'index'])
             ->name('staff-menus.index');
+
+        // スタッフメニュー更新
+        Route::put('/staff-menus', [StaffMenuController::class, 'update'])
+            ->name('staff-menus.update');
     });
 
 
