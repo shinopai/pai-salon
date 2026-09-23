@@ -38,4 +38,11 @@ class HolidayController extends Controller
 
         return redirect()->route('admin.holidays.index');
     }
+
+    public function destroy(Holiday $holiday)
+    {
+        $holiday->delete();
+
+        return redirect()->route('admin.holidays.index');
+    }
 }

@@ -129,3 +129,29 @@ test('管理者は休業日を更新できる', function () {
         'reason' => '臨時休業',
     ]);
 });
+
+test('管理者は休業日を削除できる', function () {
+    $user = User::factory()->create();
+
+    $staff = new Staff();
+    $staff->forceFill([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+    $staff->save();
+
+    $holiday = Holiday::create([
+        'date' => '2026-12-31',
+        'reason' => '年末年始休業',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->delete(route('admin.holidays.destroy', $holiday));
+
+    $response->assertRedirect(route('admin.holidays.index'));
+
+    $this->assertDatabaseMissing('holidays', [
+        'id' => $holiday->id,
+    ]);
+});

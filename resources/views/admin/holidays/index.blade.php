@@ -22,6 +22,12 @@
         <tr>
           <td>{{ $holiday->date }}</td>
           <td>{{ $holiday->reason }}</td>
+          <form method="POST" action="{{ route('admin.holidays.destroy', $holiday) }}">
+            @csrf
+            @method('DELETE')
+
+            <button type="submit">削除</button>
+          </form>
         </tr>
       @endforeach
     </tbody>
