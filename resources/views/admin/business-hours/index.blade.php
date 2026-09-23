@@ -18,27 +18,24 @@
       </tr>
     </thead>
     <tbody>
-      @php
-        $dayNames = [
-            0 => '日曜日',
-            1 => '月曜日',
-            2 => '火曜日',
-            3 => '水曜日',
-            4 => '木曜日',
-            5 => '金曜日',
-            6 => '土曜日',
-        ];
-      @endphp
-
       @foreach ($businessHours as $businessHour)
         <tr>
           <td>{{ $dayNames[$businessHour->day_of_week] }}</td>
           <td>
-            @if ($businessHour->open_time === null && $businessHour->close_time === null)
-              定休日
-            @else
-              {{ $businessHour->open_time }} ～ {{ $businessHour->close_time }}
-            @endif
+            <form method="POST" action="{{ route('admin.business-hours.update') }}">
+              @csrf
+              @method('PUT')
+
+              <input type="hidden" name="day_of_week" value="{{ $businessHour->day_of_week }}">
+
+              <input type="time" name="open_time" value="{{ $businessHour->open_time }}">
+
+              ～
+
+              <input type="time" name="close_time" value="{{ $businessHour->close_time }}">
+
+              <button type="submit">更新</button>
+            </form>
           </td>
         </tr>
       @endforeach

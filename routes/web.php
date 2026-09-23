@@ -111,6 +111,10 @@ Route::middleware(['auth', 'admin'])
         // 営業時間一覧
         Route::get('/business-hours', [BusinessHourController::class, 'index'])
             ->name('business-hours.index');
+
+        // 営業時間更新
+        Route::put('/business-hours', [BusinessHourController::class, 'update'])
+            ->name('business-hours.update');
     });
 
 
