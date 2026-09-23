@@ -31,4 +31,11 @@ class HolidayController extends Controller
     {
         return view('admin.holidays.edit', compact('holiday'));
     }
+
+    public function update(HolidayRequest $request, Holiday $holiday)
+    {
+        $holiday->update($request->validated());
+
+        return redirect()->route('admin.holidays.index');
+    }
 }

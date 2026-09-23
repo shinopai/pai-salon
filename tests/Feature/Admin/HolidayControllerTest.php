@@ -98,3 +98,34 @@ test('管理者は休業日編集画面を表示できる', function () {
         ->assertSee('2026-12-31')
         ->assertSee('年末年始休業');
 });
+
+test('管理者は休業日を更新できる', function () {
+    $user = User::factory()->create();
+
+    $staff = new Staff();
+    $staff->forceFill([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+    $staff->save();
+
+    $holiday = Holiday::create([
+        'date' => '2026-12-31',
+        'reason' => '年末年始休業',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->put(route('admin.holidays.update', $holiday), [
+            'date' => '2027-01-02',
+            'reason' => '臨時休業',
+        ]);
+
+    $response->assertRedirect(route('admin.holidays.index'));
+
+    $this->assertDatabaseHas('holidays', [
+        'id' => $holiday->id,
+        'date' => '2027-01-02',
+        'reason' => '臨時休業',
+    ]);
+});
