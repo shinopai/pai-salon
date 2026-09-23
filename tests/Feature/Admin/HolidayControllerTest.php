@@ -73,3 +73,28 @@ test('管理者は休業日を登録できる', function () {
         'reason' => '年末年始休業',
     ]);
 });
+
+test('管理者は休業日編集画面を表示できる', function () {
+    $user = User::factory()->create();
+
+    $staff = new Staff();
+    $staff->forceFill([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+    $staff->save();
+
+    $holiday = Holiday::create([
+        'date' => '2026-12-31',
+        'reason' => '年末年始休業',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->get(route('admin.holidays.edit', $holiday));
+
+    $response->assertOk()
+        ->assertSee('休業日編集')
+        ->assertSee('2026-12-31')
+        ->assertSee('年末年始休業');
+});

@@ -26,4 +26,9 @@ class HolidayController extends Controller
 
         return redirect()->route('admin.holidays.index');
     }
+
+    public function edit(Holiday $holiday)
+    {
+        return view('admin.holidays.edit', compact('holiday'));
+    }
 }
