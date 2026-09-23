@@ -148,3 +148,184 @@ test('管理者は火曜日を定休日として更新できる', function () {
     expect($businessHour->open_time)->toBeNull()
         ->and($businessHour->close_time)->toBeNull();
 });
+
+test('管理者は営業時間更新時に曜日が未入力ならバリデーションエラーになる', function () {
+    $user = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    BusinessHour::create([
+        'day_of_week' => 0,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->put(route('admin.business-hours.update'), [
+            'open_time' => '09:00',
+            'close_time' => '18:00',
+        ]);
+
+    $response
+        ->assertSessionHasErrors('day_of_week');
+});
+
+test('管理者は営業時間更新時に曜日が0から6の範囲外ならバリデーションエラーになる', function () {
+    $user = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    BusinessHour::create([
+        'day_of_week' => 0,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->put(route('admin.business-hours.update'), [
+            'day_of_week' => 7,
+            'open_time' => '09:00',
+            'close_time' => '18:00',
+        ]);
+
+    $response
+        ->assertSessionHasErrors('day_of_week');
+});
+
+test('管理者は営業時間更新時に開始時刻がH:i形式でなければバリデーションエラーになる', function () {
+    $user = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    BusinessHour::create([
+        'day_of_week' => 0,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->put(route('admin.business-hours.update'), [
+            'day_of_week' => 0,
+            'open_time' => '9:00',
+            'close_time' => '18:00',
+        ]);
+
+    $response
+        ->assertSessionHasErrors('open_time');
+});
+
+test('管理者は営業時間更新時に終了時刻がH:i形式でなければバリデーションエラーになる', function () {
+    $user = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    BusinessHour::create([
+        'day_of_week' => 0,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->put(route('admin.business-hours.update'), [
+            'day_of_week' => 0,
+            'open_time' => '09:00',
+            'close_time' => '20',
+        ]);
+
+    $response
+        ->assertSessionHasErrors('close_time');
+});
+
+test('管理者は開始時刻だけ入力した場合はバリデーションエラーになる', function () {
+    $user = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    BusinessHour::create([
+        'day_of_week' => 0,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->put(route('admin.business-hours.update'), [
+            'day_of_week' => 0,
+            'open_time' => '09:00',
+            'close_time' => null,
+        ]);
+
+    $response
+        ->assertSessionHasErrors('close_time');
+});
+
+test('管理者は終了時刻だけ入力した場合はバリデーションエラーになる', function () {
+    $user = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    BusinessHour::create([
+        'day_of_week' => 0,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->put(route('admin.business-hours.update'), [
+            'day_of_week' => 0,
+            'open_time' => null,
+            'close_time' => '18:00',
+        ]);
+
+    $response
+        ->assertSessionHasErrors('open_time');
+});
+
+test('管理者は営業時間更新時に曜日が整数でなければバリデーションエラーになる', function () {
+    $user = User::factory()->create();
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    BusinessHour::create([
+        'day_of_week' => 0,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->put(route('admin.business-hours.update'), [
+            'day_of_week' => '日曜日',
+            'open_time' => '09:00',
+            'close_time' => '18:00',
+        ]);
+
+    $response
+        ->assertSessionHasErrors('day_of_week');
+});
