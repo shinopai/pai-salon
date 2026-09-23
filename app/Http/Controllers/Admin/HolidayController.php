@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Holiday;
+use App\Http\Requests\HolidayRequest;
 
 class HolidayController extends Controller
 {
@@ -17,5 +18,12 @@ class HolidayController extends Controller
     public function create()
     {
         return view('admin.holidays.create');
+    }
+
+    public function store(HolidayRequest $request)
+    {
+        Holiday::create($request->validated());
+
+        return redirect()->route('admin.holidays.index');
     }
 }
