@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\StaffMenuController;
 use App\Http\Controllers\Admin\BusinessHourController;
+use App\Http\Controllers\Admin\HolidayController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,96 +26,29 @@ Route::middleware(['auth', 'admin'])
     ->name('admin.')
     ->group(function () {
         /**
-         * 管理者
+         * 管理者機能
          */
 
-        // スタッフ一覧
-        Route::get('/staffs', [AdminStaffController::class, 'index'])
-            ->name('staffs.index');
+        // スタッフ管理 (フルCRUD)
+        Route::resource('staffs', AdminStaffController::class);
 
-        // スタッフ登録画面
-        Route::get('/staffs/create', [AdminStaffController::class, 'create'])
-            ->name('staffs.create');
+        // 顧客管理 (登録・削除なしのCRUD)
+        Route::resource('customers', CustomerController::class)
+            ->only(['index', 'show', 'edit', 'update']);
 
-        // スタッフ登録
-        Route::post('/staffs', [AdminStaffController::class, 'store'])
-            ->name('staffs.store');
+        // メニュー管理 (フルCRUD)
+        Route::resource('menus', MenuController::class);
 
-        // スタッフ詳細
-        Route::get('/staffs/{staff}', [AdminStaffController::class, 'show'])
-            ->name('staffs.show');
+        // スタッフメニュー設定 (個別エンドポイント)
+        Route::get('/staff-menus', [StaffMenuController::class, 'index'])->name('staff-menus.index');
+        Route::put('/staff-menus', [StaffMenuController::class, 'update'])->name('staff-menus.update');
 
-        // スタッフ編集
-        Route::get('/staffs/{staff}/edit', [AdminStaffController::class, 'edit'])
-            ->name('staffs.edit');
+        // 営業時間設定 (個別エンドポイント)
+        Route::get('/business-hours', [BusinessHourController::class, 'index'])->name('business-hours.index');
+        Route::put('/business-hours', [BusinessHourController::class, 'update'])->name('business-hours.update');
 
-        // スタッフ更新
-        Route::put('/staffs/{staff}', [AdminStaffController::class, 'update'])
-            ->name('staffs.update');
-
-        // スタッフ削除
-        Route::delete('/staffs/{staff}', [AdminStaffController::class, 'destroy'])
-            ->name('staffs.destroy');
-
-        // 顧客一覧
-        Route::get('/customers', [CustomerController::class, 'index'])
-            ->name('customers.index');
-
-        // 顧客詳細
-        Route::get('/customers/{customer}', [CustomerController::class, 'show'])
-            ->name('customers.show');
-
-        // 顧客編集
-        Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])
-            ->name('customers.edit');
-
-        // 顧客更新
-        Route::put('/customers/{customer}', [CustomerController::class, 'update'])
-            ->name('customers.update');
-
-        // メニュー一覧
-        Route::get('/menus', [MenuController::class, 'index'])
-            ->name('menus.index');
-
-        // メニュー登録画面
-        Route::get('/menus/create', [MenuController::class, 'create'])
-            ->name('menus.create');
-
-        // メニュー登録
-        Route::post('/menus', [MenuController::class, 'store'])
-            ->name('menus.store');
-
-        // メニュー詳細
-        Route::get('/menus/{menu}', [MenuController::class, 'show'])
-            ->name('menus.show');
-
-        // メニュー編集
-        Route::get('/menus/{menu}/edit', [MenuController::class, 'edit'])
-            ->name('menus.edit');
-
-        // メニュー更新
-        Route::put('/menus/{menu}', [MenuController::class, 'update'])
-            ->name('menus.update');
-
-        // メニュー削除
-        Route::delete('/menus/{menu}', [MenuController::class, 'destroy'])
-            ->name('menus.destroy');
-
-        // スタッフメニュー一覧
-        Route::get('/staff-menus', [StaffMenuController::class, 'index'])
-            ->name('staff-menus.index');
-
-        // スタッフメニュー更新
-        Route::put('/staff-menus', [StaffMenuController::class, 'update'])
-            ->name('staff-menus.update');
-
-        // 営業時間一覧
-        Route::get('/business-hours', [BusinessHourController::class, 'index'])
-            ->name('business-hours.index');
-
-        // 営業時間更新
-        Route::put('/business-hours', [BusinessHourController::class, 'update'])
-            ->name('business-hours.update');
+        // 休日管理(フルCRUD)
+        Route::resource('holidays', HolidayController::class);
     });
 
 
