@@ -155,3 +155,52 @@ test('管理者は休業日を削除できる', function () {
         'id' => $holiday->id,
     ]);
 });
+
+test('管理者は同じ日付の休業日を重複して登録できない', function () {
+    $user = User::factory()->create();
+
+    $staff = new Staff();
+    $staff->forceFill([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+    $staff->save();
+
+    Holiday::create([
+        'date' => '2026-12-31',
+        'reason' => '年末年始休業',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->post(route('admin.holidays.store'), [
+            'date' => '2026-12-31',
+            'reason' => '重複休業',
+        ]);
+
+    $response->assertSessionHasErrors('date');
+
+    expect(Holiday::where('date', '2026-12-31')->count())->toBe(1);
+});
+
+test('管理者は理由が未入力の場合は休業日を登録できない', function () {
+    $user = User::factory()->create();
+
+    $staff = new Staff();
+    $staff->forceFill([
+        'user_id' => $user->id,
+        'name' => '佐藤',
+        'role' => StaffRole::ADMIN,
+    ]);
+    $staff->save();
+
+    $response = $this->actingAs($user)
+        ->post(route('admin.holidays.store'), [
+            'date' => '2026-12-31',
+            'reason' => '',
+        ]);
+
+    $response->assertSessionHasErrors('reason');
+
+    expect(Holiday::where('date', '2026-12-31')->exists())->toBeFalse();
+});
