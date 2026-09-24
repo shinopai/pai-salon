@@ -16,4 +16,9 @@ class ReservationController extends Controller
 
         return view('admin.reservations.index', compact('reservations'));
     }
+
+    public function show(Reservation $reservation): View
+    {
+        return view('admin.reservations.show', compact('reservation'));
+    }
 }
