@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\StaffMenuController;
 use App\Http\Controllers\Admin\BusinessHourController;
 use App\Http\Controllers\Admin\HolidayController;
+use App\Http\Controllers\Admin\ReservationController as AdminReservationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -49,6 +50,10 @@ Route::middleware(['auth', 'admin'])
 
         // 休日管理(フルCRUD)
         Route::resource('holidays', HolidayController::class);
+
+        // 予約管理 (編集・削除なしのCRUD)
+        Route::resource('reservations', AdminReservationController::class)
+            ->only(['index', 'show', 'update']);
     });
 
 
