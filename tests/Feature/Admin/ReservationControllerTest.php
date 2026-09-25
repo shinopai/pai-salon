@@ -226,3 +226,76 @@ test('管理者が予約を更新できる', function () {
         'status' => ReservationStatus::COMPLETED->value,
     ]);
 });
+
+test('管理者が自身の担当予約を操作できる', function () {
+    $user = User::factory()->create();
+
+    $staff = Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => '管理者スタッフ',
+        'role' => StaffRole::ADMIN,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    StaffMenu::create([
+        'staff_id' => $staff->id,
+        'menu_id' => $menu->id,
+    ]);
+
+    $startAt = now()->addDay()->setTime(15, 0, 0);
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $customer = Customer::create([
+        'name' => '担当予約テスト顧客',
+        'email' => 'admin-own-reservation@example.com',
+    ]);
+
+    $reservation = createReservation([
+        'reservation_number' => 'RSV-20260925-OWN',
+        'cancellation_token' => 'hashed-own-token',
+        'customer_id' => $customer->id,
+        'customer_name' => $customer->name,
+        'customer_email' => $customer->email,
+        'staff_id' => $staff->id,
+        'menu_id' => $menu->id,
+        'start_at' => $startAt->format('Y-m-d H:i:s'),
+        'end_at' => $startAt->copy()->addMinutes(60)->format('Y-m-d H:i:s'),
+        'status' => ReservationStatus::RESERVED,
+    ]);
+
+    $updatedStartAt = $startAt->copy()->addHour();
+
+    $this->actingAs($user);
+
+    $response = $this->put(
+        route('admin.reservations.update', $reservation),
+        [
+            'staff_id' => $staff->id,
+            'menu_id' => $menu->id,
+            'start_at' => $updatedStartAt->format('Y-m-d H:i:s'),
+            'status' => ReservationStatus::COMPLETED->value,
+        ]
+    );
+
+    $response->assertRedirect(
+        route('admin.reservations.show', $reservation)
+    );
+
+    $this->assertDatabaseHas('reservations', [
+        'id' => $reservation->id,
+        'staff_id' => $staff->id,
+        'menu_id' => $menu->id,
+        'start_at' => $updatedStartAt->format('Y-m-d H:i:s'),
+        'end_at' => $updatedStartAt->copy()->addMinutes(60)->format('Y-m-d H:i:s'),
+        'status' => ReservationStatus::COMPLETED->value,
+    ]);
+});
