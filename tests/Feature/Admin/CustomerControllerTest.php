@@ -480,3 +480,24 @@ test('管理者はメールアドレスの一部をkeywordに指定して検索�
     $response->assertSee('山田 太郎');
     $response->assertDontSee('佐藤 花子');
 });
+
+test('顧客検索ルートは顧客詳細ルートより先に定義されている', function () {
+    $routes = array_values(app('router')->getRoutes()->getRoutes());
+
+    $searchIndex = null;
+    $showIndex = null;
+
+    foreach ($routes as $index => $route) {
+        if ($route->getName() === 'admin.customers.search') {
+            $searchIndex = $index;
+        }
+
+        if ($route->getName() === 'admin.customers.show') {
+            $showIndex = $index;
+        }
+    }
+
+    expect($searchIndex)->not->toBeNull();
+    expect($showIndex)->not->toBeNull();
+    expect($searchIndex)->toBeLessThan($showIndex);
+});

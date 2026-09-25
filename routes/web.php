@@ -33,7 +33,9 @@ Route::middleware(['auth', 'admin'])
         // スタッフ管理 (フルCRUD)
         Route::resource('staffs', AdminStaffController::class);
 
-        // 顧客管理 (登録・削除なしのCRUD)
+        // 顧客管理 (登録・削除なしのCRUD＆検索)
+        Route::get('/customers/search', [CustomerController::class, 'search'])
+            ->name('customers.search');
         Route::resource('customers', CustomerController::class)
             ->only(['index', 'show', 'edit', 'update']);
 
