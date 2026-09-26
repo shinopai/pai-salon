@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationCancellationController;
 use App\Http\Controllers\StaffController;
@@ -18,18 +17,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+/**
+ * 管理者
+ */
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        /**
-         * 管理者
-         */
-
         // スタッフ管理 (フルCRUD)
         Route::resource('staffs', AdminStaffController::class);
 
@@ -58,15 +52,10 @@ Route::middleware(['auth', 'admin'])
             ->only(['index', 'show', 'update']);
     });
 
+/**
+ * スタッフ
+ */
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    /**
-     * スタッフ
-     */
-
     // ダッシュボード
     Route::get('/staff/dashboard', [StaffController::class, 'dashboard'])
         ->name('staff.dashboard');
