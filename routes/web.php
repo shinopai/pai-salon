@@ -27,7 +27,7 @@ Route::middleware(['auth', 'admin'])
     ->name('admin.')
     ->group(function () {
         /**
-         * 管理者機能
+         * 管理者
          */
 
         // スタッフ管理 (フルCRUD)
@@ -57,7 +57,6 @@ Route::middleware(['auth', 'admin'])
         Route::resource('reservations', AdminReservationController::class)
             ->only(['index', 'show', 'update']);
     });
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -102,66 +101,53 @@ Route::middleware('auth')->group(function () {
 });
 
 /**
- * 予約
+ * 顧客予約
  */
+Route::prefix('reservations')
+    ->name('reservations.')
+    ->group(function () {
+        // メニュー選択
+        Route::get('/menu', [ReservationController::class, 'menu'])
+            ->name('menu');
 
-// メニュー選択
-Route::get(
-    '/reservations/menu',
-    [ReservationController::class, 'menu']
-)->name('reservations.menu');
+        // スタッフ選択
+        Route::get('/staff', [ReservationController::class, 'staff'])
+            ->name('staff');
 
-// スタッフ選択
-Route::get(
-    '/reservations/staff',
-    [ReservationController::class, 'staff']
-)->name('reservations.staff');
+        // 日付選択
+        Route::get('/date', [ReservationController::class, 'date'])
+            ->name('date');
 
-// 日付選択
-Route::get(
-    '/reservations/date',
-    [ReservationController::class, 'date']
-)->name('reservations.date');
+        // 空き枠表示
+        Route::get('/slots', [ReservationController::class, 'slots'])
+            ->name('slots');
 
-// 空き枠表示
-Route::get(
-    '/reservations/slots',
-    [ReservationController::class, 'slots']
-)->name('reservations.slots');
+        // 顧客情報入力
+        Route::get('/customer', [ReservationController::class, 'customer'])
+            ->name('customer');
 
-// 顧客情報入力
-Route::get(
-    '/reservations/customer',
-    [ReservationController::class, 'customer']
-)->name('reservations.customer');
+        // 予約内容確認
+        Route::get('/confirm', [ReservationController::class, 'confirm'])
+            ->name('confirm');
 
-// 予約内容確認
-Route::get(
-    '/reservations/confirm',
-    [ReservationController::class, 'confirm']
-)->name('reservations.confirm');
+        // 予約登録
+        Route::post('/', [ReservationController::class, 'store'])
+            ->name('store');
 
-// 予約登録
-Route::post(
-    '/reservations',
-    [ReservationController::class, 'store']
-)->name('reservations.store');
+        // 予約完了
+        Route::get('/complete', [ReservationController::class, 'complete'])
+            ->name('complete');
 
-// 予約完了
-Route::get(
-    '/reservations/complete',
-    [ReservationController::class, 'complete']
-)->name('reservations.complete');
+        // 予約キャンセル
+        Route::get(
+            '/cancel/{reservation_number}/{token}',
+            [ReservationCancellationController::class, 'show']
+        )->name('cancel.show');
 
-// 予約キャンセル
-Route::get(
-    '/reservations/cancel/{reservation_number}/{token}',
-    [ReservationCancellationController::class, 'show']
-)->name('reservations.cancel.show');
-
-Route::post(
-    '/reservations/cancel/{reservation_number}/{token}',
-    [ReservationCancellationController::class, 'cancel']
-)->name('reservations.cancel');
+        Route::post(
+            '/cancel/{reservation_number}/{token}',
+            [ReservationCancellationController::class, 'cancel']
+        )->name('cancel');
+    });
 
 require __DIR__ . '/auth.php';
