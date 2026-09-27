@@ -1,0 +1,89 @@
+@use "sass:math";
+@use "sass:map"; // 【追加】現代のマップ操作用
+@use "variables" as v;
+
+// ==========================================================================
+// 【関数三種の神器】モダンWeb制作・自動換算関数集（システム最適化版）
+// ==========================================================================
+
+// 単位を取り除く（数値だけにする）ための社内用ヘルパー関数
+@function _strip-unit($number) {
+    @if type-of($number) == "number" and not unitless($number) {
+        @return math.div($number, $number * 0 + 1);
+    }
+    @return $number;
+}
+
+// --------------------------------------------------------------------------
+// 1. em() : 要素のフォントサイズを基準に、余白やサイズをemに換算
+// --------------------------------------------------------------------------
+@function em($size, $base-font-size: 16px, $precision: 3) {
+    $size: _strip-unit($size);
+    $base-font-size: _strip-unit($base-font-size);
+
+    $value: math.div($size, $base-font-size);
+    $factor: math.pow(10, $precision);
+    @return math.div(math.round($value * $factor), $factor) * 1em;
+}
+
+// --------------------------------------------------------------------------
+// 2. ls() : Figmaの文字間隔（Letter-spacing）数値をそのままemに換算
+// --------------------------------------------------------------------------
+@function ls($figma-value, $precision: 3) {
+    $figma-value: _strip-unit($figma-value);
+
+    $value: math.div($figma-value, 1000);
+    $factor: math.pow(10, $precision);
+    @return math.div(math.round($value * $factor), $factor) * 1em;
+}
+
+// --------------------------------------------------------------------------
+// 3. rem() : ルート（html=16px）を基準に、px数値をremに一発換算
+// --------------------------------------------------------------------------
+@function rem($px-value, $precision: 3) {
+    $px-value: _strip-unit($px-value);
+
+    $value: math.div($px-value, 16);
+    $factor: math.pow(10, $precision);
+    @return math.div(math.round($value * $factor), $factor) * 1rem;
+}
+
+// ==========================================================================
+// 【システム専用】ショートカット用関数（Variablesマップ取得用）
+// ==========================================================================
+
+// 4. color() : カラーマップから安全に色を取得する
+@function color($key) {
+    $result: map.get(v.$colors, $key);
+    @if $result == null {
+        @warn "引数の '#{$key}' は $colors マップに登録されてないよ！";
+    }
+    @return $result;
+}
+
+// 5. radius() : 角丸マップから安全にサイズを取得する
+@function radius($key) {
+    $result: map.get(v.$radii, $key);
+    @if $result == null {
+        @warn "引数の '#{$key}' は $radii マップに登録されてないよ！";
+    }
+    @return $result;
+}
+
+// 6. z() : 重なり順（z-index）マップから安全に数値を取得する【追加】
+@function z($key) {
+    $result: map.get(v.$z-indexes, $key);
+    @if $result == null {
+        @warn "引数の '#{$key}' は $z-indexes マップに登録されてないよ！";
+    }
+    @return $result;
+}
+
+// 7. fz() : フォントサイズマップから安全にサイズを取得する【追加】
+@function fz($key) {
+    $result: map.get(v.$font-sizes, $key);
+    @if $result == null {
+        @warn "引数の '#{$key}' は $font-sizes マップに登録されてないよ！";
+    }
+    @return $result;
+}

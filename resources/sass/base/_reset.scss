@@ -1,0 +1,106 @@
+@use "variables" as v;
+@use "functions" as f;
+
+// ==========================================================================
+// リセットCSS（Modern Reset ベース + システム最適化版）
+// ==========================================================================
+
+// 1. ボックスモデル・余白の全初期化
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+// 2. ルート・HTML要素の設定
+html,
+body {
+    height: 100%;
+    -webkit-tap-highlight-color: transparent; // スマホタップ時のハイライト消去
+}
+
+// 3. bodyの設定（フォント・文字色・基本背景）
+body {
+    // システムフォント + 日本語ゴシック体フォールバック
+    font-family:
+        "Alexandria",
+        system-ui,
+        -apple-system,
+        "BlinkMacSystemFont",
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        "Hiragino Sans",
+        "Hiragino Kaku Gothic ProN",
+        "Meiryo",
+        sans-serif;
+    line-height: 1.6; // 本文の読みやすさを考慮して1.6に変更
+    color: f.color("text-main"); // #102a2d（Deep Oceanベースの濃色）
+    background-color: f.color("bg-main"); // 白（#ffffff）をベースに設定
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// 4. リンク要素のリセット
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+// 5. リスト要素のリセット
+ul,
+ol {
+    list-style: none;
+}
+
+// 6. メディア要素のリセット
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+// 7. フォーム要素・ボタンのリセット
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; // ブラウザ固有のUI装飾を無効化
+}
+
+button,
+[type="button"],
+[type="submit"],
+[type="reset"] {
+    cursor: pointer;
+}
+
+textarea {
+    resize: vertical; // 横方向のリサイズのみ禁止
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: f.color("text-sub"); // #4a6b6f（統一感のある薄めテキスト色）
+    opacity: 1; // Firefoxのプレースホルダー透過防止
+}
+
+// 8. テーブル要素のリセット
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}

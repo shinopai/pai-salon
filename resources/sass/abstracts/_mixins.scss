@@ -1,0 +1,137 @@
+@use "sass:math";
+@use "sass:map";
+@use "variables" as v;
+@use "functions" as f;
+
+// ==========================================================================
+// ヘルパー：ブレイクポイントの値を取得する内部関数
+// ==========================================================================
+@function _get-breakpoint($breakpoint) {
+    $val: map.get(v.$breakpoints, $breakpoint);
+    @if $val != null {
+        @return $val;
+    }
+    @if type-of($breakpoint) == "number" and unitless($breakpoint) {
+        @return #{$breakpoint}px;
+    }
+    @return $breakpoint;
+}
+
+// ==========================================================================
+// 1. メディアクエリ（レスポンシブ）
+// ==========================================================================
+
+// 指定値以下（〜pxまで）のスタイル
+@mixin max-screen($breakpoint) {
+    $value: _get-breakpoint($breakpoint);
+    @media screen and (max-width: $value) {
+        @content;
+    }
+}
+
+// 指定値以上（px〜から）のスタイル
+@mixin min-screen($breakpoint) {
+    $value: _get-breakpoint($breakpoint);
+    @media screen and (min-width: $value) {
+        @content;
+    }
+}
+
+// 指定範囲内（px〜pxまで）のスタイル
+@mixin screen($min_breakpoint, $max_breakpoint) {
+    $min_value: _get-breakpoint($min_breakpoint);
+    $max_value: _get-breakpoint($max_breakpoint);
+    @media screen and (min-width: $min_value) and (max-width: $max_value) {
+        @content;
+    }
+}
+
+// ==========================================================================
+// 2. フォント指定（厳選5パターン対応 ＆ 関数連動）
+// ==========================================================================
+// 登録した名前（"body"など）でも、生数値（16など）でも動作
+@mixin font-set($size-key, $line-height: null, $letter_spacing: null) {
+    $font_size: map.get(v.$font-sizes, $size-key);
+    @if $font_size == null {
+        $font_size: $size-key;
+    }
+
+    // remに変換して適用
+    font-size: f.rem($font_size);
+
+    // line-heightの計算（px値が渡された場合は比率に計算、1.5等の比率ならそのまま適用）
+    @if $line-height != null {
+        @if type-of($line-height) == "number" and $line-height > 3 {
+            line-height: math.div($line-height, $font_size);
+        } @else {
+            line-height: $line-height;
+        }
+    }
+
+    // Figmaの文字間隔数値をそのままemに換算
+    @if $letter_spacing != null {
+        letter-spacing: f.ls($letter_spacing);
+    }
+
+    @content;
+}
+
+// ==========================================================================
+// 3. レイアウト・位置調整
+// ==========================================================================
+
+// Flexboxでの上下左右中央寄せ
+@mixin centering() {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+// 疑似要素（矢印やアイコンなどの配置用）
+@mixin set-pseudo($width: null, $height: null, $image: null, $center-v: true) {
+    content: "";
+    display: inline-block;
+    position: absolute;
+
+    @if $width != null {
+        width: if(type-of($width) == "number", f.rem($width), $width);
+    }
+    @if $height != null {
+        height: if(type-of($height) == "number", f.rem($height), $height);
+    }
+
+    @if $center-v {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    @if $image != null {
+        background: url($image) no-repeat center center;
+        background-size: contain;
+    }
+
+    @content;
+}
+
+// ==========================================================================
+// 4. テキスト・メディアのコントロール
+// ==========================================================================
+
+// 複数行テキストのあふれを「…」に省略
+@mixin line-clamp($lines: 3) {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+// レスポンシブ対応の縦横比維持
+@mixin aspect-ratio($width, $height) {
+    aspect-ratio: #{$width} / #{$height};
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
