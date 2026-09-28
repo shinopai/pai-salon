@@ -1,5 +1,5 @@
-@use "variables" as v;
-@use "functions" as f;
+@use "../abstracts/variables" as v;
+@use "../abstracts/functions" as f;
 
 // ==========================================================================
 // リセットCSS（Modern Reset ベース + システム最適化版）
