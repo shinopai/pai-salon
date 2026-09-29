@@ -13,10 +13,6 @@ use App\Http\Controllers\Admin\HolidayController;
 use App\Http\Controllers\Admin\ReservationController as AdminReservationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 /**
  * 管理者
  */
@@ -92,9 +88,16 @@ Route::middleware('auth')->group(function () {
 /**
  * 顧客予約
  */
+
+// 予約トップ
+Route::get('/', function () {
+    return view('reservations.index');
+});
+
 Route::prefix('reservations')
     ->name('reservations.')
     ->group(function () {
+
         // メニュー選択
         Route::get('/menu', [ReservationController::class, 'menu'])
             ->name('menu');
