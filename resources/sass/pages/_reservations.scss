@@ -1,5 +1,8 @@
 @use "../abstracts" as *;
 
+// ==========================================================================
+// 予約TOP
+// ==========================================================================
 .reservations {
     width: 100%;
 }
@@ -39,26 +42,32 @@
 .reservations__brand {
     margin-bottom: 12px;
     color: color("primary");
-    font-size: rem(28px);
-    font-weight: 700;
     letter-spacing: ls(40);
+
+    @include font-set(28px) {
+        font-weight: 700;
+    }
 }
 
 .reservations__title {
     margin-bottom: 24px;
     color: color("text-main");
-    font-size: fz("display");
-    font-weight: 700;
-    line-height: 1.5;
     letter-spacing: ls(40);
+
+    @include font-set(fz("display")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
 }
 
 .reservations__description {
     margin-bottom: 50px;
     color: color("text-sub");
-    font-size: fz("lead");
-    line-height: 1.8;
     letter-spacing: ls(20);
+
+    @include font-set(fz("lead")) {
+        line-height: 1.8;
+    }
 }
 
 .reservations__button {
@@ -70,12 +79,14 @@
     color: color("text-white");
     background-color: color("primary");
     border-radius: radius("md");
-    font-size: fz("body");
-    font-weight: 600;
     letter-spacing: ls(30);
     transition:
         background-color 0.2s ease,
         transform 0.2s ease;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+    }
 }
 
 .reservations__button:hover {
@@ -93,7 +104,10 @@
     }
 
     .reservations__title {
-        font-size: rem(28px);
+        @include font-set(28px) {
+            font-weight: 700;
+            line-height: 1.5;
+        }
     }
 }
 
@@ -120,18 +134,27 @@
 
     .reservations__brand {
         margin-bottom: 8px;
-        font-size: rem(24px);
+
+        @include font-set(24px) {
+            font-weight: 700;
+        }
     }
 
     .reservations__title {
         margin-bottom: 20px;
-        font-size: rem(26px);
-        line-height: 1.6;
+
+        @include font-set(26px) {
+            font-weight: 700;
+            line-height: 1.6;
+        }
     }
 
     .reservations__description {
         margin-bottom: 28px;
-        font-size: rem(16px);
+
+        @include font-set(fz("body")) {
+            line-height: 1.8;
+        }
     }
 }
 
@@ -157,22 +180,1286 @@
     }
 
     .reservations__brand {
-        font-size: rem(22px);
+        @include font-set(22px) {
+            font-weight: 700;
+        }
     }
 
     .reservations__title {
-        font-size: rem(23px);
-        line-height: 1.65;
+        @include font-set(23px) {
+            font-weight: 700;
+            line-height: 1.65;
+        }
     }
 
     .reservations__description {
         margin-bottom: 24px;
-        font-size: rem(14px);
+
+        @include font-set(fz("note")) {
+            line-height: 1.8;
+        }
     }
 
     .reservations__button {
         width: 100%;
         min-height: 50px;
-        font-size: rem(15px);
+
+        @include font-set(15px) {
+            font-weight: 600;
+        }
+    }
+}
+
+// ==========================================================================
+// メニュー選択
+// ==========================================================================
+.reservations-menu {
+    padding-top: 64px;
+    padding-bottom: 80px;
+    background-color: color("bg-main");
+}
+
+.reservations-menu__inner {
+    max-width: 900px;
+}
+
+.reservations-menu__heading {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.reservations-menu__eyebrow {
+    margin-bottom: 8px;
+    color: color("primary");
+    letter-spacing: ls(80);
+
+    @include font-set(fz("note")) {
+        font-weight: 700;
+    }
+}
+
+.reservations-menu__title {
+    margin-bottom: 12px;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-menu__description {
+    color: color("text-sub");
+
+    @include font-set(fz("body")) {
+        line-height: 1.8;
+    }
+}
+
+.reservations-menu__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.reservations-menu__item {
+    min-width: 0;
+}
+
+.reservations-menu__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 96px;
+    padding: 20px 48px 20px 24px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    box-shadow: 0 2px 8px rgba(16, 42, 45, 0.06);
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.reservations-menu__link::after {
+    content: "›";
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    color: color("primary");
+    line-height: 1;
+    transform: translateY(-50%);
+    transition: transform 0.2s ease;
+
+    @include font-set(28px);
+}
+
+.reservations-menu__link:hover {
+    border-color: color("primary");
+    box-shadow: 0 6px 16px rgba(16, 42, 45, 0.1);
+    transform: translateY(-2px);
+}
+
+.reservations-menu__link:hover::after {
+    transform: translate(4px, -50%);
+}
+
+.reservations-menu__name {
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.6;
+    }
+}
+
+.reservations-menu__duration {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    color: color("primary");
+    background-color: color("bg-sub");
+    border-radius: radius("full");
+    white-space: nowrap;
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+    }
+}
+
+@include max-screen("md") {
+    .reservations-menu {
+        padding-top: 48px;
+        padding-bottom: 64px;
+    }
+
+    .reservations-menu__heading {
+        margin-bottom: 32px;
+    }
+
+    .reservations-menu__list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-menu {
+        padding-top: 36px;
+        padding-bottom: 48px;
+    }
+
+    .reservations-menu__heading {
+        margin-bottom: 24px;
+    }
+
+    .reservations-menu__eyebrow {
+        @include font-set(12px) {
+            font-weight: 700;
+        }
+    }
+
+    .reservations-menu__title {
+        margin-bottom: 8px;
+
+        @include font-set(20px) {
+            font-weight: 700;
+            line-height: 1.5;
+        }
+    }
+
+    .reservations-menu__description {
+        @include font-set(fz("note")) {
+            line-height: 1.8;
+        }
+    }
+
+    .reservations-menu__link {
+        min-height: 82px;
+        padding: 16px 44px 16px 18px;
+    }
+
+    .reservations-menu__name {
+        @include font-set(15px) {
+            font-weight: 600;
+            line-height: 1.6;
+        }
+    }
+
+    .reservations-menu__duration {
+        padding: 3px 8px;
+
+        @include font-set(12px) {
+            font-weight: 600;
+        }
+    }
+
+    .reservations-menu__link::after {
+        right: 16px;
+
+        @include font-set(24px);
+    }
+}
+
+// ==========================================================================
+// スタッフ選択
+// ==========================================================================
+.reservations-staff {
+    padding-top: 64px;
+    padding-bottom: 80px;
+    background-color: color("bg-main");
+}
+
+.reservations-staff__inner {
+    max-width: 900px;
+}
+
+.reservations-staff__heading {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.reservations-staff__eyebrow {
+    margin-bottom: 8px;
+    color: color("primary");
+    letter-spacing: ls(80);
+
+    @include font-set(fz("note")) {
+        font-weight: 700;
+    }
+}
+
+.reservations-staff__title {
+    margin-bottom: 12px;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-staff__description {
+    color: color("text-sub");
+
+    @include font-set(fz("body")) {
+        line-height: 1.8;
+    }
+}
+
+.reservations-staff__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.reservations-staff__item {
+    min-width: 0;
+}
+
+.reservations-staff__link {
+    align-items: center;
+    justify-content: space-between;
+    min-height: 88px;
+    padding: 20px 24px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    box-shadow: 0 2px 8px rgba(16, 42, 45, 0.06);
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.reservations-staff__link:hover {
+    border-color: color("primary");
+    box-shadow: 0 6px 16px rgba(16, 42, 45, 0.1);
+    transform: translateY(-2px);
+}
+
+.reservations-staff__name {
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+    }
+}
+
+.reservations-staff__arrow {
+    flex-shrink: 0;
+    color: color("primary");
+    line-height: 1;
+    transition: transform 0.2s ease;
+
+    @include font-set(28px);
+}
+
+.reservations-staff__link:hover .reservations-staff__arrow {
+    transform: translateX(4px);
+}
+
+@include max-screen("md") {
+    .reservations-staff {
+        padding-top: 48px;
+        padding-bottom: 64px;
+    }
+
+    .reservations-staff__heading {
+        margin-bottom: 32px;
+    }
+
+    .reservations-staff__list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-staff {
+        padding-top: 36px;
+        padding-bottom: 48px;
+    }
+
+    .reservations-staff__heading {
+        margin-bottom: 24px;
+    }
+
+    .reservations-staff__eyebrow {
+        @include font-set(12px) {
+            font-weight: 700;
+        }
+    }
+
+    .reservations-staff__title {
+        margin-bottom: 8px;
+
+        @include font-set(20px) {
+            font-weight: 700;
+            line-height: 1.5;
+        }
+    }
+
+    .reservations-staff__description {
+        @include font-set(fz("note")) {
+            line-height: 1.8;
+        }
+    }
+
+    .reservations-staff__link {
+        min-height: 76px;
+        padding: 16px 18px;
+    }
+
+    .reservations-staff__name {
+        @include font-set(15px) {
+            font-weight: 600;
+        }
+    }
+
+    .reservations-staff__arrow {
+        @include font-set(24px);
+    }
+}
+
+// ==========================================================================
+// 予約日選択
+// ==========================================================================
+.reservations-date {
+    padding-top: 64px;
+    padding-bottom: 80px;
+    background-color: color("bg-main");
+}
+
+.reservations-date__inner {
+    max-width: 760px;
+}
+
+.reservations-date__heading {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.reservations-date__eyebrow {
+    margin-bottom: 8px;
+    color: color("primary");
+    letter-spacing: ls(80);
+
+    @include font-set(fz("note")) {
+        font-weight: 700;
+    }
+}
+
+.reservations-date__title {
+    margin-bottom: 12px;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-date__description {
+    color: color("text-sub");
+
+    @include font-set(fz("body")) {
+        line-height: 1.8;
+    }
+}
+
+.reservations-date__summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.reservations-date__summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 20px;
+    background-color: color("bg-sub");
+    border-radius: radius("md");
+}
+
+.reservations-date__summary-label {
+    color: color("text-sub");
+
+    @include font-set(fz("note")) {
+        font-weight: 500;
+    }
+}
+
+.reservations-date__summary-value {
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+    }
+}
+
+.reservations-date__form {
+    padding: 32px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    box-shadow: 0 2px 8px rgba(16, 42, 45, 0.06);
+}
+
+.reservations-date__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reservations-date__label {
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+    }
+}
+
+.reservations-date__input {
+    width: 100%;
+    min-height: 52px;
+    padding: 10px 14px;
+    color: color("text-main");
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+    @include font-set(fz("body"));
+}
+
+.reservations-date__input:focus {
+    border-color: color("primary");
+    box-shadow: 0 0 0 3px rgba(0, 131, 143, 0.12);
+}
+
+.reservations-date__button {
+    align-items: center;
+    justify-content: center;
+    width: min(100%, 450px);
+    min-height: 52px;
+    margin: 24px auto 0;
+    padding: 10px 24px;
+    color: color("text-white");
+    background-color: color("primary");
+    border-radius: radius("md");
+    letter-spacing: ls(30);
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+    }
+}
+
+.reservations-date__button:hover {
+    background-color: color("primary-dark");
+    transform: translateY(-2px);
+}
+
+@include max-screen("md") {
+    .reservations-date {
+        padding-top: 48px;
+        padding-bottom: 64px;
+    }
+
+    .reservations-date__heading {
+        margin-bottom: 32px;
+    }
+
+    .reservations-date__summary {
+        grid-template-columns: 1fr;
+    }
+
+    .reservations-date__form {
+        padding: 24px;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-date {
+        padding-top: 36px;
+        padding-bottom: 48px;
+    }
+
+    .reservations-date__heading {
+        margin-bottom: 24px;
+    }
+
+    .reservations-date__eyebrow {
+        @include font-set(12px) {
+            font-weight: 700;
+        }
+    }
+
+    .reservations-date__title {
+        margin-bottom: 8px;
+
+        @include font-set(20px) {
+            font-weight: 700;
+            line-height: 1.5;
+        }
+    }
+
+    .reservations-date__description {
+        @include font-set(fz("note")) {
+            line-height: 1.8;
+        }
+    }
+
+    .reservations-date__summary {
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+
+    .reservations-date__summary-item {
+        padding: 14px 16px;
+    }
+
+    .reservations-date__summary-label {
+        @include font-set(12px) {
+            font-weight: 500;
+        }
+    }
+
+    .reservations-date__summary-value {
+        @include font-set(fz("note")) {
+            font-weight: 600;
+        }
+    }
+
+    .reservations-date__form {
+        padding: 20px 16px;
+    }
+
+    .reservations-date__input {
+        min-height: 48px;
+
+        @include font-set(15px);
+    }
+
+    .reservations-date__button {
+        min-height: 48px;
+        margin-top: 20px;
+
+        @include font-set(15px) {
+            font-weight: 600;
+        }
+    }
+}
+
+// ==========================================================================
+// 時間帯選択
+// ==========================================================================
+.reservations-slots {
+    padding-top: 64px;
+    padding-bottom: 80px;
+    background-color: color("bg-main");
+}
+
+.reservations-slots__inner {
+    max-width: 900px;
+}
+
+.reservations-slots__heading {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.reservations-slots__eyebrow {
+    margin-bottom: 8px;
+    color: color("primary");
+    letter-spacing: ls(80);
+
+    @include font-set(fz("note")) {
+        font-weight: 700;
+    }
+}
+
+.reservations-slots__title {
+    margin-bottom: 12px;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-slots__date {
+    color: color("text-sub");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+    }
+}
+
+.reservations-slots__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.reservations-slots__item {
+    min-width: 0;
+}
+
+.reservations-slots__link {
+    align-items: center;
+    justify-content: center;
+    min-height: 64px;
+    padding: 12px 16px;
+    color: color("text-main");
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+    }
+}
+
+.reservations-slots__link:hover {
+    color: color("text-white");
+    background-color: color("primary");
+    border-color: color("primary");
+    transform: translateY(-2px);
+}
+
+.reservations-slots__empty {
+    padding: 48px 24px;
+    text-align: center;
+    background-color: color("status-gray");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+}
+
+.reservations-slots__empty-title {
+    margin-bottom: 8px;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+    }
+}
+
+.reservations-slots__empty-description {
+    color: color("text-sub");
+
+    @include font-set(fz("note"));
+}
+
+@include max-screen("md") {
+    .reservations-slots {
+        padding-top: 48px;
+        padding-bottom: 64px;
+    }
+
+    .reservations-slots__heading {
+        margin-bottom: 32px;
+    }
+
+    .reservations-slots__list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-slots {
+        padding-top: 36px;
+        padding-bottom: 48px;
+    }
+
+    .reservations-slots__heading {
+        margin-bottom: 24px;
+    }
+
+    .reservations-slots__eyebrow {
+        @include font-set(12px) {
+            font-weight: 700;
+        }
+    }
+
+    .reservations-slots__title {
+        margin-bottom: 8px;
+
+        @include font-set(20px) {
+            font-weight: 700;
+            line-height: 1.5;
+        }
+    }
+
+    .reservations-slots__date {
+        @include font-set(fz("note")) {
+            font-weight: 600;
+        }
+    }
+
+    .reservations-slots__list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .reservations-slots__link {
+        min-height: 56px;
+        padding: 10px 12px;
+
+        @include font-set(fz("note")) {
+            font-weight: 600;
+        }
+    }
+
+    .reservations-slots__empty {
+        padding: 36px 20px;
+    }
+
+    .reservations-slots__empty-title {
+        @include font-set(fz("note")) {
+            font-weight: 600;
+        }
+    }
+
+    .reservations-slots__empty-description {
+        @include font-set(12px);
+    }
+}
+
+// ==========================================================================
+// 顧客情報入力
+// ==========================================================================
+.reservations-customer {
+    padding: 64px 0 80px;
+}
+
+.reservations-customer__inner {
+    max-width: 760px;
+}
+
+.reservations-customer__heading {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.reservations-customer__eyebrow {
+    margin-bottom: 8px;
+    color: color("primary");
+    letter-spacing: 0.08em;
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-customer__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-customer__description {
+    margin-top: 12px;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        line-height: 1.8;
+    }
+}
+
+.reservations-customer__summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: #fff;
+}
+
+.reservations-customer__summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 20px;
+    background-color: #fff;
+}
+
+.reservations-customer__summary-label {
+    color: color("text-main");
+
+    @include font-set(fz("note")) {
+        line-height: 1.5;
+    }
+}
+
+.reservations-customer__summary-value {
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-customer__form {
+    padding: 32px;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: #fff;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 5%);
+}
+
+.reservations-customer__field {
+    margin-bottom: 24px;
+}
+
+.reservations-customer__label {
+    display: block;
+    margin-bottom: 8px;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-customer__input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: #fff;
+    color: color("text-main");
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+}
+
+.reservations-customer__input:focus {
+    border-color: color("primary");
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(0 131 143 / 12%);
+}
+
+.reservations-customer__button {
+    width: min(100%, 450px);
+    min-height: 48px;
+    margin: 32px auto 0;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-customer__button:hover {
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .reservations-customer {
+        padding: 48px 0 64px;
+    }
+
+    .reservations-customer__summary {
+        grid-template-columns: 1fr;
+    }
+
+    .reservations-customer__form {
+        padding: 24px;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-customer {
+        padding: 40px 0 56px;
+    }
+
+    .reservations-customer__heading {
+        margin-bottom: 24px;
+    }
+
+    .reservations-customer__form {
+        padding: 20px;
+    }
+}
+
+// ==========================================================================
+// 予約内容確認
+// ==========================================================================
+.reservations-confirm {
+    padding: 64px 0 80px;
+}
+
+.reservations-confirm__inner {
+    max-width: 760px;
+}
+
+.reservations-confirm__heading {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.reservations-confirm__eyebrow {
+    margin-bottom: 8px;
+    color: color("primary");
+    letter-spacing: 0.08em;
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-confirm__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-confirm__description {
+    margin-top: 12px;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        line-height: 1.8;
+    }
+}
+
+.reservations-confirm__section {
+    margin-bottom: 32px;
+}
+
+.reservations-confirm__section-title {
+    margin: 0 0 12px;
+    color: color("text-main");
+
+    @include font-set(fz("lead")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-confirm__summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("border");
+}
+
+.reservations-confirm__summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 20px;
+    background-color: #fff;
+}
+
+.reservations-confirm__summary-label {
+    color: color("text-main");
+
+    @include font-set(fz("note")) {
+        line-height: 1.5;
+    }
+}
+
+.reservations-confirm__summary-value {
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-confirm__form {
+    margin-top: 40px;
+}
+
+.reservations-confirm__button {
+    width: min(100%, 450px);
+    min-height: 48px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-confirm__button:hover {
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .reservations-confirm {
+        padding: 48px 0 64px;
+    }
+
+    .reservations-confirm__summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-confirm {
+        padding: 40px 0 56px;
+    }
+
+    .reservations-confirm__heading {
+        margin-bottom: 32px;
+    }
+
+    .reservations-confirm__section {
+        margin-bottom: 24px;
+    }
+
+    .reservations-confirm__form {
+        margin-top: 32px;
+    }
+}
+
+// ==========================================================================
+// 予約完了画面
+// ==========================================================================
+.reservations-complete {
+    padding: 64px 0 80px;
+}
+
+.reservations-complete__inner {
+    max-width: 760px;
+}
+
+.reservations-complete__heading {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.reservations-complete__eyebrow {
+    margin-bottom: 8px;
+    color: color("primary");
+    letter-spacing: 0.08em;
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-complete__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-complete__message {
+    margin-top: 12px;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        line-height: 1.8;
+    }
+}
+
+.reservations-complete__number {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+    padding: 24px;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-sub");
+    text-align: center;
+}
+
+.reservations-complete__number-label {
+    color: color("text-main");
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-complete__number-value {
+    color: color("primary-dark");
+    letter-spacing: 0.08em;
+
+    @include font-set(fz("lead")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-complete__section {
+    margin-bottom: 32px;
+}
+
+.reservations-complete__section-title {
+    margin: 0 0 12px;
+    color: color("text-main");
+
+    @include font-set(fz("lead")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-complete__summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("border");
+}
+
+.reservations-complete__summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 20px;
+    background-color: #fff;
+}
+
+.reservations-complete__summary-label {
+    color: color("text-main");
+
+    @include font-set(fz("note")) {
+        line-height: 1.5;
+    }
+}
+
+.reservations-complete__summary-value {
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+@include max-screen("md") {
+    .reservations-complete {
+        padding: 48px 0 64px;
+    }
+
+    .reservations-complete__summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-complete {
+        padding: 40px 0 56px;
+    }
+
+    .reservations-complete__heading {
+        margin-bottom: 24px;
+    }
+
+    .reservations-complete__number {
+        margin-bottom: 32px;
+        padding: 20px;
+    }
+
+    .reservations-complete__section {
+        margin-bottom: 24px;
     }
 }

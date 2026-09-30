@@ -1,34 +1,57 @@
-<!DOCTYPE html>
-<html lang="ja">
+<x-app-layout>
+  <section class="reservations-date">
+    <div class="reservations-date__inner u-wrap">
+      <div class="reservations-date__heading">
+        <p class="reservations-date__eyebrow">WEB RESERVATION</p>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>日付選択</title>
-</head>
+        <h1 class="reservations-date__title">
+          予約日を選択
+        </h1>
 
-<body>
+        <p class="reservations-date__description">
+          ご希望の予約日を選択してください。
+        </p>
+      </div>
 
-  <h1>日付選択</h1>
+      <div class="reservations-date__summary">
+        <div class="reservations-date__summary-item">
+          <span class="reservations-date__summary-label">
+            メニュー
+          </span>
 
-  <p>
-    メニュー：{{ $menu->name }}
-  </p>
+          <span class="reservations-date__summary-value">
+            {{ $menu->name }}
+          </span>
+        </div>
 
-  <p>
-    担当スタッフ：{{ $staff->name }}
-  </p>
+        <div class="reservations-date__summary-item">
+          <span class="reservations-date__summary-label">
+            担当スタッフ
+          </span>
 
-  <form method="GET" action="{{ route('reservations.slots') }}">
-    <input type="hidden" name="menu_id" value="{{ $menu->id }}">
-    <input type="hidden" name="staff_id" value="{{ $staff->id }}">
+          <span class="reservations-date__summary-value">
+            {{ $staff->name }}
+          </span>
+        </div>
+      </div>
 
-    <label for="date">予約日</label>
-    <input type="date" id="date" name="date">
+      <form method="GET" action="{{ route('reservations.slots') }}" class="reservations-date__form">
+        <input type="hidden" name="menu_id" value="{{ $menu->id }}">
 
-    <button type="submit">次へ</button>
-  </form>
+        <input type="hidden" name="staff_id" value="{{ $staff->id }}">
 
-</body>
+        <div class="reservations-date__field">
+          <label for="date" class="reservations-date__label">
+            予約日
+          </label>
 
-</html>
+          <input type="date" id="date" name="date" class="reservations-date__input">
+        </div>
+
+        <button type="submit" class="reservations-date__button u-flex">
+          次へ
+        </button>
+      </form>
+    </div>
+  </section>
+</x-app-layout>

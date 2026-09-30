@@ -1,56 +1,105 @@
-<!DOCTYPE html>
-<html lang="ja">
+<x-app-layout>
+  <section class="reservations-confirm">
+    <div class="reservations-confirm__inner u-wrap">
+      <div class="reservations-confirm__heading">
+        <p class="reservations-confirm__eyebrow">WEB RESERVATION</p>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>予約確認</title>
-</head>
+        <h1 class="reservations-confirm__title">
+          予約確認
+        </h1>
 
-<body>
+        <p class="reservations-confirm__description">
+          以下の内容をご確認のうえ、予約を確定してください。
+        </p>
+      </div>
 
-  <h1>予約確認</h1>
+      <div class="reservations-confirm__section">
+        <h2 class="reservations-confirm__section-title">
+          予約内容
+        </h2>
 
-  <h2>予約内容</h2>
+        <div class="reservations-confirm__summary">
+          <div class="reservations-confirm__summary-item">
+            <span class="reservations-confirm__summary-label">
+              メニュー
+            </span>
+            <span class="reservations-confirm__summary-value">
+              {{ $menu->name }}
+            </span>
+          </div>
 
-  <p>
-    メニュー：{{ $menu->name }}
-  </p>
+          <div class="reservations-confirm__summary-item">
+            <span class="reservations-confirm__summary-label">
+              担当スタッフ
+            </span>
+            <span class="reservations-confirm__summary-value">
+              {{ $staff->name }}
+            </span>
+          </div>
 
-  <p>
-    担当スタッフ：{{ $staff->name }}
-  </p>
+          <div class="reservations-confirm__summary-item">
+            <span class="reservations-confirm__summary-label">
+              予約日
+            </span>
+            <span class="reservations-confirm__summary-value">
+              {{ $date->format('Y-m-d') }}
+            </span>
+          </div>
 
-  <p>
-    予約日：{{ $date->format('Y-m-d') }}
-  </p>
+          <div class="reservations-confirm__summary-item">
+            <span class="reservations-confirm__summary-label">
+              予約時間
+            </span>
+            <span class="reservations-confirm__summary-value">
+              {{ $startAt->format('H:i') }}
+            </span>
+          </div>
+        </div>
+      </div>
 
-  <p>
-    予約時間：{{ $startAt->format('H:i') }}
-  </p>
+      <div class="reservations-confirm__section">
+        <h2 class="reservations-confirm__section-title">
+          顧客情報
+        </h2>
 
-  <h2>顧客情報</h2>
+        <div class="reservations-confirm__summary">
+          <div class="reservations-confirm__summary-item">
+            <span class="reservations-confirm__summary-label">
+              お名前
+            </span>
+            <span class="reservations-confirm__summary-value">
+              {{ $customerName }}
+            </span>
+          </div>
 
-  <p>
-    お名前：{{ $customerName }}
-  </p>
+          <div class="reservations-confirm__summary-item">
+            <span class="reservations-confirm__summary-label">
+              メールアドレス
+            </span>
+            <span class="reservations-confirm__summary-value">
+              {{ $customerEmail }}
+            </span>
+          </div>
+        </div>
+      </div>
 
-  <p>
-    メールアドレス：{{ $customerEmail }}
-  </p>
+      <form method="POST" action="{{ route('reservations.store') }}" class="reservations-confirm__form">
+        @csrf
 
-  <form method="POST" action="{{ route('reservations.store') }}">
-    @csrf
+        <input type="hidden" name="menu_id" value="{{ $menu->id }}">
 
-    <input type="hidden" name="menu_id" value="{{ $menu->id }}">
-    <input type="hidden" name="staff_id" value="{{ $staff->id }}">
-    <input type="hidden" name="start_at" value="{{ $startAt->format('Y-m-d H:i:s') }}">
-    <input type="hidden" name="customer_name" value="{{ $customerName }}">
-    <input type="hidden" name="customer_email" value="{{ $customerEmail }}">
+        <input type="hidden" name="staff_id" value="{{ $staff->id }}">
 
-    <button type="submit">予約を確定する</button>
-  </form>
+        <input type="hidden" name="start_at" value="{{ $startAt->format('Y-m-d H:i:s') }}">
 
-</body>
+        <input type="hidden" name="customer_name" value="{{ $customerName }}">
 
-</html>
+        <input type="hidden" name="customer_email" value="{{ $customerEmail }}">
+
+        <button type="submit" class="reservations-confirm__button u-flex">
+          予約を確定する
+        </button>
+      </form>
+    </div>
+  </section>
+</x-app-layout>

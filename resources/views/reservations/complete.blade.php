@@ -1,48 +1,93 @@
-<!DOCTYPE html>
-<html lang="ja">
+<x-app-layout>
+  <section class="reservations-complete">
+    <div class="reservations-complete__inner u-wrap">
+      <div class="reservations-complete__heading">
+        <p class="reservations-complete__eyebrow">WEB RESERVATION</p>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>予約完了</title>
-</head>
+        <h1 class="reservations-complete__title">
+          予約完了
+        </h1>
 
-<body>
+        <p class="reservations-complete__message">
+          ご予約ありがとうございます。
+        </p>
+      </div>
 
-  <h1>予約完了</h1>
+      <div class="reservations-complete__number">
+        <span class="reservations-complete__number-label">
+          予約番号
+        </span>
 
-  <p>
-    ご予約ありがとうございます。
-  </p>
+        <span class="reservations-complete__number-value">
+          {{ $reservation->reservation_number }}
+        </span>
+      </div>
 
-  <h2>予約内容</h2>
+      <div class="reservations-complete__section">
+        <h2 class="reservations-complete__section-title">
+          予約内容
+        </h2>
 
-  <p>
-    予約番号：{{ $reservation->reservation_number }}
-  </p>
+        <div class="reservations-complete__summary">
+          <div class="reservations-complete__summary-item">
+            <span class="reservations-complete__summary-label">
+              メニュー
+            </span>
 
-  <p>
-    メニュー：{{ $reservation->menu->name }}
-  </p>
+            <span class="reservations-complete__summary-value">
+              {{ $reservation->menu->name }}
+            </span>
+          </div>
 
-  <p>
-    担当スタッフ：{{ $reservation->staff->name }}
-  </p>
+          <div class="reservations-complete__summary-item">
+            <span class="reservations-complete__summary-label">
+              担当スタッフ
+            </span>
 
-  <p>
-    予約日時：{{ $reservation->start_at->format('Y-m-d H:i') }}
-  </p>
+            <span class="reservations-complete__summary-value">
+              {{ $reservation->staff->name }}
+            </span>
+          </div>
 
-  <h2>顧客情報</h2>
+          <div class="reservations-complete__summary-item">
+            <span class="reservations-complete__summary-label">
+              予約日時
+            </span>
 
-  <p>
-    お名前：{{ $reservation->customer_name }}
-  </p>
+            <span class="reservations-complete__summary-value">
+              {{ $reservation->start_at->format('Y-m-d H:i') }}
+            </span>
+          </div>
+        </div>
+      </div>
 
-  <p>
-    メールアドレス：{{ $reservation->customer_email }}
-  </p>
+      <div class="reservations-complete__section">
+        <h2 class="reservations-complete__section-title">
+          顧客情報
+        </h2>
 
-</body>
+        <div class="reservations-complete__summary">
+          <div class="reservations-complete__summary-item">
+            <span class="reservations-complete__summary-label">
+              お名前
+            </span>
 
-</html>
+            <span class="reservations-complete__summary-value">
+              {{ $reservation->customer_name }}
+            </span>
+          </div>
+
+          <div class="reservations-complete__summary-item">
+            <span class="reservations-complete__summary-label">
+              メールアドレス
+            </span>
+
+            <span class="reservations-complete__summary-value">
+              {{ $reservation->customer_email }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</x-app-layout>
