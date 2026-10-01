@@ -1,0 +1,885 @@
+@use "../abstracts" as *;
+
+// ==========================================================================
+// スタッフダッシュボード
+// ==========================================================================
+.staff-dashboard {
+    padding: 48px 0 64px;
+}
+
+.staff-dashboard__inner {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.staff-dashboard__welcome {
+    margin-bottom: 32px;
+}
+
+.staff-dashboard__title {
+    margin: 0 0 8px;
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    color: color("text-main");
+}
+
+.staff-dashboard__lead {
+    margin: 0;
+
+    @include font-set(fz("body")) {
+        line-height: 1.6;
+    }
+
+    color: color("text-main");
+}
+
+.staff-dashboard__summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.staff-dashboard__summary-card {
+    padding: 24px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+}
+
+.staff-dashboard__summary-label {
+    margin: 0 0 12px;
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    color: color("text-main");
+}
+
+.staff-dashboard__summary-count {
+    margin: 0;
+
+    @include font-set(fz("display")) {
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    color: color("primary");
+}
+
+.staff-dashboard__summary-count span {
+    margin-left: 4px;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+    }
+}
+
+.staff-dashboard__next-time {
+    margin: 0 0 8px;
+
+    @include font-set(fz("display")) {
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    color: color("primary");
+}
+
+.staff-dashboard__next-detail {
+    margin: 0;
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-dashboard__next-empty {
+    margin: 0;
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-dashboard__links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.staff-dashboard__link {
+    display: block;
+    padding: 24px;
+    background-color: color("bg-sub");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    color: color("text-main");
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.staff-dashboard__link:hover {
+    background-color: color("bg-main");
+    border-color: color("primary");
+}
+
+.staff-dashboard__link-title {
+    display: block;
+    margin-bottom: 8px;
+
+    @include font-set(fz("body")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-dashboard__link-text {
+    display: block;
+
+    @include font-set(fz("note")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+@include max-screen("md") {
+    .staff-dashboard {
+        padding: 32px 0 48px;
+    }
+
+    .staff-dashboard__summary {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-dashboard__links {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-dashboard__summary-card,
+    .staff-dashboard__link {
+        padding: 20px;
+    }
+}
+
+// ==========================================================================
+// スタッフプロフィール
+// ==========================================================================
+.staff-profile {
+    padding: 48px 0 64px;
+}
+
+.staff-profile__inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.staff-profile__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.staff-profile__title {
+    margin-bottom: 32px;
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    color: color("text-main");
+}
+
+.staff-profile__edit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: color("primary");
+    border-radius: radius("md");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-white");
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.staff-profile__edit-button:hover {
+    background-color: color("primary-dark");
+}
+
+.staff-profile__card {
+    padding: 32px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+}
+
+.staff-profile__list {
+    margin: 0;
+}
+
+.staff-profile__item {
+    display: flex;
+    padding: 20px 0;
+    border-bottom: 1px solid color("border");
+
+    &:first-child {
+        padding-top: 0;
+    }
+
+    &:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+}
+
+.staff-profile__label {
+    width: 180px;
+    flex-shrink: 0;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-profile__value {
+    margin: 0;
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+@include max-screen("md") {
+    .staff-profile {
+        padding: 32px 0 48px;
+    }
+
+    .staff-profile__header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .staff-profile__edit-button {
+        width: 100%;
+    }
+
+    .staff-profile__card {
+        padding: 24px 20px;
+    }
+
+    .staff-profile__item {
+        display: block;
+    }
+
+    .staff-profile__label {
+        width: auto;
+        margin-bottom: 8px;
+    }
+}
+
+// ==========================================================================
+// スタッフプロフィール編集
+// ==========================================================================
+.staff-profile-edit {
+    padding: 48px 0 64px;
+}
+
+.staff-profile-edit__inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.staff-profile-edit__title {
+    margin-bottom: 32px;
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    color: color("text-main");
+}
+
+.staff-profile-edit__form {
+    padding: 32px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+}
+
+.staff-profile-edit__field {
+    margin-bottom: 24px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.staff-profile-edit__label {
+    display: block;
+    margin-bottom: 8px;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-profile-edit__input {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("md");
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-profile-edit__input:read-only {
+    background-color: color("bg-sub");
+}
+
+.staff-profile-edit__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.staff-profile-edit__back-button,
+.staff-profile-edit__submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    padding: 10px 20px;
+    border-radius: radius("md");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.staff-profile-edit__back-button {
+    background-color: color("bg-sub");
+    color: color("text-main");
+}
+
+.staff-profile-edit__submit-button {
+    border: 0;
+    background-color: color("primary");
+    color: color("text-white");
+}
+
+.staff-profile-edit__back-button:hover {
+    background-color: color("border");
+}
+
+.staff-profile-edit__submit-button:hover {
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .staff-profile-edit {
+        padding: 32px 0 48px;
+    }
+
+    .staff-profile-edit__form {
+        padding: 24px 20px;
+    }
+
+    .staff-profile-edit__actions {
+        flex-direction: column-reverse;
+    }
+
+    .staff-profile-edit__back-button,
+    .staff-profile-edit__submit-button {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// スタッフ予約一覧
+// ==========================================================================
+.staff-reservations {
+    padding: 48px 0 64px;
+}
+
+.staff-reservations__inner {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.staff-reservations__title {
+    margin-bottom: 32px;
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations__list {
+    display: grid;
+    gap: 16px;
+}
+
+.staff-reservations__item {
+    padding: 24px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+}
+
+.staff-reservations__item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid color("border");
+}
+
+.staff-reservations__number {
+    margin: 0;
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations__status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    background-color: color("bg-sub");
+    border-radius: radius("full");
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations__details {
+    margin: 0;
+}
+
+.staff-reservations__detail {
+    display: flex;
+    padding: 16px 0;
+    border-bottom: 1px solid color("border");
+
+    &:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+}
+
+.staff-reservations__label {
+    width: 140px;
+    flex-shrink: 0;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations__value {
+    margin: 0;
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations__empty {
+    padding: 32px;
+    background-color: color("bg-sub");
+    border-radius: radius("lg");
+    text-align: center;
+}
+
+.staff-reservations__empty-text {
+    margin: 0;
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.staff-reservations__detail-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    padding: 10px 20px;
+    background-color: color("primary");
+    border-radius: radius("md");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-white");
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.staff-reservations__detail-button:hover {
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .staff-reservations {
+        padding: 32px 0 48px;
+    }
+
+    .staff-reservations__item {
+        padding: 20px;
+    }
+
+    .staff-reservations__item-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .staff-reservations__detail {
+        display: block;
+    }
+
+    .staff-reservations__label {
+        width: auto;
+        margin-bottom: 6px;
+    }
+
+    .staff-reservations__empty {
+        padding: 24px 20px;
+    }
+
+    .staff-reservations__detail-button {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// スタッフ予約詳細
+// ==========================================================================
+.staff-reservations-show {
+    padding: 48px 0 64px;
+}
+
+.staff-reservations-show__inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.staff-reservations-show__header {
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.staff-reservations-show__title {
+    margin: 0;
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations-show__back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    padding: 10px 20px;
+    background-color: color("bg-sub");
+    border-radius: radius("md");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.staff-reservations-show__back-button:hover {
+    background-color: color("border");
+}
+
+.staff-reservations-show__card {
+    padding: 32px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+}
+
+.staff-reservations-show__list {
+    margin: 0;
+}
+
+.staff-reservations-show__item {
+    align-items: flex-start;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid color("border");
+
+    &:first-child {
+        padding-top: 0;
+    }
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.staff-reservations-show__label {
+    width: 180px;
+    flex-shrink: 0;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations-show__value {
+    flex: 1;
+    margin: 0;
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations-show__select,
+.staff-reservations-show__input {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("md");
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-reservations-show__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+}
+
+.staff-reservations-show__submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+    padding: 12px 20px;
+    border: 0;
+    background-color: color("primary");
+    border-radius: radius("md");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-white");
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.staff-reservations-show__submit-button:hover {
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .staff-reservations-show {
+        padding: 32px 0 48px;
+    }
+
+    .staff-reservations-show__header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .staff-reservations-show__back-button {
+        width: 100%;
+    }
+
+    .staff-reservations-show__card {
+        padding: 24px 20px;
+    }
+
+    .staff-reservations-show__item {
+        display: block;
+    }
+
+    .staff-reservations-show__label {
+        width: auto;
+        margin-bottom: 8px;
+    }
+
+    .staff-reservations-show__value {
+        width: auto;
+    }
+
+    .staff-reservations-show__actions {
+        display: block;
+    }
+
+    .staff-reservations-show__submit-button {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// スタッフ対応メニュー
+// ==========================================================================
+.staff-menus {
+    padding: 48px 0 64px;
+}
+
+.staff-menus__inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.staff-menus__title {
+    margin-bottom: 32px;
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    color: color("text-main");
+}
+
+.staff-menus__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.staff-menus__item {
+    padding: 20px 24px;
+    background-color: color("bg-main");
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+}
+
+.staff-menus__name {
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+.staff-menus__empty {
+    padding: 24px;
+    background-color: color("bg-sub");
+    border-radius: radius("md");
+
+    @include font-set(fz("body")) {
+        line-height: 1.5;
+    }
+
+    color: color("text-main");
+}
+
+@include max-screen("md") {
+    .staff-menus {
+        padding: 32px 0 48px;
+    }
+
+    .staff-menus__list {
+        grid-template-columns: 1fr;
+    }
+}

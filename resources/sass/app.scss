@@ -1,5 +1,6 @@
 @use "abstracts"; // 変数・関数・Mixin
 @use "base/reset"; // リセット・基本スタイル
 @use "layout/header"; // 共通レイアウト
-@use "pages/reservations"; // 顧客側TOP
+@use "pages/reservations"; // 顧客
+@use "pages/staff"; // スタッフ
 @use "utilities/utilities"; // 汎用Utility

@@ -7,14 +7,29 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StaffProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Menu;
+use App\Models\Reservation;
 
 class StaffController extends Controller
 {
     public function dashboard(): View
     {
-        return view('staff.dashboard');
-    }
+        $staff = Auth::user()->staff;
 
+        $todayReservations = Reservation::with('menu')
+            ->where('staff_id', $staff->id)
+            ->whereDate('start_at', today())
+            ->orderBy('start_at')
+            ->get();
+
+        $nextReservation = $todayReservations
+            ->first(fn($reservation) => $reservation->start_at->isFuture());
+
+        return view('staff.dashboard', compact(
+            'staff',
+            'todayReservations',
+            'nextReservation'
+        ));
+    }
 
     public function profile(): View
     {

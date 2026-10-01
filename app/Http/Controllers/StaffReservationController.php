@@ -9,6 +9,8 @@ use App\Http\Requests\StaffReservationUpdateRequest;
 use App\Services\ReservationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Menu;
+use App\Models\Staff;
 
 class StaffReservationController extends Controller
 {
@@ -26,7 +28,13 @@ class StaffReservationController extends Controller
     {
         Gate::authorize('view', $reservation);
 
-        return view('staff.reservations.show', compact('reservation'));
+        $staffs = Staff::orderBy('name')->get();
+        $menus = Menu::orderBy('name')->get();
+
+        return view(
+            'staff.reservations.show',
+            compact('reservation', 'staffs', 'menus')
+        );
     }
 
     public function update(
