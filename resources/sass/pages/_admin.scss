@@ -1,0 +1,3703 @@
+@use "../abstracts" as *;
+
+// ==========================================================================
+// 管理者ダッシュボード
+// ==========================================================================
+.admin-dashboard {
+    padding: rem(48) 0 64px;
+}
+
+.admin-dashboard__header {
+    margin-bottom: rem(40);
+}
+
+.admin-dashboard__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+    font-size: fz("note");
+    font-weight: 700;
+    letter-spacing: ls(0.08);
+}
+
+.admin-dashboard__title {
+    margin: 0;
+    color: color("text-main");
+    font-size: fz("heading");
+    font-weight: 700;
+}
+
+.admin-dashboard__greeting {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+    font-size: fz("body");
+}
+
+.admin-dashboard__section-title {
+    margin: 0 0 rem(20);
+    color: color("text-main");
+    font-size: fz("lead");
+    font-weight: 700;
+}
+
+.admin-dashboard__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: rem(20);
+}
+
+.admin-dashboard__card {
+    display: block;
+    padding: rem(24);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+    color: color("text-main");
+    text-decoration: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.admin-dashboard__card:hover {
+    border-color: color("primary-light");
+    box-shadow: 0 rem(8) rem(20) rgba(0, 96, 105, 0.08);
+    transform: translateY(-2px);
+}
+
+.admin-dashboard__card-title {
+    margin: 0;
+    color: color("primary-dark");
+    font-size: fz("body");
+    font-weight: 700;
+}
+
+.admin-dashboard__card-text {
+    margin: rem(10) 0 0;
+    color: color("text-main");
+    font-size: fz("note");
+    line-height: 1.7;
+}
+
+@include max-screen("md") {
+    .admin-dashboard {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-dashboard__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@include max-screen("sm") {
+    .admin-dashboard {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-dashboard__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-dashboard__grid {
+        grid-template-columns: 1fr;
+        gap: rem(16);
+    }
+
+    .admin-dashboard__card {
+        padding: rem(20);
+    }
+}
+
+// ==========================================================================
+// スタッフ一覧
+// ==========================================================================
+.admin-staffs {
+    padding: rem(48) 0 64px;
+}
+
+.admin-staffs__header {
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: rem(24);
+    margin-bottom: rem(40);
+}
+
+.admin-staffs__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+    font-size: fz("note");
+    font-weight: 700;
+    letter-spacing: ls(0.08);
+}
+
+.admin-staffs__title {
+    margin: 0;
+    color: color("text-main");
+    font-size: fz("heading");
+    font-weight: 700;
+}
+
+.admin-staffs__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+    font-size: fz("body");
+}
+
+.admin-staffs__create {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: color("text-white");
+    font-size: fz("body");
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.admin-staffs__create:hover {
+    background-color: color("primary-dark");
+}
+
+.admin-staffs__list {
+    display: grid;
+    gap: rem(16);
+}
+
+.admin-staffs__card {
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(24);
+    padding: rem(24);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-staffs__card-body {
+    min-width: 0;
+}
+
+.admin-staffs .admin-staffs__name {
+    margin: 0;
+    color: color("text-main");
+    font-size: fz("body");
+    font-weight: 700;
+}
+
+.admin-staffs__role {
+    margin: rem(8) 0 0;
+    color: color("primary-dark");
+    font-size: fz("note");
+}
+
+.admin-staffs__actions {
+    align-items: center;
+    flex-shrink: 0;
+    gap: rem(8);
+}
+
+.admin-staffs__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(72);
+    min-height: rem(40);
+    padding: 0 rem(16);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    font-size: fz("note");
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-staffs__action--detail {
+    background-color: color("bg-main");
+    color: color("primary-dark");
+}
+
+.admin-staffs__action--detail:hover {
+    border-color: color("primary-light");
+    background-color: color("bg-sub");
+}
+
+.admin-staffs__action--edit {
+    border-color: color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+}
+
+.admin-staffs__action--edit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+.admin-staffs__delete-form {
+    margin: 0;
+}
+
+.admin-staffs__action--delete {
+    border-color: color("danger");
+    background-color: color("bg-main");
+    color: color("danger");
+    cursor: pointer;
+}
+
+.admin-staffs__action--delete:hover {
+    border-color: color("danger");
+    background-color: color("danger");
+    color: color("text-white");
+}
+
+@include max-screen("md") {
+    .admin-staffs {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-staffs__header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: rem(20);
+        margin-bottom: rem(32);
+    }
+
+    .admin-staffs__create {
+        width: 100%;
+    }
+}
+
+@include max-screen("sm") {
+    .admin-staffs {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-staffs__card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: rem(20);
+        padding: rem(20);
+    }
+
+    .admin-staffs__actions {
+        width: 100%;
+    }
+
+    .admin-staffs__action {
+        flex: 1;
+    }
+
+    .admin-staffs__delete-form {
+        flex: 1;
+        display: contents;
+    }
+}
+
+// ==========================================================================
+// スタッフ新規登録
+// ==========================================================================
+.admin-staffs-create {
+    padding: rem(48) 0 64px;
+}
+
+.admin-staffs-create__header {
+    margin-bottom: rem(40);
+}
+
+.admin-staffs-create__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+    letter-spacing: ls(0.08);
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-create__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-create__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-staffs-create__section {
+    max-width: rem(720);
+    margin: 0 auto;
+    padding: rem(32);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-staffs-create__form {
+    display: grid;
+    gap: rem(24);
+}
+
+.admin-staffs-create__field {
+    display: grid;
+    gap: rem(8);
+}
+
+.admin-staffs-create__label {
+    color: color("text-main");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-create__input,
+.admin-staffs-create__select {
+    width: 100%;
+    min-height: rem(44);
+    padding: rem(10) rem(12);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-staffs-create__input:focus,
+.admin-staffs-create__select:focus {
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+    border-color: color("primary");
+}
+
+.admin-staffs-create__error {
+    margin: 0;
+    color: color("danger");
+
+    @include font-set("note");
+}
+
+.admin-staffs-create__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(8);
+}
+
+.admin-staffs-create__back,
+.admin-staffs-create__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border-radius: radius("md");
+    text-decoration: none;
+    cursor: pointer;
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-create__back {
+    border: 1px solid color("border");
+    background-color: color("bg-main");
+    color: color("primary-dark");
+}
+
+.admin-staffs-create__back:hover {
+    border-color: color("primary-light");
+    background-color: color("bg-sub");
+}
+
+.admin-staffs-create__submit {
+    border: 1px solid color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+}
+
+.admin-staffs-create__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-staffs-create {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-staffs-create__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-staffs-create__section {
+        max-width: none;
+    }
+}
+
+@include max-screen("sm") {
+    .admin-staffs-create {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-staffs-create__section {
+        padding: rem(20);
+    }
+
+    .admin-staffs-create__actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .admin-staffs-create__back,
+    .admin-staffs-create__submit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// スタッフ詳細
+// ==========================================================================
+.admin-staffs-show {
+    padding: rem(48) 0 64px;
+}
+
+.admin-staffs-show__header {
+    margin-bottom: rem(40);
+}
+
+.admin-staffs-show__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+    letter-spacing: ls(0.08);
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-show__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-show__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-staffs-show__section {
+    max-width: rem(720);
+    margin: 0 auto;
+    padding: rem(32);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-staffs-show__list {
+    margin: 0;
+}
+
+.admin-staffs-show__item {
+    display: grid;
+    grid-template-columns: rem(180) 1fr;
+    gap: rem(24);
+    padding: rem(20) 0;
+    border-bottom: 1px solid color("border");
+}
+
+.admin-staffs-show__item:first-child {
+    padding-top: 0;
+}
+
+.admin-staffs-show__item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.admin-staffs-show__label {
+    margin: 0;
+    color: color("primary-dark");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-show__value {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-staffs-show__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(32);
+}
+
+.admin-staffs-show__back,
+.admin-staffs-show__edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border-radius: radius("md");
+    text-decoration: none;
+    cursor: pointer;
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-show__back {
+    border: 1px solid color("border");
+    background-color: color("bg-main");
+    color: color("primary-dark");
+}
+
+.admin-staffs-show__back:hover {
+    border-color: color("primary-light");
+    background-color: color("bg-sub");
+}
+
+.admin-staffs-show__edit {
+    border: 1px solid color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+}
+
+.admin-staffs-show__edit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-staffs-show {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-staffs-show__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-staffs-show__section {
+        max-width: none;
+    }
+
+    .admin-staffs-show__item {
+        grid-template-columns: rem(140) 1fr;
+    }
+}
+
+@include max-screen("sm") {
+    .admin-staffs-show {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-staffs-show__section {
+        padding: rem(20);
+    }
+
+    .admin-staffs-show__item {
+        grid-template-columns: 1fr;
+        gap: rem(8);
+    }
+
+    .admin-staffs-show__actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .admin-staffs-show__back,
+    .admin-staffs-show__edit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// スタッフ編集
+// ==========================================================================
+.admin-staffs-edit {
+    padding: rem(48) 0 64px;
+}
+
+.admin-staffs-edit__header {
+    margin-bottom: rem(40);
+}
+
+.admin-staffs-edit__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+    letter-spacing: ls(0.08);
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-edit__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-edit__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-staffs-edit__section {
+    max-width: rem(720);
+    margin: 0 auto;
+    padding: rem(32);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-staffs-edit__form {
+    display: grid;
+    gap: rem(24);
+}
+
+.admin-staffs-edit__field {
+    display: grid;
+    gap: rem(8);
+}
+
+.admin-staffs-edit__label {
+    color: color("text-main");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-edit__input,
+.admin-staffs-edit__select {
+    width: 100%;
+    min-height: rem(44);
+    padding: rem(10) rem(12);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-staffs-edit__input:focus,
+.admin-staffs-edit__select:focus {
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+    border-color: color("primary");
+}
+
+.admin-staffs-edit__error {
+    margin: 0;
+    color: color("danger");
+
+    @include font-set("note");
+}
+
+.admin-staffs-edit__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(8);
+}
+
+.admin-staffs-edit__back,
+.admin-staffs-edit__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border-radius: radius("md");
+    text-decoration: none;
+    cursor: pointer;
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+}
+
+.admin-staffs-edit__back {
+    border: 1px solid color("border");
+    background-color: color("bg-main");
+    color: color("primary-dark");
+}
+
+.admin-staffs-edit__back:hover {
+    border-color: color("primary-light");
+    background-color: color("bg-sub");
+}
+
+.admin-staffs-edit__submit {
+    border: 1px solid color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+}
+
+.admin-staffs-edit__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-staffs-edit {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-staffs-edit__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-staffs-edit__section {
+        max-width: none;
+    }
+}
+
+@include max-screen("sm") {
+    .admin-staffs-edit {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-staffs-edit__section {
+        padding: rem(20);
+    }
+
+    .admin-staffs-edit__actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .admin-staffs-edit__back,
+    .admin-staffs-edit__submit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// 顧客一覧
+// ==========================================================================
+.admin-customers {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-customers__header {
+    margin-bottom: rem(40);
+}
+
+.admin-customers__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+    @include font-set("note") {
+        font-weight: 700;
+    }
+    letter-spacing: ls(0.08);
+}
+
+.admin-customers__title {
+    margin: 0;
+    color: color("text-main");
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-customers__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+    @include font-set("body");
+}
+
+.admin-customers__search-section {
+    margin-bottom: rem(40);
+    padding: rem(24);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-sub");
+}
+
+.admin-customers__section-title {
+    margin: 0 0 rem(20);
+    color: color("text-main");
+    @include font-set("body") {
+        font-weight: 700;
+    }
+}
+
+.admin-customers__search-form {
+    align-items: flex-end;
+    gap: rem(16);
+}
+
+.admin-customers__search-field {
+    flex: 1;
+}
+
+.admin-customers__label {
+    display: block;
+    margin-bottom: rem(8);
+    color: color("text-main");
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-customers__input {
+    width: 100%;
+    min-height: rem(44);
+    padding: 0 rem(14);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+    @include font-set("body");
+}
+
+.admin-customers__input:focus {
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+    border-color: color("primary");
+}
+
+.admin-customers__search-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: rem(88);
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border: 1px solid color("primary");
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: color("text-white");
+    @include font-set("body") {
+        font-weight: 700;
+    }
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.admin-customers__search-button:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+.admin-customers__list-section {
+    margin-top: rem(40);
+}
+
+.admin-customers__list {
+    display: grid;
+    gap: rem(16);
+}
+
+.admin-customers__card {
+    padding: rem(24);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+    justify-content: space-between;
+}
+
+.admin-customers__card-body {
+    min-width: 0;
+}
+
+.admin-customers__name {
+    margin: 0;
+    color: color("text-main");
+    @include font-set("body") {
+        font-weight: 700;
+    }
+}
+
+.admin-customers__email {
+    margin: rem(8) 0 0;
+    color: color("text-main");
+    @include font-set("note");
+}
+
+.admin-customers__actions {
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.admin-customers__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(72);
+    min-height: rem(40);
+    padding: 0 rem(16);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("primary-dark");
+    @include font-set("note") {
+        font-weight: 700;
+    }
+    text-decoration: none;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-customers__action:hover {
+    border-color: color("primary-light");
+    background-color: color("bg-sub");
+}
+
+@include max-screen("md") {
+    .admin-customers {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-customers__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-customers__search-section {
+        margin-bottom: rem(32);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-customers {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-customers__search-section {
+        padding: rem(20);
+    }
+
+    .admin-customers__search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-customers__search-button {
+        width: 100%;
+    }
+
+    .admin-customers__card {
+        padding: rem(20);
+    }
+
+    .admin-customers__card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: rem(20);
+    }
+
+    .admin-customers__actions {
+        width: 100%;
+    }
+
+    .admin-customers__action {
+        flex: 1;
+    }
+}
+
+// ==========================================================================
+// 顧客詳細
+// ==========================================================================
+.admin-customers-show {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-customers-show__header {
+    margin-bottom: rem(40);
+}
+
+.admin-customers-show__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+    @include font-set("note") {
+        font-weight: 700;
+    }
+    letter-spacing: ls(0.08);
+}
+
+.admin-customers-show__title {
+    margin: 0;
+    color: color("text-main");
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-customers-show__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+    @include font-set("body");
+}
+
+.admin-customers-show__section {
+    max-width: rem(720);
+    margin: 0 auto;
+    padding: rem(32);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-customers-show__list {
+    margin: 0;
+}
+
+.admin-customers-show__item {
+    display: grid;
+    grid-template-columns: rem(160) 1fr;
+    gap: rem(24);
+    padding: rem(20) 0;
+    border-bottom: 1px solid color("border");
+}
+
+.admin-customers-show__item:first-child {
+    padding-top: 0;
+}
+
+.admin-customers-show__item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.admin-customers-show__label {
+    margin: 0;
+    color: color("text-main");
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-customers-show__value {
+    margin: 0;
+    color: color("text-main");
+    word-break: break-word;
+    @include font-set("body");
+}
+
+.admin-customers-show__actions {
+    justify-content: flex-end;
+    margin-top: rem(32);
+    gap: rem(8);
+}
+
+.admin-customers-show__back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(120);
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("primary-dark");
+    @include font-set("body") {
+        font-weight: 700;
+    }
+    text-decoration: none;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-customers-show__back:hover {
+    border-color: color("primary-light");
+    background-color: color("bg-sub");
+}
+
+.admin-customers-show__edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(96);
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border: 1px solid color("primary");
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: color("text-white");
+    @include font-set("body") {
+        font-weight: 700;
+    }
+    text-decoration: none;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-customers-show__edit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-customers-show {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-customers-show__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-customers-show__section {
+        padding: rem(28);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-customers-show {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-customers-show__section {
+        padding: rem(20);
+    }
+
+    .admin-customers-show__item {
+        grid-template-columns: 1fr;
+        gap: rem(8);
+    }
+
+    .admin-customers-show__actions {
+        justify-content: stretch;
+    }
+
+    .admin-customers-show__back {
+        width: 100%;
+    }
+
+    .admin-customers-show__edit {
+        flex: 1;
+    }
+
+    .admin-customers-show__back {
+        flex: 1;
+    }
+}
+
+// ==========================================================================
+// 顧客編集
+// ==========================================================================
+.admin-customers-edit {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-customers-edit__header {
+    margin-bottom: rem(40);
+}
+
+.admin-customers-edit__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+    @include font-set("note") {
+        font-weight: 700;
+    }
+    letter-spacing: ls(0.08);
+}
+
+.admin-customers-edit__title {
+    margin: 0;
+    color: color("text-main");
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-customers-edit__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+    @include font-set("body");
+}
+
+.admin-customers-edit__section {
+    max-width: rem(720);
+    margin: 0 auto;
+    padding: rem(32);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-customers-edit__form {
+    display: grid;
+    gap: rem(24);
+}
+
+.admin-customers-edit__field {
+    display: grid;
+    gap: rem(8);
+}
+
+.admin-customers-edit__label {
+    color: color("text-main");
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-customers-edit__input {
+    width: 100%;
+    min-height: rem(44);
+    padding: 0 rem(14);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+    @include font-set("body");
+}
+
+.admin-customers-edit__input:focus {
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+    border-color: color("primary");
+}
+
+.admin-customers-edit__error {
+    margin: 0;
+    color: color("danger");
+    @include font-set("note");
+}
+
+.admin-customers-edit__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(8);
+}
+
+.admin-customers-edit__back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(120);
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("primary-dark");
+    @include font-set("body") {
+        font-weight: 700;
+    }
+    text-decoration: none;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-customers-edit__back:hover {
+    border-color: color("primary-light");
+    background-color: color("bg-sub");
+}
+
+.admin-customers-edit__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(128);
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border: 1px solid color("primary");
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: color("text-white");
+    @include font-set("body") {
+        font-weight: 700;
+    }
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-customers-edit__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-customers-edit {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-customers-edit__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-customers-edit__section {
+        padding: rem(28);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-customers-edit {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-customers-edit__section {
+        padding: rem(20);
+    }
+
+    .admin-customers-edit__actions {
+        flex-direction: column;
+    }
+
+    .admin-customers-edit__back,
+    .admin-customers-edit__submit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// メニュー一覧
+// ==========================================================================
+.admin-menus {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-menus__header {
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: rem(24);
+    margin-bottom: rem(40);
+}
+
+.admin-menus__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-menus__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-menus__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-menus__create {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: color("text-white");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.admin-menus__create:hover {
+    background-color: color("primary-dark");
+}
+
+.admin-menus__error {
+    margin: 0 0 rem(24);
+    padding: rem(16) rem(20);
+    border: 1px solid color("danger");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("danger");
+
+    @include font-set("note");
+}
+
+.admin-menus__section {
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-menus__table-wrap {
+    overflow-x: auto;
+}
+
+.admin-menus__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-menus__table th,
+.admin-menus__table td {
+    padding: rem(20) rem(24);
+    border-bottom: 1px solid color("border");
+    text-align: left;
+    vertical-align: middle;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-menus__table th {
+    background-color: color("bg-sub");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    white-space: nowrap;
+}
+
+.admin-menus__table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.admin-menus__table td:nth-child(2) {
+    white-space: nowrap;
+}
+
+.admin-menus__actions {
+    align-items: center;
+    gap: rem(8);
+}
+
+.admin-menus__detail,
+.admin-menus__delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(72);
+    min-height: rem(40);
+    padding: 0 rem(16);
+    border-radius: radius("md");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+}
+
+.admin-menus__detail {
+    border: 1px solid color("primary");
+    background-color: color("bg-main");
+    color: color("primary");
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-menus__detail:hover {
+    border-color: color("primary");
+    background-color: color("bg-sub");
+    color: color("primary-dark");
+}
+
+.admin-menus__delete-form {
+    margin: 0;
+}
+
+.admin-menus__delete {
+    border: 1px solid color("danger");
+    background-color: color("bg-main");
+    color: color("danger");
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-menus__delete:hover {
+    border-color: color("danger");
+    background-color: color("danger");
+    color: color("text-white");
+}
+
+@include max-screen("md") {
+    .admin-menus {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-menus__header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: rem(20);
+        margin-bottom: rem(32);
+    }
+
+    .admin-menus__create {
+        width: 100%;
+    }
+
+    .admin-menus__table th,
+    .admin-menus__table td {
+        padding: rem(16) rem(20);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-menus {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-menus__section {
+        border: 0;
+        background-color: transparent;
+    }
+
+    .admin-menus__table-wrap {
+        overflow: visible;
+    }
+
+    .admin-menus__table,
+    .admin-menus__table tbody {
+        display: block;
+    }
+
+    .admin-menus__table thead {
+        display: none;
+    }
+
+    .admin-menus__table tr {
+        display: grid;
+        gap: rem(12);
+        margin-bottom: rem(16);
+        padding: rem(20);
+        border: 1px solid color("border");
+        border-radius: radius("lg");
+        background-color: color("bg-main");
+    }
+
+    .admin-menus__table tr:last-child {
+        margin-bottom: 0;
+    }
+
+    .admin-menus__table td {
+        display: grid;
+        grid-template-columns: 6em 1fr;
+        gap: rem(12);
+        padding: 0;
+        border: 0;
+    }
+
+    .admin-menus__table td::before {
+        content: attr(data-label);
+        color: color("text-main");
+
+        @include font-set("note") {
+            font-weight: 700;
+        }
+    }
+
+    .admin-menus__table td:nth-child(3) {
+        display: block;
+        margin-top: rem(4);
+    }
+
+    .admin-menus__actions {
+        width: 100%;
+    }
+
+    .admin-menus__detail,
+    .admin-menus__delete-form {
+        flex: 1;
+    }
+
+    .admin-menus__delete {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// メニュー作成
+// ==========================================================================
+.admin-menus-create {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-menus-create__header {
+    margin-bottom: rem(40);
+}
+
+.admin-menus-create__eyebrow {
+    margin-bottom: rem(8);
+    color: color("primary");
+    @include font-set("note") {
+        font-weight: 700;
+    }
+    letter-spacing: 0.08em;
+}
+
+.admin-menus-create__title {
+    margin-bottom: rem(12);
+    color: color("text-main");
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-menus-create__description {
+    color: color("text-main");
+    @include font-set("body");
+}
+
+.admin-menus-create__section {
+    max-width: rem(720);
+    margin: 0 auto;
+    padding: rem(32);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-menus-create__form {
+    display: grid;
+    gap: rem(24);
+}
+
+.admin-menus-create__field {
+    display: grid;
+    gap: rem(8);
+}
+
+.admin-menus-create__label {
+    color: color("text-main");
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-menus-create__input-group {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: rem(8);
+}
+
+.admin-menus-create__input {
+    width: 100%;
+    min-height: rem(44);
+    padding: rem(10) rem(12);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+    @include font-set("body");
+}
+
+.admin-menus-create__input:focus {
+    border-color: color("primary");
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+}
+
+.admin-menus-create__unit {
+    color: color("text-main");
+    white-space: nowrap;
+    @include font-set("body");
+}
+
+.admin-menus-create__error {
+    color: color("danger");
+    @include font-set("note");
+}
+
+.admin-menus-create__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(8);
+}
+
+.admin-menus-create__back,
+.admin-menus-create__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(44);
+    padding: rem(10) rem(20);
+    border-radius: radius("md");
+    @include font-set("body") {
+        font-weight: 700;
+    }
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-menus-create__back {
+    border: 1px solid color("border");
+    background-color: color("bg-main");
+    color: color("text-main");
+}
+
+.admin-menus-create__back:hover {
+    border-color: color("primary");
+    color: color("primary");
+}
+
+.admin-menus-create__submit {
+    border: 1px solid color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+    cursor: pointer;
+}
+
+.admin-menus-create__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-menus-create {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-menus-create__section {
+        padding: rem(28);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-menus-create {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-menus-create__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-menus-create__section {
+        padding: rem(24);
+    }
+
+    .admin-menus-create__actions {
+        flex-direction: column;
+    }
+
+    .admin-menus-create__back,
+    .admin-menus-create__submit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// メニュー詳細
+// ==========================================================================
+.admin-menus-show {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-menus-show__header {
+    margin-bottom: rem(40);
+}
+
+.admin-menus-show__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-menus-show__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-menus-show__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-menus-show__section {
+    max-width: rem(720);
+    margin: 0 auto;
+    padding: rem(32);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-menus-show__list {
+    display: grid;
+    gap: rem(20);
+    margin: 0;
+}
+
+.admin-menus-show__item {
+    display: grid;
+    grid-template-columns: rem(160) 1fr;
+    gap: rem(20);
+    padding-bottom: rem(20);
+    border-bottom: 1px solid color("border");
+}
+
+.admin-menus-show__item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.admin-menus-show__label {
+    color: color("text-main");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-menus-show__value {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-menus-show__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(32);
+}
+
+.admin-menus-show__back,
+.admin-menus-show__edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(44);
+    padding: rem(10) rem(20);
+    border-radius: radius("md");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-menus-show__back {
+    border: 1px solid color("border");
+    background-color: color("bg-main");
+    color: color("text-main");
+}
+
+.admin-menus-show__back:hover {
+    border-color: color("primary");
+    color: color("primary");
+}
+
+.admin-menus-show__edit {
+    border: 1px solid color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+}
+
+.admin-menus-show__edit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-menus-show {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-menus-show__section {
+        padding: rem(28);
+    }
+
+    .admin-menus-show__item {
+        grid-template-columns: rem(140) 1fr;
+        gap: rem(16);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-menus-show {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-menus-show__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-menus-show__section {
+        padding: rem(24);
+    }
+
+    .admin-menus-show__item {
+        grid-template-columns: 1fr;
+        gap: rem(6);
+    }
+
+    .admin-menus-show__actions {
+        flex-direction: column;
+    }
+
+    .admin-menus-show__back,
+    .admin-menus-show__edit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// メニュー編集
+// ==========================================================================
+.admin-menus-edit {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-menus-edit__header {
+    margin-bottom: rem(40);
+}
+
+.admin-menus-edit__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-menus-edit__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-menus-edit__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-menus-edit__section {
+    max-width: rem(720);
+    margin: 0 auto;
+    padding: rem(32);
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-menus-edit__form {
+    display: grid;
+    gap: rem(24);
+}
+
+.admin-menus-edit__field {
+    display: grid;
+    gap: rem(8);
+}
+
+.admin-menus-edit__label {
+    color: color("text-main");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-menus-edit__input-group {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: rem(8);
+}
+
+.admin-menus-edit__input {
+    width: 100%;
+    min-height: rem(44);
+    padding: rem(10) rem(12);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-menus-edit__input:focus {
+    border-color: color("primary");
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+}
+
+.admin-menus-edit__unit {
+    color: color("text-main");
+    white-space: nowrap;
+
+    @include font-set("body");
+}
+
+.admin-menus-edit__error {
+    color: color("danger");
+
+    @include font-set("note");
+}
+
+.admin-menus-edit__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(8);
+}
+
+.admin-menus-edit__back,
+.admin-menus-edit__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(44);
+    padding: rem(10) rem(20);
+    border-radius: radius("md");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-menus-edit__back {
+    border: 1px solid color("border");
+    background-color: color("bg-main");
+    color: color("text-main");
+}
+
+.admin-menus-edit__back:hover {
+    border-color: color("primary");
+    color: color("primary");
+}
+
+.admin-menus-edit__submit {
+    border: 1px solid color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+    cursor: pointer;
+}
+
+.admin-menus-edit__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-menus-edit {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-menus-edit__section {
+        padding: rem(28);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-menus-edit {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-menus-edit__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-menus-edit__section {
+        padding: rem(24);
+    }
+
+    .admin-menus-edit__actions {
+        flex-direction: column;
+    }
+
+    .admin-menus-edit__back,
+    .admin-menus-edit__submit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// 対応メニュー一覧
+// ==========================================================================
+.admin-staff-menus {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-staff-menus__header {
+    margin-bottom: rem(40);
+}
+
+.admin-staff-menus__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-staff-menus__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-staff-menus__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-staff-menus__list {
+    display: grid;
+    gap: rem(24);
+}
+
+.admin-staff-menus__card {
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-staff-menus__card-header {
+    padding: rem(20) rem(24);
+    border-bottom: 1px solid color("border");
+    background-color: color("bg-sub");
+}
+
+.admin-staff-menus__staff-name {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-staff-menus__form {
+    padding: rem(24);
+}
+
+.admin-staff-menus__fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.admin-staff-menus__legend {
+    margin-bottom: rem(16);
+    color: color("text-main");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-staff-menus__menus {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(12);
+}
+
+.admin-staff-menus__menu {
+    align-items: center;
+    gap: rem(10);
+    min-height: rem(48);
+    padding: rem(12) rem(16);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-staff-menus__menu:hover {
+    border-color: color("primary");
+}
+
+.admin-staff-menus__menu:has(.admin-staff-menus__checkbox:checked) {
+    border-color: color("primary");
+    background-color: color("bg-sub");
+}
+
+.admin-staff-menus__checkbox {
+    width: rem(18);
+    height: rem(18);
+    flex-shrink: 0;
+    margin: 0;
+    accent-color: color("primary");
+    cursor: pointer;
+}
+
+.admin-staff-menus__menu-name {
+    @include font-set("body");
+}
+
+.admin-staff-menus__actions {
+    justify-content: flex-end;
+    margin-top: rem(24);
+    padding-top: rem(20);
+    border-top: 1px solid color("border");
+}
+
+.admin-staff-menus__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(96);
+    min-height: rem(44);
+    padding: rem(10) rem(20);
+    border: 1px solid color("primary");
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: color("text-white");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-staff-menus__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-staff-menus {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-staff-menus__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-staff-menus__menus {
+        grid-template-columns: 1fr;
+    }
+}
+
+@include max-screen("sm") {
+    .admin-staff-menus {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-staff-menus__card-header {
+        padding: rem(16) rem(20);
+    }
+
+    .admin-staff-menus__form {
+        padding: rem(20);
+    }
+
+    .admin-staff-menus__menu {
+        padding: rem(12);
+    }
+
+    .admin-staff-menus__actions {
+        margin-top: rem(20);
+        padding-top: rem(16);
+    }
+
+    .admin-staff-menus__submit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// 予約一覧
+// ==========================================================================
+.admin-reservations {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-reservations__header {
+    margin-bottom: rem(40);
+}
+
+.admin-reservations__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-reservations__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-reservations__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-reservations__section {
+    display: grid;
+}
+
+.admin-reservations__list {
+    display: grid;
+    gap: rem(24);
+}
+
+.admin-reservations__card {
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-reservations__card-header {
+    padding: rem(20) rem(24);
+    border-bottom: 1px solid color("border");
+    background-color: color("bg-sub");
+}
+
+.admin-reservations__number {
+    margin: 0;
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-reservations__card-body {
+    display: grid;
+}
+
+.admin-reservations__item {
+    display: grid;
+    grid-template-columns: rem(160) 1fr;
+    gap: rem(20);
+    padding: rem(20) rem(24);
+    border-bottom: 1px solid color("border");
+}
+
+.admin-reservations__item:last-child {
+    border-bottom: 0;
+}
+
+.admin-reservations__label {
+    color: color("text-main");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-reservations__value {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-reservations__actions {
+    justify-content: flex-end;
+    padding: rem(20) rem(24);
+    border-top: 1px solid color("border");
+}
+
+.admin-reservations__detail {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(72);
+    min-height: rem(40);
+    padding: 0 rem(16);
+    border: 1px solid color("primary");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-reservations__detail:hover {
+    border-color: color("primary");
+    background-color: color("bg-sub");
+    color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-reservations {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-reservations__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-reservations__item {
+        grid-template-columns: rem(140) 1fr;
+        gap: rem(16);
+        padding: rem(16) rem(20);
+    }
+
+    .admin-reservations__card-header {
+        padding: rem(16) rem(20);
+    }
+
+    .admin-reservations__actions {
+        padding: rem(16) rem(20);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-reservations {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-reservations__item {
+        grid-template-columns: 1fr;
+        gap: rem(6);
+    }
+
+    .admin-reservations__card-header {
+        padding: rem(16);
+    }
+
+    .admin-reservations__actions {
+        padding: rem(16);
+    }
+
+    .admin-reservations__detail {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// 予約詳細
+// ==========================================================================
+.admin-reservations-show {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-reservations-show__header {
+    margin-bottom: rem(40);
+}
+
+.admin-reservations-show__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-reservations-show__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-reservations-show__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-reservations-show__success {
+    margin: 0 0 rem(24);
+    padding: rem(16) rem(20);
+    border: 1px solid color("primary");
+    border-radius: radius("md");
+    background-color: color("bg-sub");
+    color: color("primary-dark");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-reservations-show__section {
+    display: grid;
+    gap: rem(32);
+    max-width: rem(800);
+    margin: 0 auto;
+}
+
+.admin-reservations-show__reservation,
+.admin-reservations-show__edit {
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-reservations-show__reservation-header {
+    padding: rem(20) rem(24);
+    border-bottom: 1px solid color("border");
+    background-color: color("bg-sub");
+}
+
+.admin-reservations-show__number {
+    margin: 0;
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-reservations-show__list {
+    display: grid;
+    margin: 0;
+}
+
+.admin-reservations-show__item {
+    display: grid;
+    grid-template-columns: rem(160) 1fr;
+    gap: rem(20);
+    padding: rem(20) rem(24);
+    border-bottom: 1px solid color("border");
+}
+
+.admin-reservations-show__item:last-child {
+    border-bottom: 0;
+}
+
+.admin-reservations-show__label {
+    color: color("text-main");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-reservations-show__value {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-reservations-show__edit-title {
+    margin: 0;
+    padding: rem(20) rem(24);
+    border-bottom: 1px solid color("border");
+    background-color: color("bg-sub");
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-reservations-show__form {
+    display: grid;
+    gap: rem(24);
+    padding: rem(24);
+}
+
+.admin-reservations-show__field {
+    display: grid;
+    gap: rem(8);
+}
+
+.admin-reservations-show__field-label {
+    color: color("text-main");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-reservations-show__select,
+.admin-reservations-show__input {
+    width: 100%;
+    min-height: rem(44);
+    padding: rem(10) rem(12);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-reservations-show__select:focus,
+.admin-reservations-show__input:focus {
+    border-color: color("primary");
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+}
+
+.admin-reservations-show__error {
+    margin: 0;
+    color: color("danger");
+
+    @include font-set("note");
+}
+
+.admin-reservations-show__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(8);
+    padding-top: rem(20);
+    border-top: 1px solid color("border");
+}
+
+.admin-reservations-show__back,
+.admin-reservations-show__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(44);
+    padding: rem(10) rem(20);
+    border-radius: radius("md");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-reservations-show__back {
+    border: 1px solid color("border");
+    background-color: color("bg-main");
+    color: color("text-main");
+}
+
+.admin-reservations-show__back:hover {
+    border-color: color("primary");
+    color: color("primary");
+}
+
+.admin-reservations-show__submit {
+    border: 1px solid color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+    cursor: pointer;
+}
+
+.admin-reservations-show__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-reservations-show {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-reservations-show__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-reservations-show__item {
+        grid-template-columns: rem(140) 1fr;
+        gap: rem(16);
+        padding: rem(16) rem(20);
+    }
+
+    .admin-reservations-show__reservation-header {
+        padding: rem(16) rem(20);
+    }
+
+    .admin-reservations-show__edit-title {
+        padding: rem(16) rem(20);
+    }
+
+    .admin-reservations-show__form {
+        padding: rem(20);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-reservations-show {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-reservations-show__item {
+        grid-template-columns: 1fr;
+        gap: rem(6);
+    }
+
+    .admin-reservations-show__reservation-header {
+        padding: rem(16);
+    }
+
+    .admin-reservations-show__edit-title {
+        padding: rem(16);
+    }
+
+    .admin-reservations-show__form {
+        padding: rem(16);
+    }
+
+    .admin-reservations-show__actions {
+        flex-direction: column;
+    }
+
+    .admin-reservations-show__back,
+    .admin-reservations-show__submit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// 営業時間一覧
+// ==========================================================================
+.admin-business-hours {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-business-hours__header {
+    margin-bottom: rem(40);
+}
+
+.admin-business-hours__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-business-hours__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-business-hours__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-business-hours__section {
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-business-hours__table-wrap {
+    overflow-x: auto;
+}
+
+.admin-business-hours__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-business-hours__table th,
+.admin-business-hours__table td {
+    padding: rem(20) rem(24);
+    border-bottom: 1px solid color("border");
+    text-align: left;
+    vertical-align: middle;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-business-hours__table thead th {
+    background-color: color("bg-sub");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    white-space: nowrap;
+}
+
+.admin-business-hours__table tbody tr:last-child th,
+.admin-business-hours__table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.admin-business-hours__table tbody th {
+    width: rem(160);
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+}
+
+.admin-business-hours__form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: rem(16);
+}
+
+.admin-business-hours__time-group {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: rem(10);
+}
+
+.admin-business-hours__input {
+    width: 100%;
+    min-height: rem(44);
+    padding: rem(10) rem(12);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-business-hours__input:focus {
+    border-color: color("primary");
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+}
+
+.admin-business-hours__separator {
+    color: color("text-main");
+    white-space: nowrap;
+
+    @include font-set("body");
+}
+
+.admin-business-hours__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(72);
+    min-height: rem(44);
+    padding: rem(10) rem(16);
+    border: 1px solid color("primary");
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: color("text-white");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-business-hours__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-business-hours {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-business-hours__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-business-hours__table th,
+    .admin-business-hours__table td {
+        padding: rem(16) rem(20);
+    }
+
+    .admin-business-hours__form {
+        grid-template-columns: 1fr;
+        gap: rem(12);
+    }
+
+    .admin-business-hours__submit {
+        width: 100%;
+    }
+}
+
+@include max-screen("sm") {
+    .admin-business-hours {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-business-hours__section {
+        overflow: visible;
+        border: 0;
+        background-color: transparent;
+    }
+
+    .admin-business-hours__table-wrap {
+        overflow: visible;
+    }
+
+    .admin-business-hours__table,
+    .admin-business-hours__table tbody {
+        display: block;
+    }
+
+    .admin-business-hours__table thead {
+        display: none;
+    }
+
+    .admin-business-hours__table tr {
+        display: block;
+        margin-bottom: rem(16);
+        padding: rem(20);
+        border: 1px solid color("border");
+        border-radius: radius("lg");
+        background-color: color("bg-main");
+    }
+
+    .admin-business-hours__table tr:last-child {
+        margin-bottom: 0;
+    }
+
+    .admin-business-hours__table tbody th,
+    .admin-business-hours__table tbody td {
+        display: block;
+        width: auto;
+        padding: 0;
+        border: 0;
+    }
+
+    .admin-business-hours__table tbody th {
+        margin-bottom: rem(12);
+
+        @include font-set("heading") {
+            font-weight: 700;
+        }
+    }
+
+    .admin-business-hours__table tbody td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: rem(8);
+        color: color("text-main");
+
+        @include font-set("note") {
+            font-weight: 700;
+        }
+    }
+
+    .admin-business-hours__form {
+        gap: rem(12);
+    }
+
+    .admin-business-hours__time-group {
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        gap: rem(8);
+    }
+
+    .admin-business-hours__input {
+        min-width: 0;
+        padding: rem(10);
+    }
+}
+
+// ==========================================================================
+// 休業日一覧
+// ==========================================================================
+.admin-holidays {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-holidays__header {
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: rem(24);
+    margin-bottom: rem(40);
+}
+
+.admin-holidays__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-holidays__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-holidays__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-holidays__create {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-height: rem(44);
+    padding: 0 rem(20);
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: color("text-white");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.admin-holidays__create:hover {
+    background-color: color("primary-dark");
+}
+
+.admin-holidays__section {
+    display: grid;
+}
+
+.admin-holidays__list {
+    display: grid;
+    gap: rem(24);
+}
+
+.admin-holidays__card {
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-holidays__card-body {
+    display: grid;
+}
+
+.admin-holidays__item {
+    display: grid;
+    grid-template-columns: rem(160) 1fr;
+    gap: rem(20);
+    padding: rem(20) rem(24);
+    border-bottom: 1px solid color("border");
+}
+
+.admin-holidays__item:last-child {
+    border-bottom: 0;
+}
+
+.admin-holidays__label {
+    color: color("text-main");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-holidays__value {
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-holidays__actions {
+    justify-content: flex-end;
+    gap: rem(8);
+    padding: rem(20) rem(24);
+    border-top: 1px solid color("border");
+}
+
+.admin-holidays__edit,
+.admin-holidays__delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: rem(72);
+    min-height: rem(40);
+    padding: 0 rem(16);
+    border-radius: radius("md");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+}
+
+.admin-holidays__edit {
+    border: 1px solid color("primary");
+    background-color: color("bg-main");
+    color: color("primary");
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-holidays__edit:hover {
+    border-color: color("primary");
+    background-color: color("bg-sub");
+    color: color("primary-dark");
+}
+
+.admin-holidays__delete-form {
+    margin: 0;
+}
+
+.admin-holidays__delete {
+    border: 1px solid color("danger");
+    background-color: color("bg-main");
+    color: color("danger");
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-holidays__delete:hover {
+    border-color: color("danger");
+    background-color: color("danger");
+    color: color("text-white");
+}
+
+@include max-screen("md") {
+    .admin-holidays {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-holidays__header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: rem(20);
+        margin-bottom: rem(32);
+    }
+
+    .admin-holidays__create {
+        width: 100%;
+    }
+
+    .admin-holidays__item {
+        grid-template-columns: rem(140) 1fr;
+        gap: rem(16);
+        padding: rem(16) rem(20);
+    }
+
+    .admin-holidays__actions {
+        padding: rem(16) rem(20);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-holidays {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-holidays__list {
+        gap: rem(16);
+    }
+
+    .admin-holidays__item {
+        grid-template-columns: 1fr;
+        gap: rem(6);
+        padding: rem(16);
+    }
+
+    .admin-holidays__actions {
+        padding: rem(16);
+    }
+
+    .admin-holidays__edit,
+    .admin-holidays__delete {
+        flex: 1;
+    }
+
+    .admin-holidays__delete-form {
+        display: contents;
+    }
+}
+
+// ==========================================================================
+// 休業日登録
+// ==========================================================================
+.admin-holidays-create {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-holidays-create__header {
+    max-width: rem(800);
+    margin: 0 auto rem(40);
+}
+
+.admin-holidays-create__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-holidays-create__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-holidays-create__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-holidays-create__section {
+    max-width: rem(800);
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-holidays-create__form {
+    display: grid;
+    gap: rem(24);
+    padding: rem(32);
+}
+
+.admin-holidays-create__field {
+    display: grid;
+    gap: rem(8);
+}
+
+.admin-holidays-create__label {
+    color: color("text-main");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-holidays-create__input {
+    width: 100%;
+    min-height: rem(44);
+    padding: rem(10) rem(12);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-holidays-create__input:focus {
+    border-color: color("primary");
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+}
+
+.admin-holidays-create__error {
+    margin: 0;
+    color: color("danger");
+
+    @include font-set("note");
+}
+
+.admin-holidays-create__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(8);
+    padding-top: rem(20);
+    border-top: 1px solid color("border");
+}
+
+.admin-holidays-create__back,
+.admin-holidays-create__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(44);
+    padding: rem(10) rem(20);
+    border-radius: radius("md");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-holidays-create__back {
+    border: 1px solid color("border");
+    background-color: color("bg-main");
+    color: color("text-main");
+}
+
+.admin-holidays-create__back:hover {
+    border-color: color("primary");
+    color: color("primary");
+}
+
+.admin-holidays-create__submit {
+    border: 1px solid color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+    cursor: pointer;
+}
+
+.admin-holidays-create__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-holidays-create {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-holidays-create__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-holidays-create__form {
+        padding: rem(24);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-holidays-create {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-holidays-create__section {
+        border: 0;
+        background-color: transparent;
+    }
+
+    .admin-holidays-create__form {
+        padding: 0;
+    }
+
+    .admin-holidays-create__actions {
+        flex-direction: column;
+    }
+
+    .admin-holidays-create__back,
+    .admin-holidays-create__submit {
+        width: 100%;
+    }
+}
+
+// ==========================================================================
+// 休業日編集
+// ==========================================================================
+.admin-holidays-edit {
+    padding: rem(48) 0 rem(64);
+}
+
+.admin-holidays-edit__header {
+    max-width: rem(800);
+    margin: 0 auto rem(40);
+}
+
+.admin-holidays-edit__eyebrow {
+    margin: 0 0 rem(8);
+    color: color("primary");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
+    letter-spacing: ls(0.08);
+}
+
+.admin-holidays-edit__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
+}
+
+.admin-holidays-edit__description {
+    margin: rem(12) 0 0;
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-holidays-edit__section {
+    max-width: rem(800);
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+}
+
+.admin-holidays-edit__form {
+    display: grid;
+    gap: rem(24);
+    padding: rem(32);
+}
+
+.admin-holidays-edit__field {
+    display: grid;
+    gap: rem(8);
+}
+
+.admin-holidays-edit__label {
+    color: color("text-main");
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+}
+
+.admin-holidays-edit__input {
+    width: 100%;
+    min-height: rem(44);
+    padding: rem(10) rem(12);
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("bg-main");
+    color: color("text-main");
+
+    @include font-set("body");
+}
+
+.admin-holidays-edit__input:focus {
+    border-color: color("primary");
+    outline: 2px solid color("primary-soft");
+    outline-offset: 1px;
+}
+
+.admin-holidays-edit__error {
+    margin: 0;
+    color: color("danger");
+
+    @include font-set("note");
+}
+
+.admin-holidays-edit__actions {
+    justify-content: flex-end;
+    gap: rem(12);
+    margin-top: rem(8);
+    padding-top: rem(20);
+    border-top: 1px solid color("border");
+}
+
+.admin-holidays-edit__back,
+.admin-holidays-edit__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: rem(44);
+    padding: rem(10) rem(20);
+    border-radius: radius("md");
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.admin-holidays-edit__back {
+    border: 1px solid color("border");
+    background-color: color("bg-main");
+    color: color("text-main");
+}
+
+.admin-holidays-edit__back:hover {
+    border-color: color("primary");
+    color: color("primary");
+}
+
+.admin-holidays-edit__submit {
+    border: 1px solid color("primary");
+    background-color: color("primary");
+    color: color("text-white");
+    cursor: pointer;
+}
+
+.admin-holidays-edit__submit:hover {
+    border-color: color("primary-dark");
+    background-color: color("primary-dark");
+}
+
+@include max-screen("md") {
+    .admin-holidays-edit {
+        padding: rem(40) 0 rem(56);
+    }
+
+    .admin-holidays-edit__header {
+        margin-bottom: rem(32);
+    }
+
+    .admin-holidays-edit__form {
+        padding: rem(24);
+    }
+}
+
+@include max-screen("sm") {
+    .admin-holidays-edit {
+        padding: rem(32) 0 rem(48);
+    }
+
+    .admin-holidays-edit__section {
+        border: 0;
+        background-color: transparent;
+    }
+
+    .admin-holidays-edit__form {
+        padding: 0;
+    }
+
+    .admin-holidays-edit__actions {
+        flex-direction: column;
+    }
+
+    .admin-holidays-edit__back,
+    .admin-holidays-edit__submit {
+        width: 100%;
+    }
+}

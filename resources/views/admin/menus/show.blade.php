@@ -1,22 +1,45 @@
-<!DOCTYPE html>
-<html lang="ja">
+<x-app-layout>
+  <div class="admin-menus-show">
+    <div class="u-wrap">
+      <header class="admin-menus-show__header">
+        <p class="admin-menus-show__eyebrow">MENU MANAGEMENT</p>
+        <h1 class="admin-menus-show__title">メニュー詳細</h1>
+        <p class="admin-menus-show__description">
+          メニューの登録内容を確認できます。
+        </p>
+      </header>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>メニュー詳細</title>
-</head>
+      <section class="admin-menus-show__section">
+        <dl class="admin-menus-show__list">
+          <div class="admin-menus-show__item">
+            <dt class="admin-menus-show__label">
+              メニュー名
+            </dt>
+            <dd class="admin-menus-show__value">
+              {{ $menu->name }}
+            </dd>
+          </div>
 
-<body>
-  <h1>メニュー詳細</h1>
+          <div class="admin-menus-show__item">
+            <dt class="admin-menus-show__label">
+              所要時間
+            </dt>
+            <dd class="admin-menus-show__value">
+              {{ $menu->duration }}分
+            </dd>
+          </div>
+        </dl>
 
-  <dl>
-    <dt>メニュー名</dt>
-    <dd>{{ $menu->name }}</dd>
+        <div class="admin-menus-show__actions u-flex">
+          <a href="{{ route('admin.menus.index') }}" class="admin-menus-show__back">
+            一覧へ戻る
+          </a>
 
-    <dt>所要時間</dt>
-    <dd>{{ $menu->duration }}分</dd>
-  </dl>
-</body>
-
-</html>
+          <a href="{{ route('admin.menus.edit', $menu) }}" class="admin-menus-show__edit">
+            編集
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</x-app-layout>

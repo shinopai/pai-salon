@@ -1,38 +1,63 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>メニュー登録</title>
-</head>
-<body>
-    <h1>メニュー登録</h1>
+<x-app-layout>
+  <div class="admin-menus-create">
+    <div class="u-wrap">
+      <header class="admin-menus-create__header">
+        <p class="admin-menus-create__eyebrow">MENU MANAGEMENT</p>
+        <h1 class="admin-menus-create__title">メニュー登録</h1>
+        <p class="admin-menus-create__description">
+          新しいメニューを登録します。
+        </p>
+      </header>
 
-    <form action="{{ route('admin.menus.store') }}" method="POST">
-        @csrf
+      <section class="admin-menus-create__section">
+        <form action="{{ route('admin.menus.store') }}" method="POST" class="admin-menus-create__form">
+          @csrf
 
-        <div>
-            <label for="name">メニュー名</label>
-            <input
-                type="text"
-                id="name"
-                name="name"
-                value="{{ old('name') }}"
-            >
-        </div>
+          <div class="admin-menus-create__field">
+            <label for="name" class="admin-menus-create__label">
+              メニュー名
+            </label>
 
-        <div>
-            <label for="duration">所要時間</label>
-            <input
-                type="number"
-                id="duration"
-                name="duration"
-                value="{{ old('duration') }}"
-                min="1"
-            >
-        </div>
+            <input type="text" id="name" name="name" value="{{ old('name') }}"
+              class="admin-menus-create__input">
 
-        <button type="submit">登録</button>
-    </form>
-</body>
-</html>
+            @error('name')
+              <p class="admin-menus-create__error">
+                {{ $message }}
+              </p>
+            @enderror
+          </div>
+
+          <div class="admin-menus-create__field">
+            <label for="duration" class="admin-menus-create__label">
+              所要時間
+            </label>
+
+            <div class="admin-menus-create__input-group">
+              <input type="number" id="duration" name="duration" value="{{ old('duration') }}" min="1"
+                class="admin-menus-create__input">
+
+              <span class="admin-menus-create__unit">分</span>
+            </div>
+
+            @error('duration')
+              <p class="admin-menus-create__error">
+                {{ $message }}
+              </p>
+            @enderror
+          </div>
+
+          <div class="admin-menus-create__actions u-flex">
+            <a href="{{ route('admin.menus.index') }}" class="admin-menus-create__back">
+              一覧へ戻る
+            </a>
+
+            <button type="submit" class="admin-menus-create__submit">
+              メニューを登録
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+</x-app-layout>

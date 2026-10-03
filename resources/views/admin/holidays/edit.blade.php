@@ -1,31 +1,60 @@
-<!DOCTYPE html>
-<html lang="ja">
+<x-app-layout>
+  <div class="admin-holidays-edit">
+    <div class="u-wrap">
+      <header class="admin-holidays-edit__header">
+        <p class="admin-holidays-edit__eyebrow">HOLIDAY MANAGEMENT</p>
+        <h1 class="admin-holidays-edit__title">休業日編集</h1>
+        <p class="admin-holidays-edit__description">
+          登録されている休業日の内容を編集します。
+        </p>
+      </header>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>休業日編集</title>
-</head>
+      <section class="admin-holidays-edit__section">
+        <form method="POST" action="{{ route('admin.holidays.update', $holiday) }}" class="admin-holidays-edit__form">
+          @csrf
+          @method('PUT')
 
-<body>
-  <h1>休業日編集</h1>
+          <div class="admin-holidays-edit__field">
+            <label for="date" class="admin-holidays-edit__label">
+              休業日
+            </label>
 
-  <form method="POST" action="{{ route('admin.holidays.update', $holiday) }}">
-    @csrf
-    @method('PUT')
+            <input type="date" id="date" name="date" value="{{ old('date', $holiday->date) }}"
+              class="admin-holidays-edit__input">
 
-    <div>
-      <label for="date">休業日</label>
-      <input type="date" id="date" name="date" value="{{ old('date', $holiday->date) }}">
+            @error('date')
+              <p class="admin-holidays-edit__error">
+                {{ $message }}
+              </p>
+            @enderror
+          </div>
+
+          <div class="admin-holidays-edit__field">
+            <label for="reason" class="admin-holidays-edit__label">
+              理由
+            </label>
+
+            <input type="text" id="reason" name="reason" value="{{ old('reason', $holiday->reason) }}"
+              class="admin-holidays-edit__input">
+
+            @error('reason')
+              <p class="admin-holidays-edit__error">
+                {{ $message }}
+              </p>
+            @enderror
+          </div>
+
+          <div class="admin-holidays-edit__actions u-flex">
+            <a href="{{ route('admin.holidays.index') }}" class="admin-holidays-edit__back">
+              一覧へ戻る
+            </a>
+
+            <button type="submit" class="admin-holidays-edit__submit">
+              変更を保存
+            </button>
+          </div>
+        </form>
+      </section>
     </div>
-
-    <div>
-      <label for="reason">理由</label>
-      <input type="text" id="reason" name="reason" value="{{ old('reason', $holiday->reason) }}">
-    </div>
-
-    <button type="submit">更新</button>
-  </form>
-</body>
-
-</html>
+  </div>
+</x-app-layout>

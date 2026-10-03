@@ -1,75 +1,192 @@
-<!DOCTYPE html>
-<html lang="ja">
+<x-app-layout>
+  <div class="admin-reservations-show">
+    <div class="u-wrap">
+      <header class="admin-reservations-show__header">
+        <p class="admin-reservations-show__eyebrow">RESERVATION MANAGEMENT</p>
+        <h1 class="admin-reservations-show__title">予約詳細</h1>
+        <p class="admin-reservations-show__description">
+          予約内容を確認・管理できます。
+        </p>
+      </header>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>予約詳細</title>
-</head>
+      @if (session('success'))
+        <p class="admin-reservations-show__success">
+          {{ session('success') }}
+        </p>
+      @endif
 
-<body>
-  <h1>予約詳細</h1>
+      <section class="admin-reservations-show__section">
+        <div class="admin-reservations-show__reservation">
+          <div class="admin-reservations-show__reservation-header">
+            <p class="admin-reservations-show__number">
+              {{ $reservation->reservation_number }}
+            </p>
+          </div>
 
-  @if (session('success'))
-    <p>{{ session('success') }}</p>
-  @endif
+          <dl class="admin-reservations-show__list">
+            <div class="admin-reservations-show__item">
+              <dt class="admin-reservations-show__label">
+                顧客名
+              </dt>
+              <dd class="admin-reservations-show__value">
+                {{ $reservation->customer_name }}
+              </dd>
+            </div>
 
-  <div>
-    <p>{{ $reservation->reservation_number }}</p>
-    <p>{{ $reservation->customer_name }}</p>
-    <p>{{ $reservation->customer_email }}</p>
-    <p>{{ $reservation->staff->name }}</p>
-    <p>{{ $reservation->menu->name }}</p>
-    <p>{{ $reservation->start_at }}</p>
-    <p>{{ $reservation->end_at }}</p>
-    <p>{{ $reservation->status->value }}</p>
+            <div class="admin-reservations-show__item">
+              <dt class="admin-reservations-show__label">
+                メールアドレス
+              </dt>
+              <dd class="admin-reservations-show__value">
+                {{ $reservation->customer_email }}
+              </dd>
+            </div>
+
+            <div class="admin-reservations-show__item">
+              <dt class="admin-reservations-show__label">
+                担当スタッフ
+              </dt>
+              <dd class="admin-reservations-show__value">
+                {{ $reservation->staff->name }}
+              </dd>
+            </div>
+
+            <div class="admin-reservations-show__item">
+              <dt class="admin-reservations-show__label">
+                メニュー
+              </dt>
+              <dd class="admin-reservations-show__value">
+                {{ $reservation->menu->name }}
+              </dd>
+            </div>
+
+            <div class="admin-reservations-show__item">
+              <dt class="admin-reservations-show__label">
+                開始日時
+              </dt>
+              <dd class="admin-reservations-show__value">
+                {{ $reservation->start_at }}
+              </dd>
+            </div>
+
+            <div class="admin-reservations-show__item">
+              <dt class="admin-reservations-show__label">
+                終了日時
+              </dt>
+              <dd class="admin-reservations-show__value">
+                {{ $reservation->end_at }}
+              </dd>
+            </div>
+
+            <div class="admin-reservations-show__item">
+              <dt class="admin-reservations-show__label">
+                ステータス
+              </dt>
+              <dd class="admin-reservations-show__value">
+                {{ $reservation->status->value }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="admin-reservations-show__edit">
+          <h2 class="admin-reservations-show__edit-title">
+            予約を編集
+          </h2>
+
+          <form method="POST" action="{{ route('admin.reservations.update', $reservation) }}"
+            class="admin-reservations-show__form">
+            @csrf
+            @method('PUT')
+
+            <div class="admin-reservations-show__field">
+              <label for="staff_id" class="admin-reservations-show__field-label">
+                担当スタッフ
+              </label>
+
+              <select id="staff_id" name="staff_id" class="admin-reservations-show__select">
+                @foreach ($staffs as $staff)
+                  <option value="{{ $staff->id }}" @selected($staff->id === $reservation->staff_id)>
+                    {{ $staff->name }}
+                  </option>
+                @endforeach
+              </select>
+
+              @error('staff_id')
+                <p class="admin-reservations-show__error">
+                  {{ $message }}
+                </p>
+              @enderror
+            </div>
+
+            <div class="admin-reservations-show__field">
+              <label for="menu_id" class="admin-reservations-show__field-label">
+                メニュー
+              </label>
+
+              <select id="menu_id" name="menu_id" class="admin-reservations-show__select">
+                @foreach ($menus as $menu)
+                  <option value="{{ $menu->id }}" @selected($menu->id === $reservation->menu_id)>
+                    {{ $menu->name }}
+                  </option>
+                @endforeach
+              </select>
+
+              @error('menu_id')
+                <p class="admin-reservations-show__error">
+                  {{ $message }}
+                </p>
+              @enderror
+            </div>
+
+            <div class="admin-reservations-show__field">
+              <label for="start_at" class="admin-reservations-show__field-label">
+                開始日時
+              </label>
+
+              <input type="datetime-local" id="start_at" name="start_at"
+                value="{{ old('start_at', $reservation->start_at->format('Y-m-d\TH:i')) }}"
+                class="admin-reservations-show__input">
+
+              @error('start_at')
+                <p class="admin-reservations-show__error">
+                  {{ $message }}
+                </p>
+              @enderror
+            </div>
+
+            <div class="admin-reservations-show__field">
+              <label for="status" class="admin-reservations-show__field-label">
+                ステータス
+              </label>
+
+              <select id="status" name="status" class="admin-reservations-show__select">
+                @foreach (\App\Enums\ReservationStatus::cases() as $status)
+                  <option value="{{ $status->value }}" @selected($status === $reservation->status)>
+                    {{ $status->value }}
+                  </option>
+                @endforeach
+              </select>
+
+              @error('status')
+                <p class="admin-reservations-show__error">
+                  {{ $message }}
+                </p>
+              @enderror
+            </div>
+
+            <div class="admin-reservations-show__actions u-flex">
+              <a href="{{ route('admin.reservations.index') }}" class="admin-reservations-show__back">
+                一覧へ戻る
+              </a>
+
+              <button type="submit" class="admin-reservations-show__submit">
+                予約を更新する
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
   </div>
-
-  <form method="POST" action="{{ route('admin.reservations.update', $reservation) }}">
-    @csrf
-    @method('PUT')
-
-    <div>
-      <label for="staff_id">担当スタッフ</label>
-      <select id="staff_id" name="staff_id">
-        @foreach ($staffs as $staff)
-          <option value="{{ $staff->id }}" @selected($staff->id === $reservation->staff_id)>
-            {{ $staff->name }}
-          </option>
-        @endforeach
-      </select>
-    </div>
-
-    <div>
-      <label for="menu_id">メニュー</label>
-      <select id="menu_id" name="menu_id">
-        @foreach ($menus as $menu)
-          <option value="{{ $menu->id }}" @selected($menu->id === $reservation->menu_id)>
-            {{ $menu->name }}
-          </option>
-        @endforeach
-      </select>
-    </div>
-
-    <div>
-      <label for="start_at">開始日時</label>
-      <input type="datetime-local" id="start_at" name="start_at"
-        value="{{ $reservation->start_at->format('Y-m-d\TH:i') }}">
-    </div>
-
-    <div>
-      <label for="status">ステータス</label>
-      <select id="status" name="status">
-        @foreach (\App\Enums\ReservationStatus::cases() as $status)
-          <option value="{{ $status->value }}" @selected($status === $reservation->status)>
-            {{ $status->value }}
-          </option>
-        @endforeach
-      </select>
-    </div>
-
-    <button type="submit">予約を更新する</button>
-  </form>
-</body>
-
-</html>
+</x-app-layout>

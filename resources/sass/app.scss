@@ -3,4 +3,5 @@
 @use "layout/header"; // 共通レイアウト
 @use "pages/reservations"; // 顧客
 @use "pages/staff"; // スタッフ
+@use "pages/admin"; // 管理者
 @use "utilities/utilities"; // 汎用Utility

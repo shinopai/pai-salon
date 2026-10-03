@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
         $user = $request->user();
 
         $defaultRoute = $user?->staff?->role->value === 'admin'
-            ? route('admin.staffs.index', absolute: false)
+            ? route('admin.dashboard', absolute: false)
             : route('staff.dashboard', absolute: false);
 
         return redirect()->intended($defaultRoute);

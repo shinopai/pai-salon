@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             StaffMenuSeeder::class,
             BusinessHourSeeder::class,
+            HolidaySeeder::class
         ]);
     }
 }

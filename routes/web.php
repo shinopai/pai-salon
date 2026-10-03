@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\StaffMenuController;
 use App\Http\Controllers\Admin\BusinessHourController;
 use App\Http\Controllers\Admin\HolidayController;
 use App\Http\Controllers\Admin\ReservationController as AdminReservationController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -20,6 +21,10 @@ Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+        // ダッシュボード
+        Route::get('/dashboard', [DashboardController::class, 'dashboard'])
+            ->name('dashboard');
+
         // スタッフ管理 (フルCRUD)
         Route::resource('staffs', AdminStaffController::class);
 
