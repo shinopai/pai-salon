@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Staff;
 use Illuminate\View\View;
 use App\Http\Requests\StaffRequest;
 use App\Http\Requests\AdminStaffUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
@@ -28,11 +30,18 @@ class StaffController extends Controller
     {
         $data = $request->validated();
 
-        Staff::forceCreate([
-            'user_id' => $data['user_id'],
-            'name' => $data['name'],
-            'role' => $data['role'],
-        ]);
+        DB::transaction(function () use ($data): void {
+            $user = User::create([
+                'email' => $data['email'],
+                'password' => Hash::make('password'),
+            ]);
+
+            Staff::forceCreate([
+                'user_id' => $user->id,
+                'name' => $data['name'],
+                'role' => $data['role'],
+            ]);
+        });
 
         return redirect()->route('admin.staffs.index');
     }

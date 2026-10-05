@@ -7,7 +7,7 @@ use App\Enums\StaffRole;
 use App\Enums\ReservationStatus;
 use Illuminate\Support\Facades\DB;
 
-it('管理者スタッフ一覧を表示できる', function () {
+test('管理者スタッフ一覧を表示できる', function () {
     $user = User::factory()->create([
         'email' => 'admin@example.com',
     ]);
@@ -80,17 +80,13 @@ test('管理者はスタッフを登録できる', function () {
         'role' => StaffRole::ADMIN,
     ]);
 
-    $staffUser = User::factory()->create([
-        'email' => 'newstaff@example.com',
-    ]);
-
     $this->actingAs($user);
 
     $response = $this->post(
         route('admin.staffs.store'),
         [
-            'user_id' => $staffUser->id,
             'name' => '新規スタッフ',
+            'email' => 'newstaff@example.com',
             'role' => StaffRole::STAFF->value,
         ]
     );
@@ -98,6 +94,13 @@ test('管理者はスタッフを登録できる', function () {
     $response->assertRedirect(
         route('admin.staffs.index')
     );
+
+    $staffUser = User::where(
+        'email',
+        'newstaff@example.com'
+    )->first();
+
+    expect($staffUser)->not->toBeNull();
 
     $this->assertDatabaseHas('staffs', [
         'user_id' => $staffUser->id,
@@ -360,7 +363,7 @@ test('管理者は管理者スタッフ一覧にアクセスできる', function
     $response->assertOk();
 });
 
-it('管理者が登録したスタッフが指定したUserと紐付く', function () {
+test('管理者が登録したスタッフは新規作成されたUserと紐付く', function () {
     $adminUser = User::factory()->create();
 
     Staff::forceCreate([
@@ -369,25 +372,31 @@ it('管理者が登録したスタッフが指定したUserと紐付く', functi
         'role' => StaffRole::ADMIN,
     ]);
 
-    $user = User::factory()->create([
-        'email' => 'staff@example.com',
-    ]);
-
     $this->actingAs($adminUser)
         ->post(route('admin.staffs.store'), [
-            'user_id' => $user->id,
             'name' => '新規スタッフ',
+            'email' => 'staff@example.com',
             'role' => StaffRole::STAFF->value,
         ])
         ->assertRedirect(route('admin.staffs.index'));
 
-    $staff = Staff::where('name', '新規スタッフ')->first();
+    $staffUser = User::where(
+        'email',
+        'staff@example.com'
+    )->first();
+
+    expect($staffUser)->not->toBeNull();
+
+    $staff = Staff::where(
+        'name',
+        '新規スタッフ'
+    )->first();
 
     expect($staff)->not->toBeNull()
-        ->and($staff->user_id)->toBe($user->id);
+        ->and($staff->user_id)->toBe($staffUser->id);
 });
 
-it('管理者は予約のないスタッフを削除でき、Userは残る', function () {
+test('管理者は予約のないスタッフを削除でき、Userは残る', function () {
     $adminUser = User::factory()->create();
 
     Staff::forceCreate([
@@ -426,7 +435,7 @@ it('管理者は予約のないスタッフを削除でき、Userは残る', fun
         )->toBeFalse();
 });
 
-it('管理者は予約があるスタッフを削除できない', function () {
+test('管理者は予約があるスタッフを削除できない', function () {
     $adminUser = User::factory()->create();
 
     Staff::forceCreate([
