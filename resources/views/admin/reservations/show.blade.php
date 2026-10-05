@@ -104,6 +104,12 @@
                 担当スタッフ
               </label>
 
+              @error('staff_id')
+                <p class="u-error">
+                  {{ $message }}
+                </p>
+              @enderror
+
               <select id="staff_id" name="staff_id" class="admin-reservations-show__select">
                 @foreach ($staffs as $staff)
                   <option value="{{ $staff->id }}" @selected($staff->id === $reservation->staff_id)>
@@ -111,18 +117,18 @@
                   </option>
                 @endforeach
               </select>
-
-              @error('staff_id')
-                <p class="admin-reservations-show__error">
-                  {{ $message }}
-                </p>
-              @enderror
             </div>
 
             <div class="admin-reservations-show__field">
               <label for="menu_id" class="admin-reservations-show__field-label">
                 メニュー
               </label>
+
+              @error('menu_id')
+                <p class="u-error">
+                  {{ $message }}
+                </p>
+              @enderror
 
               <select id="menu_id" name="menu_id" class="admin-reservations-show__select">
                 @foreach ($menus as $menu)
@@ -131,12 +137,6 @@
                   </option>
                 @endforeach
               </select>
-
-              @error('menu_id')
-                <p class="admin-reservations-show__error">
-                  {{ $message }}
-                </p>
-              @enderror
             </div>
 
             <div class="admin-reservations-show__field">
@@ -144,21 +144,27 @@
                 開始日時
               </label>
 
-              <input type="datetime-local" id="start_at" name="start_at"
-                value="{{ old('start_at', $reservation->start_at->format('Y-m-d\TH:i')) }}"
-                class="admin-reservations-show__input">
-
               @error('start_at')
-                <p class="admin-reservations-show__error">
+                <p class="u-error">
                   {{ $message }}
                 </p>
               @enderror
+
+              <input type="datetime-local" id="start_at" name="start_at"
+                value="{{ old('start_at', $reservation->start_at->format('Y-m-d\TH:i')) }}"
+                class="admin-reservations-show__input">
             </div>
 
             <div class="admin-reservations-show__field">
               <label for="status" class="admin-reservations-show__field-label">
                 ステータス
               </label>
+
+              @error('status')
+                <p class="u-error">
+                  {{ $message }}
+                </p>
+              @enderror
 
               <select id="status" name="status" class="admin-reservations-show__select">
                 @foreach (\App\Enums\ReservationStatus::cases() as $status)
@@ -167,12 +173,6 @@
                   </option>
                 @endforeach
               </select>
-
-              @error('status')
-                <p class="admin-reservations-show__error">
-                  {{ $message }}
-                </p>
-              @enderror
             </div>
 
             <div class="admin-reservations-show__actions u-flex">

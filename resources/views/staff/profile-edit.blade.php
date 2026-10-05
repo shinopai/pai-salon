@@ -10,6 +10,9 @@
 
           <div class="staff-profile-edit__field">
             <label class="staff-profile-edit__label" for="name">名前</label>
+            @error('name')
+              <p class="u-error">{{ $message }}</p>
+            @enderror
             <input class="staff-profile-edit__input" type="text" id="name" name="name"
               value="{{ $staff->name }}">
           </div>

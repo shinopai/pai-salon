@@ -19,14 +19,14 @@
               休業日
             </label>
 
-            <input type="date" id="date" name="date" value="{{ old('date', $holiday->date) }}"
-              class="admin-holidays-edit__input">
-
             @error('date')
-              <p class="admin-holidays-edit__error">
+              <p class="u-error">
                 {{ $message }}
               </p>
             @enderror
+
+            <input type="date" id="date" name="date" value="{{ old('date', $holiday->date) }}"
+              class="admin-holidays-edit__input">
           </div>
 
           <div class="admin-holidays-edit__field">
@@ -34,14 +34,14 @@
               理由
             </label>
 
-            <input type="text" id="reason" name="reason" value="{{ old('reason', $holiday->reason) }}"
-              class="admin-holidays-edit__input">
-
             @error('reason')
-              <p class="admin-holidays-edit__error">
+              <p class="u-error">
                 {{ $message }}
               </p>
             @enderror
+
+            <input type="text" id="reason" name="reason" value="{{ old('reason', $holiday->reason) }}"
+              class="admin-holidays-edit__input">
           </div>
 
           <div class="admin-holidays-edit__actions u-flex">

@@ -18,14 +18,14 @@
               メニュー名
             </label>
 
-            <input type="text" id="name" name="name" value="{{ old('name') }}"
-              class="admin-menus-create__input">
-
             @error('name')
-              <p class="admin-menus-create__error">
+              <p class="u-error">
                 {{ $message }}
               </p>
             @enderror
+
+            <input type="text" id="name" name="name" value="{{ old('name') }}"
+              class="admin-menus-create__input">
           </div>
 
           <div class="admin-menus-create__field">
@@ -33,18 +33,19 @@
               所要時間
             </label>
 
+            @error('duration')
+              <p class="u-error">
+                {{ $message }}
+              </p>
+            @enderror
+
             <div class="admin-menus-create__input-group">
+
               <input type="number" id="duration" name="duration" value="{{ old('duration') }}" min="1"
                 class="admin-menus-create__input">
 
               <span class="admin-menus-create__unit">分</span>
             </div>
-
-            @error('duration')
-              <p class="admin-menus-create__error">
-                {{ $message }}
-              </p>
-            @enderror
           </div>
 
           <div class="admin-menus-create__actions u-flex">

@@ -18,14 +18,15 @@
               氏名
             </label>
 
-            <input type="text" id="name" name="name" value="{{ old('name') }}"
-              class="admin-staffs-create__input">
-
             @error('name')
-              <p class="admin-staffs-create__error">
+              <p class="u-error">
                 {{ $message }}
               </p>
             @enderror
+
+            <input type="text" id="name" name="name" value="{{ old('name') }}"
+              class="admin-staffs-create__input">
+
           </div>
 
           <div class="admin-staffs-create__field">
@@ -33,20 +34,26 @@
               メールアドレス
             </label>
 
-            <input type="email" id="email" name="email" value="{{ old('email') }}"
-              class="admin-staffs-create__input">
-
             @error('email')
-              <p class="admin-staffs-create__error">
+              <p class="u-error">
                 {{ $message }}
               </p>
             @enderror
+
+            <input type="email" id="email" name="email" value="{{ old('email') }}"
+              class="admin-staffs-create__input">
           </div>
 
           <div class="admin-staffs-create__field">
             <label for="role" class="admin-staffs-create__label">
               権限
             </label>
+
+            @error('role')
+              <p class="u-error">
+                {{ $message }}
+              </p>
+            @enderror
 
             <select id="role" name="role" class="admin-staffs-create__select">
               <option value="staff" @selected(old('role', 'staff') === 'staff')>
@@ -56,12 +63,6 @@
                 管理者
               </option>
             </select>
-
-            @error('role')
-              <p class="admin-staffs-create__error">
-                {{ $message }}
-              </p>
-            @enderror
           </div>
 
           <div class="admin-staffs-create__actions u-flex">

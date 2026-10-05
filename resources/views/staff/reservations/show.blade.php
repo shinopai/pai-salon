@@ -41,6 +41,9 @@
               <div class="staff-reservations-show__item u-flex">
                 <dt class="staff-reservations-show__label">担当スタッフ</dt>
                 <dd class="staff-reservations-show__value">
+                  @error('staff_id')
+                    <p class="u-error">{{ $message }}</p>
+                  @enderror
                   <select class="staff-reservations-show__select" name="staff_id" id="staff_id">
                     @foreach ($staffs as $staff)
                       <option value="{{ $staff->id }}" @selected($reservation->staff_id === $staff->id)>
@@ -54,6 +57,9 @@
               <div class="staff-reservations-show__item u-flex">
                 <dt class="staff-reservations-show__label">メニュー</dt>
                 <dd class="staff-reservations-show__value">
+                  @error('menu_id')
+                    <p class="u-error">{{ $message }}</p>
+                  @enderror
                   <select class="staff-reservations-show__select" name="menu_id" id="menu_id">
                     @foreach ($menus as $menu)
                       <option value="{{ $menu->id }}" @selected($reservation->menu_id === $menu->id)>
@@ -67,6 +73,9 @@
               <div class="staff-reservations-show__item u-flex">
                 <dt class="staff-reservations-show__label">予約日時</dt>
                 <dd class="staff-reservations-show__value">
+                  @error('start_at')
+                    <p class="u-error">{{ $message }}</p>
+                  @enderror
                   <input class="staff-reservations-show__input" type="datetime-local" name="start_at" id="start_at"
                     value="{{ $reservation->start_at->format('Y-m-d\TH:i') }}">
                 </dd>
@@ -75,6 +84,9 @@
               <div class="staff-reservations-show__item u-flex">
                 <dt class="staff-reservations-show__label">ステータス</dt>
                 <dd class="staff-reservations-show__value">
+                  @error('status')
+                    <p class="u-error">{{ $message }}</p>
+                  @enderror
                   <select class="staff-reservations-show__select" name="status" id="status">
                     <option value="reserved" @selected($reservation->status === \App\Enums\ReservationStatus::RESERVED)>
                       予約中

@@ -19,14 +19,14 @@
               名前
             </label>
 
-            <input type="text" id="name" name="name" value="{{ old('name', $customer->name) }}"
-              class="admin-customers-edit__input">
-
             @error('name')
-              <p class="admin-customers-edit__error">
+              <p class="u-error">
                 {{ $message }}
               </p>
             @enderror
+
+            <input type="text" id="name" name="name" value="{{ old('name', $customer->name) }}"
+              class="admin-customers-edit__input">
           </div>
 
           <div class="admin-customers-edit__field">
@@ -34,14 +34,14 @@
               メールアドレス
             </label>
 
-            <input type="email" id="email" name="email" value="{{ old('email', $customer->email) }}"
-              class="admin-customers-edit__input">
-
             @error('email')
-              <p class="admin-customers-edit__error">
+              <p class="u-error">
                 {{ $message }}
               </p>
             @enderror
+
+            <input type="email" id="email" name="email" value="{{ old('email', $customer->email) }}"
+              class="admin-customers-edit__input">
           </div>
 
           <div class="admin-customers-edit__actions u-flex">

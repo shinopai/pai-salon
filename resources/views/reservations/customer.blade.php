@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <form method="GET" action="{{ route('reservations.confirm') }}" class="reservations-customer__form">
+      <form method="GET" action="{{ route('reservations.confirm') }}" class="reservations-customer__form" novalidate>
         <input type="hidden" name="menu_id" value="{{ $menu->id }}">
         <input type="hidden" name="staff_id" value="{{ $staff->id }}">
         <input type="hidden" name="date" value="{{ $date->format('Y-m-d') }}">
@@ -46,6 +46,10 @@
             お名前
           </label>
 
+          @error('customer_name')
+            <p class="u-error">{{ $message }}</p>
+          @enderror
+
           <input type="text" id="customer_name" name="customer_name" maxlength="100" required
             class="reservations-customer__input">
         </div>
@@ -54,6 +58,10 @@
           <label for="customer_email" class="reservations-customer__label">
             メールアドレス
           </label>
+
+          @error('customer_email')
+            <p class="u-error">{{ $message }}</p>
+          @enderror
 
           <input type="email" id="customer_email" name="customer_email" maxlength="255" required
             class="reservations-customer__input">

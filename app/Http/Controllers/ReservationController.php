@@ -72,7 +72,7 @@ class ReservationController extends Controller
         ));
     }
 
-    public function confirm(Request $request)
+    public function confirm(ReservationRequest $request)
     {
         $menu = Menu::findOrFail($request->integer('menu_id'));
         $staff = Staff::findOrFail($request->integer('staff_id'));
