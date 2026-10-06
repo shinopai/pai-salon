@@ -8,6 +8,7 @@ use App\Models\StaffMenu;
 use App\Models\User;
 use App\Models\BusinessHour;
 use App\Models\Reservation;
+use App\Models\Holiday;
 use Illuminate\Support\Facades\Mail;
 
 test('メニュー選択画面を表示できる', function () {
@@ -261,6 +262,67 @@ test('予約確定時に既存予約と重複した場合は確認画面に戻�
     $response->assertSessionHasErrors([
         'start_at' => '選択した時間帯はすでに予約されています。',
     ]);
+});
+
+test('休業日の予約は確認画面に戻り予約不可エラーを表示する', function () {
+    Mail::fake();
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $user = User::factory()->create();
+
+    $staff = (new Staff())->forceFill([
+        'user_id' => $user->id,
+        'role' => StaffRole::STAFF,
+        'name' => '担当スタッフ',
+    ]);
+    $staff->save();
+
+    StaffMenu::create([
+        'staff_id' => $staff->id,
+        'menu_id' => $menu->id,
+    ]);
+
+    $startAt = now()->addDays(7)->setTime(10, 0);
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    Holiday::create([
+        'date' => $startAt->format('Y-m-d'),
+        'reason' => '臨時休業',
+    ]);
+
+    $response = $this->post(route('reservations.store'), [
+        'menu_id' => $menu->id,
+        'staff_id' => $staff->id,
+        'start_at' => $startAt->format('Y-m-d H:i:s'),
+        'customer_name' => '新規顧客',
+        'customer_email' => 'customer@example.com',
+    ]);
+
+    $response->assertRedirectToRoute('reservations.confirm', [
+        'menu_id' => $menu->id,
+        'staff_id' => $staff->id,
+        'date' => $startAt->format('Y-m-d'),
+        'start_at' => $startAt->format('Y-m-d H:i:s'),
+        'customer_name' => '新規顧客',
+        'customer_email' => 'customer@example.com',
+    ]);
+
+    $response->assertSessionHasErrors([
+        'start_at' => '選択した日は休業日です。',
+    ]);
+
+    expect(Reservation::count())->toBe(0);
+
+    Mail::assertNothingSent();
 });
 
 test('予約を登録して予約完了画面へリダイレクトできる', function () {
