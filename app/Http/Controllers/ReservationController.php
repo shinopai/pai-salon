@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Services\ReservationService;
+use Illuminate\Validation\ValidationException;
 
 class ReservationController extends Controller
 {
@@ -95,13 +96,31 @@ class ReservationController extends Controller
         ReservationRequest $request,
         ReservationService $reservationService
     ) {
-        $reservation = $reservationService->reserve($request->validated());
+        try {
+            $reservation = $reservationService->reserve(
+                $request->validated()
+            );
+        } catch (ValidationException $e) {
+            $data = $request->validated();
+
+            return redirect()
+                ->route('reservations.confirm', [
+                    'menu_id' => $data['menu_id'],
+                    'staff_id' => $data['staff_id'],
+                    'date' => Carbon::parse($data['start_at'])
+                        ->format('Y-m-d'),
+                    'start_at' => $data['start_at'],
+                    'customer_name' => $data['customer_name'],
+                    'customer_email' => $data['customer_email'],
+                ])
+                ->withErrors($e->errors())
+                ->withInput();
+        }
 
         return redirect()->route('reservations.complete', [
             'reservation_number' => $reservation->reservation_number,
         ]);
     }
-
     public function complete(Request $request)
     {
         $reservation = Reservation::query()

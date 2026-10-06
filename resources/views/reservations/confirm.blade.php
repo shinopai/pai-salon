@@ -13,6 +13,10 @@
         </p>
       </div>
 
+      @error('start_at')
+        <p class="u-error">{{ $message }}</p>
+      @enderror
+
       <div class="reservations-confirm__section">
         <h2 class="reservations-confirm__section-title">
           予約内容

@@ -10,7 +10,7 @@ use App\Models\BusinessHour;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Mail;
 
-it('メニュー選択画面を表示できる', function () {
+test('メニュー選択画面を表示できる', function () {
     Menu::create([
         'name' => 'カット',
         'duration' => 60,
@@ -31,7 +31,7 @@ it('メニュー選択画面を表示できる', function () {
     $response->assertSee('カラー');
 });
 
-it('選択したメニューに対応できるスタッフを表示できる', function () {
+test('選択したメニューに対応できるスタッフを表示できる', function () {
     $menu = Menu::create([
         'name' => 'カット',
         'duration' => 60,
@@ -73,7 +73,7 @@ it('選択したメニューに対応できるスタッフを表示できる', f
     $response->assertDontSee('非対応スタッフ');
 });
 
-it('選択したメニューとスタッフを指定して日付選択画面を表示できる', function () {
+test('選択したメニューとスタッフを指定して日付選択画面を表示できる', function () {
     $menu = Menu::create([
         'name' => 'カット',
         'duration' => 60,
@@ -102,7 +102,7 @@ it('選択したメニューとスタッフを指定して日付選択画面を�
     $response->assertSee('担当スタッフ');
 });
 
-it('選択した予約情報を指定して顧客情報入力画面を表示できる', function () {
+test('選択した予約情報を指定して顧客情報入力画面を表示できる', function () {
     $menu = Menu::create([
         'name' => 'カット',
         'duration' => 60,
@@ -146,7 +146,7 @@ it('選択した予約情報を指定して顧客情報入力画面を表示で�
     $response->assertSee('10:00');
 });
 
-it('入力した顧客情報を指定して予約確認画面を表示できる', function () {
+test('入力した顧客情報を指定して予約確認画面を表示できる', function () {
     $menu = Menu::create([
         'name' => 'カット',
         'duration' => 60,
@@ -199,7 +199,7 @@ it('入力した顧客情報を指定して予約確認画面を表示できる'
     $response->assertSee('customer@example.com');
 });
 
-it('予約を登録して予約完了画面へリダイレクトできる', function () {
+test('予約確定時に既存予約と重複した場合は確認画面に戻り競合エラーを表示する', function () {
     Mail::fake();
 
     $menu = Menu::create([
@@ -221,18 +221,82 @@ it('予約を登録して予約完了画面へリダイレクトできる', func
         'menu_id' => $menu->id,
     ]);
 
+    $startAt = now()->addDays(7)->setTime(10, 0);
+
     BusinessHour::create([
-        'day_of_week' => 4,
+        'day_of_week' => $startAt->dayOfWeek,
         'open_time' => '10:00',
         'close_time' => '20:00',
     ]);
 
-    $startAt = '2026-09-24 15:00:00';
+    createReservation([
+        'reservation_number' => 'RSV-UI-006-EXISTING',
+        'cancellation_token' => 'hashed-token-ui-006',
+        'customer_name' => '既存顧客',
+        'customer_email' => 'existing@example.com',
+        'staff_id' => $staff->id,
+        'menu_id' => $menu->id,
+        'start_at' => $startAt,
+        'end_at' => $startAt->copy()->addHour(),
+        'status' => ReservationStatus::RESERVED,
+    ]);
 
     $response = $this->post(route('reservations.store'), [
         'menu_id' => $menu->id,
         'staff_id' => $staff->id,
-        'start_at' => $startAt,
+        'start_at' => $startAt->format('Y-m-d H:i:s'),
+        'customer_name' => '新規顧客',
+        'customer_email' => 'customer@example.com',
+    ]);
+
+    $response->assertRedirectToRoute('reservations.confirm', [
+        'menu_id' => $menu->id,
+        'staff_id' => $staff->id,
+        'date' => $startAt->format('Y-m-d'),
+        'start_at' => $startAt->format('Y-m-d H:i:s'),
+        'customer_name' => '新規顧客',
+        'customer_email' => 'customer@example.com',
+    ]);
+
+    $response->assertSessionHasErrors([
+        'start_at' => '選択した時間帯はすでに予約されています。',
+    ]);
+});
+
+test('予約を登録して予約完了画面へリダイレクトできる', function () {
+    Mail::fake();
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $user = User::factory()->create();
+
+    $staff = (new Staff())->forceFill([
+        'user_id' => $user->id,
+        'role' => StaffRole::STAFF,
+        'name' => '担当スタッフ',
+    ]);
+    $staff->save();
+
+    StaffMenu::create([
+        'staff_id' => $staff->id,
+        'menu_id' => $menu->id,
+    ]);
+
+    $startAt = now()->addDays(7)->setTime(15, 0);
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $response = $this->post(route('reservations.store'), [
+        'menu_id' => $menu->id,
+        'staff_id' => $staff->id,
+        'start_at' => $startAt->format('Y-m-d H:i:s'),
         'customer_name' => 'テスト顧客',
         'customer_email' => 'customer@example.com',
     ]);
@@ -252,7 +316,7 @@ it('予約を登録して予約完了画面へリダイレクトできる', func
     Mail::assertSent(\App\Mail\ReservationConfirmationMail::class);
 });
 
-it('予約完了画面に予約情報を表示できる', function () {
+test('予約完了画面に予約情報を表示できる', function () {
     $menu = Menu::create([
         'name' => 'カット',
         'duration' => 60,
