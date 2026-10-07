@@ -8,7 +8,7 @@ use App\Models\Menu;
 use App\Models\StaffMenu;
 use App\Models\BusinessHour;
 
-it('スタッフは予約一覧を表示できる', function () {
+test('スタッフは予約一覧を表示できる', function () {
     $user = User::factory()->create();
 
     $staff = new Staff();
@@ -25,7 +25,7 @@ it('スタッフは予約一覧を表示できる', function () {
         ->assertViewIs('staff.reservations.index');
 });
 
-it('スタッフは自分が担当する予約だけ一覧で確認できる', function () {
+test('スタッフは自分が担当する予約だけ一覧で確認できる', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
 
@@ -84,7 +84,7 @@ it('スタッフは自分が担当する予約だけ一覧で確認できる', f
         });
 });
 
-it('スタッフは予約詳細を表示できる', function () {
+test('スタッフは予約詳細を表示できる', function () {
     $user = User::factory()->create();
 
     $staff = new Staff();
@@ -119,6 +119,47 @@ it('スタッフは予約詳細を表示できる', function () {
         ->assertViewHas('reservation', $reservation);
 });
 
+test('スタッフは他スタッフの予約詳細を表示できない', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $staff = new Staff();
+    $staff->forceFill([
+        'user_id' => $user->id,
+        'name' => 'テストスタッフ',
+        'role' => StaffRole::STAFF,
+    ])->save();
+
+    $otherStaff = new Staff();
+    $otherStaff->forceFill([
+        'user_id' => $otherUser->id,
+        'name' => '別スタッフ',
+        'role' => StaffRole::STAFF,
+    ])->save();
+
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $reservation = createReservation([
+        'reservation_number' => 'RSV-20260920-403',
+        'cancellation_token' => 'hashed-token-403',
+        'customer_name' => '別スタッフの予約',
+        'customer_email' => 'other@example.com',
+        'staff_id' => $otherStaff->id,
+        'menu_id' => $menu->id,
+        'start_at' => '2026-09-20 10:00:00',
+        'end_at' => '2026-09-20 11:00:00',
+        'status' => ReservationStatus::RESERVED,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('staff.reservations.show', $reservation))
+        ->assertForbidden()
+        ->assertSee('この予約を操作する権限がありません。');
+});
+
 test('スタッフは予約を更新して詳細画面へリダイレクトできる', function () {
     $user = User::factory()->create();
 
@@ -145,14 +186,14 @@ test('スタッフは予約を更新して詳細画面へリダイレクトで�
     ]);
 
     $reservation = createReservation([
-        'reservation_number' => 'RSV-20260924-TEST',
+        'reservation_number' => 'RSV-20261015-TEST',
         'cancellation_token' => 'hashed-token',
         'customer_name' => 'テスト顧客',
         'customer_email' => 'customer@example.com',
         'staff_id' => $staff->id,
         'menu_id' => $menu->id,
-        'start_at' => '2026-09-24 15:00:00',
-        'end_at' => '2026-09-24 16:00:00',
+        'start_at' => '2026-10-15 15:00:00',
+        'end_at' => '2026-10-15 16:00:00',
         'status' => ReservationStatus::RESERVED,
     ]);
 
@@ -163,7 +204,7 @@ test('スタッフは予約を更新して詳細画面へリダイレクトで�
         [
             'staff_id' => $staff->id,
             'menu_id' => $menu->id,
-            'start_at' => '2026-09-24 16:00:00',
+            'start_at' => '2026-10-15 16:00:00',
             'status' => ReservationStatus::RESERVED->value,
         ]
     );
@@ -174,8 +215,8 @@ test('スタッフは予約を更新して詳細画面へリダイレクトで�
 
     $this->assertDatabaseHas('reservations', [
         'id' => $reservation->id,
-        'start_at' => '2026-09-24 16:00:00',
-        'end_at' => '2026-09-24 17:00:00',
+        'start_at' => '2026-10-15 16:00:00',
+        'end_at' => '2026-10-15 17:00:00',
         'status' => ReservationStatus::RESERVED->value,
     ]);
 });
