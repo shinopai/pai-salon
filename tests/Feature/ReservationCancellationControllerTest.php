@@ -159,8 +159,49 @@ test('不正なトークンでは予約をキャンセルできない', function
         ])
     );
 
-    $response->assertSessionHasErrors('reservation');
+    $response->assertViewIs('reservations.cancel-error');
+    $response->assertSee('この予約はキャンセルできません。');
+    $response->assertDontSee($reservation->reservation_number);
 
     expect($reservation->fresh()->status)
         ->toBe(ReservationStatus::RESERVED);
+});
+
+test('キャンセル不可の予約ではキャンセル不可画面を表示する', function () {
+    $user = User::factory()->create();
+
+    $staff = new Staff();
+    $staff->user_id = $user->id;
+    $staff->role = StaffRole::STAFF;
+    $staff->name = 'テストスタッフ';
+    $staff->save();
+
+    $menu = Menu::create([
+        'name' => 'テストメニュー',
+        'duration' => 60,
+    ]);
+
+    $reservation = createReservation([
+        'reservation_number' => 'RSV-TEST-005',
+        'cancellation_token' => Hash::make('test-token'),
+        'status' => ReservationStatus::CANCELLED,
+        'customer_name' => 'テスト顧客',
+        'customer_email' => 'customer5@example.com',
+        'staff_id' => $staff->id,
+        'menu_id' => $menu->id,
+        'start_at' => now()->addDays(3)->setTime(10, 0),
+        'end_at' => now()->addDays(3)->setTime(11, 0),
+    ]);
+
+    $response = $this->get(
+        route('reservations.cancel.show', [
+            'reservation_number' => $reservation->reservation_number,
+            'token' => 'test-token',
+        ])
+    );
+
+    $response->assertStatus(200);
+    $response->assertViewIs('reservations.cancel-error');
+    $response->assertSee('この予約はキャンセルできません。');
+    $response->assertDontSee($reservation->reservation_number);
 });

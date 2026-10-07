@@ -1463,3 +1463,448 @@
         margin-bottom: 24px;
     }
 }
+
+// ==========================================================================
+// キャンセル確認
+// ==========================================================================
+
+.reservations-cancel {
+    padding: 64px 0 80px;
+}
+
+.reservations-cancel__inner {
+    max-width: 760px;
+}
+
+.reservations-cancel__heading {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.reservations-cancel__eyebrow {
+    margin-bottom: 8px;
+    color: color("primary");
+    letter-spacing: ls(80);
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel__description {
+    margin-top: 12px;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        line-height: 1.8;
+    }
+}
+
+.reservations-cancel__section {
+    margin-bottom: 40px;
+}
+
+.reservations-cancel__section-title {
+    margin: 0 0 12px;
+    color: color("text-main");
+
+    @include font-set(fz("lead")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel__summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("border");
+}
+
+.reservations-cancel__summary-item {
+    padding: 16px 20px;
+    background-color: color("bg-main");
+}
+
+.reservations-cancel__summary-label {
+    margin-bottom: 6px;
+    color: color("text-main");
+
+    @include font-set(fz("note")) {
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel__summary-value {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel__form {
+    margin-top: 40px;
+}
+
+.reservations-cancel__button {
+    width: min(100%, 450px);
+    min-height: 48px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: radius("md");
+    background-color: color("danger");
+    color: color("text-white");
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel__button:hover {
+    background-color: color("danger");
+    filter: brightness(0.9);
+    transform: translateY(-2px);
+}
+
+@include max-screen("md") {
+    .reservations-cancel {
+        padding: 48px 0 64px;
+    }
+
+    .reservations-cancel__summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-cancel {
+        padding: 40px 0 56px;
+    }
+
+    .reservations-cancel__heading {
+        margin-bottom: 32px;
+    }
+
+    .reservations-cancel__section {
+        margin-bottom: 32px;
+    }
+
+    .reservations-cancel__form {
+        margin-top: 32px;
+    }
+}
+
+// ==========================================================================
+// キャンセル完了
+// ==========================================================================
+
+.reservations-cancel-complete {
+    padding: 64px 0 80px;
+}
+
+.reservations-cancel-complete__inner {
+    max-width: 760px;
+}
+
+.reservations-cancel-complete__heading {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.reservations-cancel-complete__eyebrow {
+    margin-bottom: 8px;
+    color: color("primary");
+    letter-spacing: ls(80);
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel-complete__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel-complete__message {
+    margin-top: 12px;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        line-height: 1.8;
+    }
+}
+
+.reservations-cancel-complete__number {
+    margin-bottom: 40px;
+    padding: 24px;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-sub");
+    text-align: center;
+}
+
+.reservations-cancel-complete__number-label {
+    display: block;
+    margin-bottom: 8px;
+    color: color("text-main");
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel-complete__number-value {
+    display: block;
+    color: color("primary-dark");
+    letter-spacing: ls(80);
+
+    @include font-set(fz("lead")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel-complete__section {
+    margin-bottom: 32px;
+}
+
+.reservations-cancel-complete__section-title {
+    margin: 0 0 12px;
+    color: color("text-main");
+
+    @include font-set(fz("lead")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel-complete__summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid color("border");
+    border-radius: radius("md");
+    background-color: color("border");
+}
+
+.reservations-cancel-complete__summary-item {
+    padding: 16px 20px;
+    background-color: color("bg-main");
+}
+
+.reservations-cancel-complete__summary-label {
+    margin-bottom: 6px;
+    color: color("text-main");
+
+    @include font-set(fz("note")) {
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel-complete__summary-value {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+@include max-screen("md") {
+    .reservations-cancel-complete {
+        padding: 48px 0 64px;
+    }
+
+    .reservations-cancel-complete__summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-cancel-complete {
+        padding: 40px 0 56px;
+    }
+
+    .reservations-cancel-complete__heading {
+        margin-bottom: 24px;
+    }
+
+    .reservations-cancel-complete__number {
+        margin-bottom: 32px;
+        padding: 20px;
+    }
+
+    .reservations-cancel-complete__section {
+        margin-bottom: 24px;
+    }
+}
+
+// ==========================================================================
+// キャンセル不可
+// ==========================================================================
+
+.reservations-cancel-error {
+    padding: 80px 0;
+}
+
+.reservations-cancel-error__inner {
+    max-width: 760px;
+}
+
+.reservations-cancel-error__content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 48px 40px;
+    border: 1px solid color("border");
+    border-radius: radius("lg");
+    background-color: color("bg-main");
+    box-shadow: 0 4px 16px rgba(16, 42, 45, 0.05);
+    text-align: center;
+}
+
+.reservations-cancel-error__eyebrow {
+    margin-bottom: 8px;
+    color: color("danger");
+    letter-spacing: ls(80);
+
+    @include font-set(fz("note")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel-error__title {
+    margin: 0;
+    color: color("text-main");
+
+    @include font-set(fz("heading")) {
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel-error__message {
+    margin-top: 16px;
+    color: color("text-main");
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.8;
+    }
+}
+
+.reservations-cancel-error__description {
+    margin-top: 8px;
+    color: color("text-sub");
+
+    @include font-set(fz("note")) {
+        line-height: 1.8;
+    }
+}
+
+.reservations-cancel-error__button {
+    width: min(100%, 360px);
+    min-height: 48px;
+    margin: 32px auto 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: radius("md");
+    background-color: color("primary");
+    color: color("text-white");
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+
+    @include font-set(fz("body")) {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+}
+
+.reservations-cancel-error__button:hover {
+    background-color: color("primary-dark");
+    transform: translateY(-2px);
+}
+
+@include max-screen("md") {
+    .reservations-cancel-error {
+        padding: 64px 0;
+    }
+
+    .reservations-cancel-error__content {
+        padding: 40px 32px;
+    }
+}
+
+@include max-screen("sm") {
+    .reservations-cancel-error {
+        padding: 40px 0 56px;
+    }
+
+    .reservations-cancel-error__content {
+        padding: 32px 20px;
+    }
+
+    .reservations-cancel-error__title {
+        @include font-set(20px) {
+            font-weight: 700;
+            line-height: 1.5;
+        }
+    }
+
+    .reservations-cancel-error__message {
+        margin-top: 12px;
+
+        @include font-set(fz("note")) {
+            font-weight: 600;
+        }
+    }
+
+    .reservations-cancel-error__description {
+        @include font-set(12px) {
+            line-height: 1.8;
+        }
+    }
+
+    .reservations-cancel-error__button {
+        margin-top: 24px;
+
+        @include font-set(15px) {
+            font-weight: 600;
+        }
+    }
+}

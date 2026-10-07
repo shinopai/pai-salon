@@ -67,9 +67,10 @@ class CancellationService
         if (
             $reservation === null
             || ! Hash::check($rawToken, $reservation->cancellation_token)
+            || $reservation->status !== ReservationStatus::RESERVED
         ) {
             throw ValidationException::withMessages([
-                'reservation' => '予約情報を確認できません。',
+                'reservation' => 'この予約はキャンセルできません。',
             ]);
         }
 
@@ -90,9 +91,10 @@ class CancellationService
         if (
             $reservation === null
             || ! Hash::check($rawToken, $reservation->cancellation_token)
+            || $reservation->status !== ReservationStatus::RESERVED
         ) {
             throw ValidationException::withMessages([
-                'reservation' => '予約情報を確認できません。',
+                'reservation' => 'この予約はキャンセルできません。',
             ]);
         }
 

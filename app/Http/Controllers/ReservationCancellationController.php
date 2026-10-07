@@ -3,21 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Services\CancellationService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Validation\ValidationException;
 
 class ReservationCancellationController extends Controller
 {
-    /**
-     * キャンセル確認画面を表示する。
-     */
     public function show(
         string $reservationNumber,
         string $token,
         CancellationService $cancellationService,
-    ) {
-        $reservation = $cancellationService->getReservationByToken(
-            $reservationNumber,
-            $token,
-        );
+    ): View {
+        try {
+            $reservation = $cancellationService->getReservationByToken(
+                $reservationNumber,
+                $token,
+            );
+        } catch (ValidationException) {
+            return view('reservations.cancel-error');
+        }
 
         return view('reservations.cancel', [
             'reservation' => $reservation,
@@ -25,18 +28,19 @@ class ReservationCancellationController extends Controller
         ]);
     }
 
-    /**
-     * 予約をキャンセルする。
-     */
     public function cancel(
         string $reservationNumber,
         string $token,
         CancellationService $cancellationService,
-    ) {
-        $reservation = $cancellationService->cancelByToken(
-            $reservationNumber,
-            $token,
-        );
+    ): View {
+        try {
+            $reservation = $cancellationService->cancelByToken(
+                $reservationNumber,
+                $token,
+            );
+        } catch (ValidationException) {
+            return view('reservations.cancel-error');
+        }
 
         return view('reservations.cancel-complete', [
             'reservation' => $reservation,
