@@ -1,20 +1,21 @@
 <?php
 
+use App\Enums\StaffRole;
 use App\Http\Requests\StaffMenuRequest;
 use App\Models\Menu;
 use App\Models\Staff;
 use App\Models\User;
-use App\Enums\StaffRole;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator as ValidatorFacade;
 
 uses(RefreshDatabase::class);
 
-function staffMenuRequestValidator(array $data): \Illuminate\Contracts\Validation\Validator
+function staffMenuRequestValidator(array $data): Validator
 {
     $request = StaffMenuRequest::create('/dummy', 'POST', $data);
 
-    return Validator::make(
+    return ValidatorFacade::make(
         $data,
         $request->rules()
     );
@@ -27,11 +28,15 @@ function validStaffMenuData(): array
         'password' => bcrypt('password'),
     ]);
 
-    $staff = Staff::create([
+    $staff = new Staff();
+
+    $staff->forceFill([
         'user_id' => $user->id,
         'name' => 'テストスタッフ',
         'role' => StaffRole::STAFF,
     ]);
+
+    $staff->save();
 
     $menu = Menu::create([
         'name' => 'テストメニュー',
@@ -52,6 +57,7 @@ test('有効なスタッフとメニューの組み合わせはバリデーシ�
 
 test('staff_idは必須である', function () {
     $data = validStaffMenuData();
+
     unset($data['staff_id']);
 
     $validator = staffMenuRequestValidator($data);
@@ -61,6 +67,7 @@ test('staff_idは必須である', function () {
 
 test('staff_idは整数である必要がある', function () {
     $data = validStaffMenuData();
+
     $data['staff_id'] = 'staff';
 
     $validator = staffMenuRequestValidator($data);
@@ -70,6 +77,7 @@ test('staff_idは整数である必要がある', function () {
 
 test('staff_idは存在するスタッフである必要がある', function () {
     $data = validStaffMenuData();
+
     $data['staff_id'] = 999999;
 
     $validator = staffMenuRequestValidator($data);
@@ -79,6 +87,7 @@ test('staff_idは存在するスタッフである必要がある', function () 
 
 test('menu_idは必須である', function () {
     $data = validStaffMenuData();
+
     unset($data['menu_id']);
 
     $validator = staffMenuRequestValidator($data);
@@ -88,6 +97,7 @@ test('menu_idは必須である', function () {
 
 test('menu_idは整数である必要がある', function () {
     $data = validStaffMenuData();
+
     $data['menu_id'] = 'menu';
 
     $validator = staffMenuRequestValidator($data);
@@ -97,6 +107,7 @@ test('menu_idは整数である必要がある', function () {
 
 test('menu_idは存在するメニューである必要がある', function () {
     $data = validStaffMenuData();
+
     $data['menu_id'] = 999999;
 
     $validator = staffMenuRequestValidator($data);
@@ -110,11 +121,15 @@ test('staff_idとmenu_idが両方有効ならバリデーションを通過す�
         'password' => bcrypt('password'),
     ]);
 
-    $staff = Staff::create([
+    $staff = new Staff();
+
+    $staff->forceFill([
         'user_id' => $user->id,
         'name' => 'テストスタッフ',
         'role' => StaffRole::STAFF,
     ]);
+
+    $staff->save();
 
     $menu = Menu::create([
         'name' => 'テストメニュー',

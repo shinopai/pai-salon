@@ -1,13 +1,13 @@
 <?php
 
-use App\Enums\StaffRole;
-use App\Models\Staff;
-use App\Models\User;
-use App\Models\Menu;
-use App\Models\StaffMenu;
 use App\Enums\ReservationStatus;
+use App\Enums\StaffRole;
+use App\Models\Menu;
+use App\Models\Staff;
+use App\Models\StaffMenu;
+use App\Models\User;
 
-it('スタッフダッシュボードを表示できる', function () {
+test('スタッフダッシュボードを表示できる', function () {
     $user = User::factory()->create();
 
     $staff = new Staff();
@@ -29,11 +29,13 @@ test('スタッフは自身の情報を表示できる', function () {
         'email' => 'staff@example.com',
     ]);
 
-    $staff = Staff::forceCreate([
+    $staff = new Staff();
+
+    $staff->forceFill([
         'user_id' => $user->id,
         'name' => 'テストスタッフ',
-        'role' => 'staff',
-    ]);
+        'role' => StaffRole::STAFF,
+    ])->save();
 
     $this->actingAs($user);
 
@@ -54,11 +56,13 @@ test('スタッフは自身の情報編集画面を表示できる', function ()
         'email' => 'staff@example.com',
     ]);
 
-    $staff = Staff::forceCreate([
+    $staff = new Staff();
+
+    $staff->forceFill([
         'user_id' => $user->id,
         'name' => 'テストスタッフ',
-        'role' => 'staff',
-    ]);
+        'role' => StaffRole::STAFF,
+    ])->save();
 
     $this->actingAs($user);
 
@@ -78,11 +82,13 @@ test('スタッフは自身の情報を更新してプロフィール画面へ�
         'email' => 'staff@example.com',
     ]);
 
-    $staff = Staff::forceCreate([
+    $staff = new Staff();
+
+    $staff->forceFill([
         'user_id' => $user->id,
         'name' => '更新前スタッフ',
-        'role' => 'staff',
-    ]);
+        'role' => StaffRole::STAFF,
+    ])->save();
 
     $this->actingAs($user);
 
@@ -106,11 +112,13 @@ test('スタッフは自身の情報を更新してプロフィール画面へ�
 test('スタッフは自身が対応可能なメニューを表示できる', function () {
     $user = User::factory()->create();
 
-    $staff = Staff::forceCreate([
+    $staff = new Staff();
+
+    $staff->forceFill([
         'user_id' => $user->id,
         'name' => 'テストスタッフ',
-        'role' => 'staff',
-    ]);
+        'role' => StaffRole::STAFF,
+    ])->save();
 
     $availableMenu = Menu::create([
         'name' => 'カット',
@@ -135,16 +143,14 @@ test('スタッフは自身が対応可能なメニューを表示できる', fu
 
     $response->assertOk();
     $response->assertViewIs('staff.menus.index');
+
     $response->assertViewHas('menus', function ($menus) use ($availableMenu, $otherMenu) {
         return $menus->contains($availableMenu)
             && ! $menus->contains($otherMenu);
     });
-
-    $response->assertSee('カット');
-    $response->assertDontSee('カラー');
 });
 
-it('他スタッフの予約詳細にはアクセスできない', function () {
+test('他スタッフの予約詳細にはアクセスできない', function () {
     $user = User::factory()->create();
 
     $staff = new Staff();

@@ -17,11 +17,9 @@ function staffRequestValidator(array $data): \Illuminate\Contracts\Validation\Va
 
 function validStaffData(): array
 {
-    $user = User::factory()->create();
-
     return [
-        'user_id' => $user->id,
         'name' => 'テストスタッフ',
+        'email' => 'staff@example.com',
         'role' => StaffRole::STAFF->value,
     ];
 }
@@ -32,26 +30,29 @@ test('有効なスタッフデータはバリデーションを通過する', fu
     expect($validator->passes())->toBeTrue();
 });
 
-test('user_idは必須である', function () {
+test('emailは必須である', function () {
     $data = validStaffData();
-    unset($data['user_id']);
+
+    unset($data['email']);
 
     $validator = staffRequestValidator($data);
 
-    expect($validator->errors()->has('user_id'))->toBeTrue();
+    expect($validator->errors()->has('email'))->toBeTrue();
 });
 
-test('存在しないuser_idは許可されない', function () {
+test('email形式でない値は許可されない', function () {
     $data = validStaffData();
-    $data['user_id'] = 99999;
+
+    $data['email'] = 'invalid-email';
 
     $validator = staffRequestValidator($data);
 
-    expect($validator->errors()->has('user_id'))->toBeTrue();
+    expect($validator->errors()->has('email'))->toBeTrue();
 });
 
 test('nameは必須である', function () {
     $data = validStaffData();
+
     unset($data['name']);
 
     $validator = staffRequestValidator($data);
@@ -61,6 +62,7 @@ test('nameは必須である', function () {
 
 test('nameは文字列である必要がある', function () {
     $data = validStaffData();
+
     $data['name'] = 12345;
 
     $validator = staffRequestValidator($data);
@@ -70,6 +72,7 @@ test('nameは文字列である必要がある', function () {
 
 test('nameは100文字まで許可される', function () {
     $data = validStaffData();
+
     $data['name'] = str_repeat('あ', 100);
 
     $validator = staffRequestValidator($data);
@@ -79,6 +82,7 @@ test('nameは100文字まで許可される', function () {
 
 test('101文字のnameは許可されない', function () {
     $data = validStaffData();
+
     $data['name'] = str_repeat('あ', 101);
 
     $validator = staffRequestValidator($data);
@@ -88,6 +92,7 @@ test('101文字のnameは許可されない', function () {
 
 test('roleは必須である', function () {
     $data = validStaffData();
+
     unset($data['role']);
 
     $validator = staffRequestValidator($data);
@@ -97,6 +102,7 @@ test('roleは必須である', function () {
 
 test('StaffRoleに定義されていないroleは許可されない', function () {
     $data = validStaffData();
+
     $data['role'] = 'invalid-role';
 
     $validator = staffRequestValidator($data);
@@ -106,9 +112,22 @@ test('StaffRoleに定義されていないroleは許可されない', function (
 
 test('StaffRoleに定義されたroleは許可される', function () {
     $data = validStaffData();
+
     $data['role'] = StaffRole::ADMIN->value;
 
     $validator = staffRequestValidator($data);
 
     expect($validator->passes())->toBeTrue();
+});
+
+test('既に登録されているemailは許可されない', function () {
+    User::factory()->create([
+        'email' => 'staff@example.com',
+    ]);
+
+    $data = validStaffData();
+
+    $validator = staffRequestValidator($data);
+
+    expect($validator->errors()->has('email'))->toBeTrue();
 });

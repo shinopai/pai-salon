@@ -2,13 +2,13 @@
 
 use App\Models\User;
 
-test('login screen can be rendered', function () {
+test('ログイン画面を表示できる', function () {
     $response = $this->get('/login');
 
     $response->assertStatus(200);
 });
 
-test('users can authenticate using the login screen', function () {
+test('ユーザーはログイン画面から認証できる', function () {
     $user = User::factory()->create();
 
     $response = $this->post('/login', [
@@ -17,10 +17,11 @@ test('users can authenticate using the login screen', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+
+    $response->assertRedirect('/staff/dashboard');
 });
 
-test('users can not authenticate with invalid password', function () {
+test('ユーザーは不正なパスワードでは認証できない', function () {
     $user = User::factory()->create();
 
     $this->post('/login', [
@@ -31,11 +32,12 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
-test('users can logout', function () {
+test('ユーザーはログアウトできる', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->post('/logout');
 
     $this->assertGuest();
+
     $response->assertRedirect('/');
 });
