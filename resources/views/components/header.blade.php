@@ -18,37 +18,37 @@
       <nav class="header__nav u-flex">
         @if ($isAdmin)
           <ul class="header__menu u-flex">
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('admin.staffs.index') }}" class="header__link">
                 スタッフ
               </a>
             </li>
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('admin.customers.index') }}" class="header__link">
                 顧客
               </a>
             </li>
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('admin.menus.index') }}" class="header__link">
                 メニュー
               </a>
             </li>
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('admin.staff-menus.index') }}" class="header__link">
                 スタッフメニュー
               </a>
             </li>
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('admin.reservations.index') }}" class="header__link">
                 予約
               </a>
             </li>
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('admin.business-hours.index') }}" class="header__link">
                 営業時間
               </a>
             </li>
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('admin.holidays.index') }}" class="header__link">
                 休日
               </a>
@@ -57,7 +57,6 @@
 
           <div class="header__user u-flex">
             <span class="header__name">{{ $staffName }}</span>
-
             <form method="POST" action="{{ route('logout') }}">
               @csrf
               <button type="submit" class="header__logout">
@@ -67,17 +66,17 @@
           </div>
         @elseif ($isStaff)
           <ul class="header__menu u-flex">
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('staff.reservations.index') }}" class="header__link">
                 予約一覧
               </a>
             </li>
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('staff.profile') }}" class="header__link">
                 プロフィール
               </a>
             </li>
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('staff.menus.index') }}" class="header__link">
                 対応メニュー
               </a>
@@ -86,7 +85,6 @@
 
           <div class="header__user u-flex">
             <span class="header__name">{{ $staffName }}</span>
-
             <form method="POST" action="{{ route('logout') }}">
               @csrf
               <button type="submit" class="header__logout">
@@ -96,12 +94,12 @@
           </div>
         @else
           <ul class="header__menu u-flex">
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('reservations.menu') }}" class="header__link">
                 Web予約
               </a>
             </li>
-            <li class="header__item">
+            <li class="header__item u-flex">
               <a href="{{ route('login') }}" class="header__link header__link--small">
                 関係者ログイン
               </a>

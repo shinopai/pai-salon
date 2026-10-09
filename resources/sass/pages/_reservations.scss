@@ -54,7 +54,7 @@
     color: color("text-main");
     letter-spacing: ls(40);
 
-    @include font-set(fz("display")) {
+    @include font-set("display") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -65,7 +65,7 @@
     color: color("text-sub");
     letter-spacing: ls(20);
 
-    @include font-set(fz("lead")) {
+    @include font-set("lead") {
         line-height: 1.8;
     }
 }
@@ -84,7 +84,7 @@
         background-color 0.2s ease,
         transform 0.2s ease;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
     }
 }
@@ -152,7 +152,7 @@
     .reservations__description {
         margin-bottom: 28px;
 
-        @include font-set(fz("body")) {
+        @include font-set("body") {
             line-height: 1.8;
         }
     }
@@ -195,7 +195,7 @@
     .reservations__description {
         margin-bottom: 24px;
 
-        @include font-set(fz("note")) {
+        @include font-set("note") {
             line-height: 1.8;
         }
     }
@@ -233,7 +233,7 @@
     color: color("primary");
     letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 700;
     }
 }
@@ -242,7 +242,7 @@
     margin-bottom: 12px;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -251,7 +251,7 @@
 .reservations-menu__description {
     color: color("text-sub");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.8;
     }
 }
@@ -268,7 +268,6 @@
 
 .reservations-menu__link {
     position: relative;
-    display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
@@ -310,7 +309,7 @@
 .reservations-menu__name {
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.6;
     }
@@ -324,7 +323,7 @@
     border-radius: radius("full");
     white-space: nowrap;
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
     }
 }
@@ -370,7 +369,7 @@
     }
 
     .reservations-menu__description {
-        @include font-set(fz("note")) {
+        @include font-set("note") {
             line-height: 1.8;
         }
     }
@@ -425,7 +424,7 @@
     color: color("primary");
     letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 700;
     }
 }
@@ -434,7 +433,7 @@
     margin-bottom: 12px;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -443,7 +442,7 @@
 .reservations-staff__description {
     color: color("text-sub");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.8;
     }
 }
@@ -482,7 +481,7 @@
 .reservations-staff__name {
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
     }
 }
@@ -541,7 +540,7 @@
     }
 
     .reservations-staff__description {
-        @include font-set(fz("note")) {
+        @include font-set("note") {
             line-height: 1.8;
         }
     }
@@ -585,7 +584,7 @@
     color: color("primary");
     letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 700;
     }
 }
@@ -594,7 +593,7 @@
     margin-bottom: 12px;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -603,7 +602,7 @@
 .reservations-date__description {
     color: color("text-sub");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.8;
     }
 }
@@ -616,7 +615,6 @@
 }
 
 .reservations-date__summary-item {
-    display: flex;
     flex-direction: column;
     gap: 4px;
     padding: 16px 20px;
@@ -627,7 +625,7 @@
 .reservations-date__summary-label {
     color: color("text-sub");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 500;
     }
 }
@@ -635,7 +633,7 @@
 .reservations-date__summary-value {
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
     }
 }
@@ -649,7 +647,6 @@
 }
 
 .reservations-date__field {
-    display: flex;
     flex-direction: column;
     gap: 8px;
 }
@@ -657,7 +654,7 @@
 .reservations-date__label {
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
     }
 }
@@ -674,7 +671,7 @@
         border-color 0.2s ease,
         box-shadow 0.2s ease;
 
-    @include font-set(fz("body"));
+    @include font-set("body");
 }
 
 .reservations-date__input:focus {
@@ -697,7 +694,7 @@
         background-color 0.2s ease,
         transform 0.2s ease;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
     }
 }
@@ -752,7 +749,7 @@
     }
 
     .reservations-date__description {
-        @include font-set(fz("note")) {
+        @include font-set("note") {
             line-height: 1.8;
         }
     }
@@ -773,7 +770,7 @@
     }
 
     .reservations-date__summary-value {
-        @include font-set(fz("note")) {
+        @include font-set("note") {
             font-weight: 600;
         }
     }
@@ -821,7 +818,7 @@
     color: color("primary");
     letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 700;
     }
 }
@@ -830,7 +827,7 @@
     margin-bottom: 12px;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -839,7 +836,7 @@
 .reservations-slots__date {
     color: color("text-sub");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
     }
 }
@@ -869,7 +866,7 @@
         border-color 0.2s ease,
         transform 0.2s ease;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
     }
 }
@@ -893,7 +890,7 @@
     margin-bottom: 8px;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
     }
 }
@@ -901,7 +898,7 @@
 .reservations-slots__empty-description {
     color: color("text-sub");
 
-    @include font-set(fz("note"));
+    @include font-set("note");
 }
 
 @include max-screen("md") {
@@ -946,7 +943,7 @@
     }
 
     .reservations-slots__date {
-        @include font-set(fz("note")) {
+        @include font-set("note") {
             font-weight: 600;
         }
     }
@@ -960,7 +957,7 @@
         min-height: 56px;
         padding: 10px 12px;
 
-        @include font-set(fz("note")) {
+        @include font-set("note") {
             font-weight: 600;
         }
     }
@@ -970,7 +967,7 @@
     }
 
     .reservations-slots__empty-title {
-        @include font-set(fz("note")) {
+        @include font-set("note") {
             font-weight: 600;
         }
     }
@@ -999,9 +996,9 @@
 .reservations-customer__eyebrow {
     margin-bottom: 8px;
     color: color("primary");
-    letter-spacing: 0.08em;
+    letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1011,7 +1008,7 @@
     margin: 0;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1021,7 +1018,7 @@
     margin-top: 12px;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.8;
     }
 }
@@ -1034,21 +1031,20 @@
     overflow: hidden;
     border: 1px solid color("border");
     border-radius: radius("md");
-    background-color: #fff;
+    background-color: color("bg-main");
 }
 
 .reservations-customer__summary-item {
-    display: flex;
     flex-direction: column;
     gap: 6px;
     padding: 16px 20px;
-    background-color: #fff;
+    background-color: color("bg-main");
 }
 
 .reservations-customer__summary-label {
     color: color("text-main");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         line-height: 1.5;
     }
 }
@@ -1056,7 +1052,7 @@
 .reservations-customer__summary-value {
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1066,7 +1062,7 @@
     padding: 32px;
     border: 1px solid color("border");
     border-radius: radius("lg");
-    background-color: #fff;
+    background-color: color("bg-main");
     box-shadow: 0 4px 16px rgb(0 0 0 / 5%);
 }
 
@@ -1079,7 +1075,7 @@
     margin-bottom: 8px;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1090,13 +1086,13 @@
     padding: 12px 14px;
     border: 1px solid color("border");
     border-radius: radius("md");
-    background-color: #fff;
+    background-color: color("bg-main");
     color: color("text-main");
     transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 }
@@ -1116,11 +1112,11 @@
     border: 0;
     border-radius: radius("md");
     background-color: color("primary");
-    color: #fff;
+    color: color("text-white");
     cursor: pointer;
     transition: background-color 0.2s ease;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1177,9 +1173,9 @@
 .reservations-confirm__eyebrow {
     margin-bottom: 8px;
     color: color("primary");
-    letter-spacing: 0.08em;
+    letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1189,7 +1185,7 @@
     margin: 0;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1199,7 +1195,7 @@
     margin-top: 12px;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.8;
     }
 }
@@ -1212,7 +1208,7 @@
     margin: 0 0 12px;
     color: color("text-main");
 
-    @include font-set(fz("lead")) {
+    @include font-set("lead") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1229,17 +1225,16 @@
 }
 
 .reservations-confirm__summary-item {
-    display: flex;
     flex-direction: column;
     gap: 6px;
     padding: 16px 20px;
-    background-color: #fff;
+    background-color: color("bg-main");
 }
 
 .reservations-confirm__summary-label {
     color: color("text-main");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         line-height: 1.5;
     }
 }
@@ -1247,7 +1242,7 @@
 .reservations-confirm__summary-value {
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1266,11 +1261,11 @@
     border: 0;
     border-radius: radius("md");
     background-color: color("primary");
-    color: #fff;
+    color: color("text-white");
     cursor: pointer;
     transition: background-color 0.2s ease;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1327,9 +1322,9 @@
 .reservations-complete__eyebrow {
     margin-bottom: 8px;
     color: color("primary");
-    letter-spacing: 0.08em;
+    letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1339,7 +1334,7 @@
     margin: 0;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1349,13 +1344,12 @@
     margin-top: 12px;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.8;
     }
 }
 
 .reservations-complete__number {
-    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
@@ -1370,7 +1364,7 @@
 .reservations-complete__number-label {
     color: color("text-main");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1378,9 +1372,9 @@
 
 .reservations-complete__number-value {
     color: color("primary-dark");
-    letter-spacing: 0.08em;
+    letter-spacing: ls(80);
 
-    @include font-set(fz("lead")) {
+    @include font-set("lead") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1394,7 +1388,7 @@
     margin: 0 0 12px;
     color: color("text-main");
 
-    @include font-set(fz("lead")) {
+    @include font-set("lead") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1411,17 +1405,16 @@
 }
 
 .reservations-complete__summary-item {
-    display: flex;
     flex-direction: column;
     gap: 6px;
     padding: 16px 20px;
-    background-color: #fff;
+    background-color: color("bg-main");
 }
 
 .reservations-complete__summary-label {
     color: color("text-main");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         line-height: 1.5;
     }
 }
@@ -1429,7 +1422,7 @@
 .reservations-complete__summary-value {
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1486,7 +1479,7 @@
     color: color("primary");
     letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1496,7 +1489,7 @@
     margin: 0;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1506,7 +1499,7 @@
     margin-top: 12px;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.8;
     }
 }
@@ -1519,7 +1512,7 @@
     margin: 0 0 12px;
     color: color("text-main");
 
-    @include font-set(fz("lead")) {
+    @include font-set("lead") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1544,7 +1537,7 @@
     margin-bottom: 6px;
     color: color("text-main");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         line-height: 1.5;
     }
 }
@@ -1553,7 +1546,7 @@
     margin: 0;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1578,7 +1571,7 @@
         background-color 0.2s ease,
         transform 0.2s ease;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1640,7 +1633,7 @@
     color: color("primary");
     letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1650,7 +1643,7 @@
     margin: 0;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1660,7 +1653,7 @@
     margin-top: 12px;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.8;
     }
 }
@@ -1679,7 +1672,7 @@
     margin-bottom: 8px;
     color: color("text-main");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1690,7 +1683,7 @@
     color: color("primary-dark");
     letter-spacing: ls(80);
 
-    @include font-set(fz("lead")) {
+    @include font-set("lead") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1704,7 +1697,7 @@
     margin: 0 0 12px;
     color: color("text-main");
 
-    @include font-set(fz("lead")) {
+    @include font-set("lead") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1729,7 +1722,7 @@
     margin-bottom: 6px;
     color: color("text-main");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         line-height: 1.5;
     }
 }
@@ -1738,7 +1731,7 @@
     margin: 0;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1801,7 +1794,7 @@
     color: color("danger");
     letter-spacing: ls(80);
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1811,7 +1804,7 @@
     margin: 0;
     color: color("text-main");
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -1821,7 +1814,7 @@
     margin-top: 16px;
     color: color("text-main");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.8;
     }
@@ -1831,7 +1824,7 @@
     margin-top: 8px;
     color: color("text-sub");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         line-height: 1.8;
     }
 }
@@ -1849,7 +1842,7 @@
         background-color 0.2s ease,
         transform 0.2s ease;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -1889,7 +1882,7 @@
     .reservations-cancel-error__message {
         margin-top: 12px;
 
-        @include font-set(fz("note")) {
+        @include font-set("note") {
             font-weight: 600;
         }
     }

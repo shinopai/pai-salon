@@ -3,6 +3,7 @@
 // ==========================================================================
 // 管理者ダッシュボード
 // ==========================================================================
+
 .admin-dashboard {
     padding: rem(48) 0 64px;
 }
@@ -14,29 +15,36 @@
 .admin-dashboard__eyebrow {
     margin: 0 0 rem(8);
     color: color("primary");
-    font-size: fz("note");
-    font-weight: 700;
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
     letter-spacing: ls(0.08);
 }
 
 .admin-dashboard__title {
     margin: 0;
     color: color("text-main");
-    font-size: fz("heading");
-    font-weight: 700;
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
 }
 
 .admin-dashboard__greeting {
     margin: rem(12) 0 0;
     color: color("text-main");
-    font-size: fz("body");
+    @include font-set("body");
 }
 
 .admin-dashboard__section-title {
     margin: 0 0 rem(20);
     color: color("text-main");
-    font-size: fz("lead");
-    font-weight: 700;
+
+    @include font-set("lead") {
+        font-weight: 700;
+    }
 }
 
 .admin-dashboard__grid {
@@ -68,14 +76,16 @@
 .admin-dashboard__card-title {
     margin: 0;
     color: color("primary-dark");
-    font-size: fz("body");
-    font-weight: 700;
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
 }
 
 .admin-dashboard__card-text {
     margin: rem(10) 0 0;
     color: color("text-main");
-    font-size: fz("note");
+    @include font-set("note");
     line-height: 1.7;
 }
 
@@ -111,6 +121,7 @@
 // ==========================================================================
 // スタッフ一覧
 // ==========================================================================
+
 .admin-staffs {
     padding: rem(48) 0 64px;
 }
@@ -125,22 +136,27 @@
 .admin-staffs__eyebrow {
     margin: 0 0 rem(8);
     color: color("primary");
-    font-size: fz("note");
-    font-weight: 700;
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
     letter-spacing: ls(0.08);
 }
 
 .admin-staffs__title {
     margin: 0;
     color: color("text-main");
-    font-size: fz("heading");
-    font-weight: 700;
+
+    @include font-set("heading") {
+        font-weight: 700;
+    }
 }
 
 .admin-staffs__description {
     margin: rem(12) 0 0;
     color: color("text-main");
-    font-size: fz("body");
+    @include font-set("body");
 }
 
 .admin-staffs__create {
@@ -153,8 +169,11 @@
     border-radius: radius("md");
     background-color: color("primary");
     color: color("text-white");
-    font-size: fz("body");
-    font-weight: 700;
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
+
     text-decoration: none;
     transition: background-color 0.2s ease;
 }
@@ -185,14 +204,16 @@
 .admin-staffs .admin-staffs__name {
     margin: 0;
     color: color("text-main");
-    font-size: fz("body");
-    font-weight: 700;
+
+    @include font-set("body") {
+        font-weight: 700;
+    }
 }
 
 .admin-staffs__role {
     margin: rem(8) 0 0;
     color: color("primary-dark");
-    font-size: fz("note");
+    @include font-set("note");
 }
 
 .admin-staffs__actions {
@@ -210,8 +231,11 @@
     padding: 0 rem(16);
     border: 1px solid color("border");
     border-radius: radius("md");
-    font-size: fz("note");
-    font-weight: 700;
+
+    @include font-set("note") {
+        font-weight: 700;
+    }
+
     text-decoration: none;
     transition:
         border-color 0.2s ease,
@@ -1677,7 +1701,7 @@
     @include font-set("note") {
         font-weight: 700;
     }
-    letter-spacing: 0.08em;
+    letter-spacing: ls(0.08);
 }
 
 .admin-menus-create__title {

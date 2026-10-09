@@ -38,7 +38,6 @@
 }
 
 .header__item {
-    display: flex;
     align-items: center;
 }
 
@@ -48,8 +47,11 @@
     min-height: 44px;
     padding: 8px 0;
     color: color("text-main");
-    font-size: fz("body");
-    font-weight: 600;
+
+    @include font-set("body") {
+        font-weight: 600;
+    }
+
     letter-spacing: ls(20);
     transition:
         color 0.2s ease,
@@ -61,8 +63,9 @@
 }
 
 .header__link--small {
-    font-size: fz("note");
-    font-weight: 500;
+    @include font-set("note") {
+        font-weight: 500;
+    }
 }
 
 .header__user {
@@ -74,8 +77,10 @@
 
 .header__name {
     color: color("text-main");
-    font-size: fz("note");
-    font-weight: 600;
+
+    @include font-set("note") {
+        font-weight: 600;
+    }
 }
 
 .header__logout {
@@ -87,8 +92,11 @@
     color: color("text-white");
     background-color: color("primary");
     border-radius: radius("md");
-    font-size: fz("note");
-    font-weight: 600;
+
+    @include font-set("note") {
+        font-weight: 600;
+    }
+
     letter-spacing: ls(20);
     transition:
         background-color 0.2s ease,
@@ -118,7 +126,7 @@
     }
 
     .header__link {
-        font-size: fz("note");
+        @include font-set("note");
     }
 
     .header__user {
@@ -184,7 +192,7 @@
 
     .header__link {
         min-height: 36px;
-        font-size: rem(14px);
+        @include font-set("note");
     }
 
     .header__user {

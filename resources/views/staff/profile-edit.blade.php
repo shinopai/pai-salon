@@ -29,11 +29,10 @@
               value="{{ $staff->role->value }}" readonly>
           </div>
 
-          <div class="staff-profile-edit__actions">
+          <div class="staff-profile-edit__actions u-flex">
             <a class="staff-profile-edit__back-button" href="{{ route('staff.profile') }}">
               戻る
             </a>
-
             <button class="staff-profile-edit__submit-button" type="submit">
               保存する
             </button>

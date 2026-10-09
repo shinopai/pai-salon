@@ -2,9 +2,8 @@
   <section class="staff-profile">
     <div class="u-wrap">
       <div class="staff-profile__inner">
-        <div class="staff-profile__header">
+        <div class="staff-profile__header u-flex">
           <h1 class="staff-profile__title">スタッフ情報</h1>
-
           <a class="staff-profile__edit-button" href="{{ route('staff.profile.edit') }}">
             プロフィールを編集
           </a>

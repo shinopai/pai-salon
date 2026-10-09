@@ -19,7 +19,7 @@
 .staff-dashboard__title {
     margin: 0 0 8px;
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.4;
     }
@@ -30,7 +30,7 @@
 .staff-dashboard__lead {
     margin: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.6;
     }
 
@@ -54,7 +54,7 @@
 .staff-dashboard__summary-label {
     margin: 0 0 12px;
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.4;
     }
@@ -65,7 +65,7 @@
 .staff-dashboard__summary-count {
     margin: 0;
 
-    @include font-set(fz("display")) {
+    @include font-set("display") {
         font-weight: 700;
         line-height: 1.2;
     }
@@ -76,7 +76,7 @@
 .staff-dashboard__summary-count span {
     margin-left: 4px;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
     }
 }
@@ -84,7 +84,7 @@
 .staff-dashboard__next-time {
     margin: 0 0 8px;
 
-    @include font-set(fz("display")) {
+    @include font-set("display") {
         font-weight: 700;
         line-height: 1.2;
     }
@@ -95,7 +95,7 @@
 .staff-dashboard__next-detail {
     margin: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 
@@ -105,7 +105,7 @@
 .staff-dashboard__next-empty {
     margin: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 
@@ -140,7 +140,7 @@
     display: block;
     margin-bottom: 8px;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 700;
         line-height: 1.5;
     }
@@ -151,7 +151,7 @@
 .staff-dashboard__link-text {
     display: block;
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         line-height: 1.5;
     }
 
@@ -190,7 +190,6 @@
 }
 
 .staff-profile__header {
-    display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
@@ -200,7 +199,7 @@
 .staff-profile__title {
     margin-bottom: 32px;
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.4;
     }
@@ -216,7 +215,7 @@
     background-color: color("primary");
     border-radius: radius("md");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -260,7 +259,7 @@
     width: 180px;
     flex-shrink: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -271,7 +270,7 @@
 .staff-profile__value {
     margin: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 
@@ -322,7 +321,7 @@
 .staff-profile-edit__title {
     margin-bottom: 32px;
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.4;
     }
@@ -349,7 +348,7 @@
     display: block;
     margin-bottom: 8px;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -365,7 +364,7 @@
     border: 1px solid color("border");
     border-radius: radius("md");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 
@@ -377,7 +376,6 @@
 }
 
 .staff-profile-edit__actions {
-    display: flex;
     justify-content: flex-end;
     gap: 12px;
     margin-top: 32px;
@@ -392,7 +390,7 @@
     padding: 10px 20px;
     border-radius: radius("md");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -454,7 +452,7 @@
 .staff-reservations__title {
     margin-bottom: 32px;
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.4;
     }
@@ -475,7 +473,6 @@
 }
 
 .staff-reservations__item-header {
-    display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
@@ -486,7 +483,7 @@
 .staff-reservations__number {
     margin: 0;
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -502,7 +499,7 @@
     background-color: color("bg-sub");
     border-radius: radius("full");
 
-    @include font-set(fz("note")) {
+    @include font-set("note") {
         font-weight: 600;
         line-height: 1.4;
     }
@@ -529,7 +526,7 @@
     width: 140px;
     flex-shrink: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -540,7 +537,7 @@
 .staff-reservations__value {
     margin: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 
@@ -557,7 +554,7 @@
 .staff-reservations__empty-text {
     margin: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 
@@ -565,7 +562,6 @@
 }
 
 .staff-reservations__actions {
-    display: flex;
     justify-content: flex-end;
     margin-top: 20px;
 }
@@ -579,7 +575,7 @@
     background-color: color("primary");
     border-radius: radius("md");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -647,7 +643,7 @@
 .staff-reservations-show__title {
     margin: 0;
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.4;
     }
@@ -664,7 +660,7 @@
     background-color: color("bg-sub");
     border-radius: radius("md");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -708,7 +704,7 @@
     width: 180px;
     flex-shrink: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -720,7 +716,7 @@
     flex: 1;
     margin: 0;
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 
@@ -736,7 +732,7 @@
     border: 1px solid color("border");
     border-radius: radius("md");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 
@@ -759,7 +755,7 @@
     background-color: color("primary");
     border-radius: radius("md");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -829,7 +825,7 @@
 .staff-menus__title {
     margin-bottom: 32px;
 
-    @include font-set(fz("heading")) {
+    @include font-set("heading") {
         font-weight: 700;
         line-height: 1.4;
     }
@@ -854,7 +850,7 @@
 }
 
 .staff-menus__name {
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         font-weight: 600;
         line-height: 1.5;
     }
@@ -867,7 +863,7 @@
     background-color: color("bg-sub");
     border-radius: radius("md");
 
-    @include font-set(fz("body")) {
+    @include font-set("body") {
         line-height: 1.5;
     }
 
