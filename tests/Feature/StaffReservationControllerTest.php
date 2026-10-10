@@ -220,3 +220,54 @@ test('スタッフは予約を更新して詳細画面へリダイレクトで�
         'status' => ReservationStatus::RESERVED->value,
     ]);
 });
+
+test('スタッフは他スタッフの予約を更新できない', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $staff = Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => 'テストスタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $otherStaff = Staff::forceCreate([
+        'user_id' => $otherUser->id,
+        'name' => '別スタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $menu = Menu::create([
+        'name' => 'テストメニュー',
+        'duration' => 60,
+    ]);
+
+    $reservation = createReservation([
+        'reservation_number' => 'RSV-20261015-OTHER',
+        'cancellation_token' => 'hashed-token-other',
+        'customer_name' => '別スタッフの顧客',
+        'customer_email' => 'other@example.com',
+        'staff_id' => $otherStaff->id,
+        'menu_id' => $menu->id,
+        'start_at' => '2026-10-15 15:00:00',
+        'end_at' => '2026-10-15 16:00:00',
+        'status' => ReservationStatus::RESERVED,
+    ]);
+
+    $this->actingAs($user)
+        ->put(route('staff.reservations.update', $reservation), [
+            'staff_id' => $staff->id,
+            'menu_id' => $menu->id,
+            'start_at' => '2026-10-15 16:00:00',
+            'status' => ReservationStatus::RESERVED->value,
+        ])
+        ->assertForbidden();
+
+    $this->assertDatabaseHas('reservations', [
+        'id' => $reservation->id,
+        'staff_id' => $otherStaff->id,
+        'start_at' => '2026-10-15 15:00:00',
+        'end_at' => '2026-10-15 16:00:00',
+        'status' => ReservationStatus::RESERVED->value,
+    ]);
+});

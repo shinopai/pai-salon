@@ -42,6 +42,8 @@ class StaffReservationController extends Controller
         Reservation $reservation,
         ReservationService $reservationService
     ): RedirectResponse {
+        Gate::authorize('update', $reservation);
+
         $reservationService->update(
             $reservation,
             $request->validated()

@@ -37,7 +37,7 @@ class ReservationPolicy
      */
     public function update(User $user, Reservation $reservation): bool
     {
-        return false;
+        return $user->staff?->id === $reservation->staff_id;
     }
 
     /**
