@@ -636,14 +636,21 @@ it('キャンセル完了メールの送信に失敗してもキャンセル状�
         ->once()
         ->andThrow(new RuntimeException('メール送信失敗'));
 
+    $hashedToken = Hash::make('test-token');
+
     Log::shouldReceive('error')
         ->once()
-        ->withArgs(function (string $message, array $context) {
+        ->withArgs(function (string $message, array $context) use ($hashedToken) {
+            $logContent = $message . ' ' . json_encode($context);
+
             return $message === 'キャンセル完了メールの送信に失敗しました。'
                 && isset($context['reservation_number'])
                 && isset($context['customer_email'])
                 && isset($context['error'])
-                && ! isset($context['cancellation_token']);
+                && ! isset($context['cancellation_token'])
+                && ! str_contains($logContent, 'password')
+                && ! str_contains($logContent, 'test-token')
+                && ! str_contains($logContent, $hashedToken);
         });
 
     $user = User::create([
@@ -677,7 +684,7 @@ it('キャンセル完了メールの送信に失敗してもキャンセル状�
     $reservation->start_at = now()->addDay()->setTime(10, 0);
     $reservation->end_at = now()->addDay()->setTime(11, 0);
     $reservation->status = ReservationStatus::RESERVED;
-    $reservation->cancellation_token = Hash::make('test-token');
+    $reservation->cancellation_token = $hashedToken;
     $reservation->save();
 
     $this->travelTo(

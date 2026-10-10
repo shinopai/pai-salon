@@ -471,11 +471,14 @@ it('予約確認メールの送信に失敗しても予約は登録されエラ�
     Log::shouldReceive('error')
         ->once()
         ->withArgs(function (string $message, array $context) {
+            $logContent = $message . ' ' . json_encode($context);
+
             return $message === '予約確認メールの送信に失敗しました。'
                 && isset($context['reservation_number'])
                 && isset($context['customer_email'])
                 && isset($context['error'])
-                && ! isset($context['cancellation_token']);
+                && ! isset($context['cancellation_token'])
+                && ! str_contains($logContent, 'password');
         });
 
     $startAt = now()->addDays(7)->setTime(10, 0);
