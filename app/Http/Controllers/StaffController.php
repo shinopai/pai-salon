@@ -8,6 +8,7 @@ use App\Http\Requests\StaffProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Menu;
 use App\Models\Reservation;
+use Illuminate\Support\Facades\Gate;
 
 class StaffController extends Controller
 {
@@ -35,6 +36,8 @@ class StaffController extends Controller
     {
         $staff = Auth::user()->staff;
 
+        Gate::authorize('view', $staff);
+
         return view('staff.profile', compact('staff'));
     }
 
@@ -49,6 +52,8 @@ class StaffController extends Controller
         StaffProfileUpdateRequest $request
     ): RedirectResponse {
         $staff = Auth::user()->staff;
+
+        Gate::authorize('update', $staff);
 
         $staff->update(
             $request->validated()

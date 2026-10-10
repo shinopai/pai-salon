@@ -202,3 +202,58 @@ test('未認証ユーザーはスタッフ画面にアクセスできない', fu
         route('login')
     );
 });
+
+test('スタッフは他スタッフの情報を閲覧できない', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $staff = new Staff();
+    $staff->forceFill([
+        'user_id' => $user->id,
+        'name' => 'ログインスタッフ',
+        'role' => StaffRole::STAFF,
+    ])->save();
+
+    $otherStaff = new Staff();
+    $otherStaff->forceFill([
+        'user_id' => $otherUser->id,
+        'name' => '別スタッフ',
+        'role' => StaffRole::STAFF,
+    ])->save();
+
+    $this->actingAs($user);
+
+    $this->assertFalse(
+        Gate::allows('view', $otherStaff)
+    );
+});
+
+test('スタッフは他スタッフの情報を更新できない', function () {
+    $user = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $staff = new Staff();
+    $staff->forceFill([
+        'user_id' => $user->id,
+        'name' => 'ログインスタッフ',
+        'role' => StaffRole::STAFF,
+    ])->save();
+
+    $otherStaff = new Staff();
+    $otherStaff->forceFill([
+        'user_id' => $otherUser->id,
+        'name' => '別スタッフ',
+        'role' => StaffRole::STAFF,
+    ])->save();
+
+    $this->actingAs($user);
+
+    $this->assertFalse(
+        Gate::allows('update', $otherStaff)
+    );
+
+    $this->assertDatabaseHas('staffs', [
+        'id' => $otherStaff->id,
+        'name' => '別スタッフ',
+    ]);
+});
