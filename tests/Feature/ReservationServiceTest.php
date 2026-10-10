@@ -54,7 +54,7 @@ function validPayload(array $overrides = []): array
     ], $overrides);
 }
 
-it('スタッフが対応できないメニューでは予約できない', function () {
+test('スタッフが対応できないメニューでは予約できない', function () {
     $unsupportedMenu = Menu::create([
         'name' => '非対応メニュー',
         'duration' => 60,
@@ -69,7 +69,7 @@ it('スタッフが対応できないメニューでは予約できない', func
     ])))->toThrow(ValidationException::class);
 });
 
-it('営業時間外の予約を拒否する', function () {
+test('営業時間外の予約を拒否する', function () {
     $startAt = now()->addDays(7)->setTime(19, 30);
 
     expect(fn() => $this->service->reserve(validPayload([
@@ -79,7 +79,7 @@ it('営業時間外の予約を拒否する', function () {
     ])))->toThrow(ValidationException::class);
 });
 
-it('2か月を超える予約を拒否する', function () {
+test('2か月を超える予約を拒否する', function () {
     $startAt = now()->addMonthsNoOverflow(2)->addDay()->setTime(10, 0);
 
     expect(fn() => $this->service->reserve(validPayload([
@@ -89,7 +89,7 @@ it('2か月を超える予約を拒否する', function () {
     ])))->toThrow(ValidationException::class);
 });
 
-it('当日の3時間未満の予約を拒否する', function () {
+test('当日の3時間未満の予約を拒否する', function () {
     Carbon::setTestNow('2026-09-05 09:00:00');
     $startAt = Carbon::parse('2026-09-05 11:30:00');
 
@@ -100,7 +100,7 @@ it('当日の3時間未満の予約を拒否する', function () {
     ])))->toThrow(ValidationException::class);
 });
 
-it('既存予約と重複する予約を拒否する', function () {
+test('既存予約と重複する予約を拒否する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     createReservation([
@@ -124,7 +124,7 @@ it('既存予約と重複する予約を拒否する', function () {
     ])))->toThrow(ValidationException::class);
 });
 
-it('1分でも重複する予約は拒否する', function () {
+test('1分でも重複する予約は拒否する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     createReservation([
@@ -148,7 +148,7 @@ it('1分でも重複する予約は拒否する', function () {
     ])))->toThrow(ValidationException::class);
 });
 
-it('隣接する予約は拒否しない', function () {
+test('隣接する予約は拒否しない', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     createReservation([
@@ -192,7 +192,7 @@ it('隣接する予約は拒否しない', function () {
     ]);
 });
 
-it('キャンセル済み予約は重複判定の対象外とする', function () {
+test('キャンセル済み予約は重複判定の対象外とする', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     createReservation([
@@ -230,7 +230,7 @@ it('キャンセル済み予約は重複判定の対象外とする', function (
     )->toBe(1);
 });
 
-it('予約登録失敗時にTransactionがrollbackされる', function () {
+test('予約登録失敗時にTransactionがrollbackされる', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -256,7 +256,7 @@ it('予約登録失敗時にTransactionがrollbackされる', function () {
     expect(Reservation::where('customer_email', $customerEmail)->exists())->toBeFalse();
 });
 
-it('予約可能な時間帯で予約を登録できる', function () {
+test('予約可能な時間帯で予約を登録できる', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -280,7 +280,7 @@ it('予約可能な時間帯で予約を登録できる', function () {
     expect($reservation->end_at->equalTo($startAt->copy()->addHour()))->toBeTrue();
 });
 
-it('予約時に既存顧客をメールアドレスで検索して利用する', function () {
+test('予約時に既存顧客をメールアドレスで検索して利用する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -306,7 +306,7 @@ it('予約時に既存顧客をメールアドレスで検索して利用する'
     expect(Customer::where('email', 'existing@example.com')->count())->toBe(1);
 });
 
-it('予約時に存在しない顧客を新規作成する', function () {
+test('予約時に存在しない顧客を新規作成する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -334,7 +334,7 @@ it('予約時に存在しない顧客を新規作成する', function () {
     expect($customer->name)->toBe('新規顧客');
 });
 
-it('予約登録時に予約番号を生成する', function () {
+test('予約登録時に予約番号を生成する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -356,7 +356,7 @@ it('予約登録時に予約番号を生成する', function () {
     expect(Reservation::where('reservation_number', $reservation->reservation_number)->count())->toBe(1);
 });
 
-it('予約番号は予約ごとに一意に生成される', function () {
+test('予約番号は予約ごとに一意に生成される', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -382,7 +382,7 @@ it('予約番号は予約ごとに一意に生成される', function () {
     expect($reservation1->reservation_number)->not->toBe($reservation2->reservation_number);
 });
 
-it('予約登録時にキャンセル用トークンをハッシュ化して保存する', function () {
+test('予約登録時にキャンセル用トークンをハッシュ化して保存する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -402,7 +402,7 @@ it('予約登録時にキャンセル用トークンをハッシュ化して保�
         ->not->toBeEmpty();
 })->skip('トークンのハッシュ化仕様確定まで保留');
 
-it('予約登録が成功すると予約確認メールを送信する', function () {
+test('予約登録が成功すると予約確認メールを送信する', function () {
     Mail::fake();
 
     $startAt = now()->addDays(7)->setTime(10, 0);
@@ -429,7 +429,7 @@ it('予約登録が成功すると予約確認メールを送信する', functio
     );
 });
 
-it('予約登録がロールバックされた場合は予約確認メールを送信しない', function () {
+test('予約登録がロールバックされた場合は予約確認メールを送信しない', function () {
     Mail::fake();
 
     $startAt = now()->addDays(7)->setTime(10, 0);
@@ -459,7 +459,7 @@ it('予約登録がロールバックされた場合は予約確認メールを�
     )->toBeFalse();
 });
 
-it('予約確認メールの送信に失敗しても予約は登録されエラーをログに記録する', function () {
+test('予約確認メールの送信に失敗しても予約は登録されエラーをログに記録する', function () {
     Mail::shouldReceive('to')
         ->once()
         ->andReturnSelf();
@@ -504,7 +504,7 @@ it('予約確認メールの送信に失敗しても予約は登録されエラ�
     )->toBeTrue();
 });
 
-it('予約を更新できる', function () {
+test('予約を更新できる', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
     $updatedStartAt = $startAt->copy()->addHours(2);
 
@@ -549,7 +549,7 @@ it('予約を更新できる', function () {
         ->toBe(ReservationStatus::RESERVED);
 });
 
-it('予約更新時にメニュー変更に応じて終了時刻を再計算する', function () {
+test('予約更新時にメニュー変更に応じて終了時刻を再計算する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -598,7 +598,7 @@ it('予約更新時にメニュー変更に応じて終了時刻を再計算す�
     ))->toBeTrue();
 });
 
-it('予約更新時に既存予約と重複する場合は拒否する', function () {
+test('予約更新時に既存予約と重複する場合は拒否する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -641,7 +641,7 @@ it('予約更新時に既存予約と重複する場合は拒否する', functio
     ]))->toThrow(ValidationException::class);
 });
 
-it('予約更新時は更新対象自身を重複判定の対象外とする', function () {
+test('予約更新時は更新対象自身を重複判定の対象外とする', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -683,7 +683,7 @@ it('予約更新時は更新対象自身を重複判定の対象外とする', f
         ->toBe(ReservationStatus::RESERVED);
 });
 
-it('予約更新時にスタッフが対応していないメニューへの変更を拒否する', function () {
+test('予約更新時にスタッフが対応していないメニューへの変更を拒否する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -717,7 +717,7 @@ it('予約更新時にスタッフが対応していないメニューへの変�
     ]))->toThrow(ValidationException::class);
 });
 
-it('予約更新時に休業日への変更を拒否する', function () {
+test('予約更新時に休業日への変更を拒否する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -751,7 +751,7 @@ it('予約更新時に休業日への変更を拒否する', function () {
     ]))->toThrow(ValidationException::class);
 });
 
-it('予約更新時に営業時間外への変更を拒否する', function () {
+test('予約更新時に営業時間外への変更を拒否する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
     $outsideStartAt = $startAt->copy()->setTime(19, 30);
 
@@ -781,7 +781,7 @@ it('予約更新時に営業時間外への変更を拒否する', function () {
     ]))->toThrow(ValidationException::class);
 });
 
-it('予約更新時に2か月を超える日付への変更を拒否する', function () {
+test('予約更新時に2か月を超える日付への変更を拒否する', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
     $outsidePeriodStartAt = now()->addMonths(2)->addDay()->setTime(10, 0);
 
@@ -811,7 +811,7 @@ it('予約更新時に2か月を超える日付への変更を拒否する', fun
     ]))->toThrow(ValidationException::class);
 });
 
-it('予約更新時に当日の3時間以内への変更を拒否する', function () {
+test('予約更新時に当日の3時間以内への変更を拒否する', function () {
     $now = Carbon::create(2026, 9, 16, 10, 0);
     Carbon::setTestNow($now);
 
@@ -844,7 +844,7 @@ it('予約更新時に当日の3時間以内への変更を拒否する', functi
     ]))->toThrow(ValidationException::class);
 });
 
-it('予約更新時にステータスをキャンセルへ変更できる', function () {
+test('予約更新時にステータスをキャンセルへ変更できる', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -876,7 +876,7 @@ it('予約更新時にステータスをキャンセルへ変更できる', func
         ->toBe(ReservationStatus::CANCELLED);
 });
 
-it('予約更新時に予約済みから完了へ変更できる', function () {
+test('予約更新時に予約済みから完了へ変更できる', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -908,7 +908,7 @@ it('予約更新時に予約済みから完了へ変更できる', function () {
         ->toBe(ReservationStatus::COMPLETED);
 });
 
-it('キャンセル済み予約を予約済みに戻すことはできない', function () {
+test('キャンセル済み予約を予約済みに戻すことはできない', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -937,7 +937,7 @@ it('キャンセル済み予約を予約済みに戻すことはできない', f
     ]))->toThrow(ValidationException::class);
 });
 
-it('キャンセル済み予約を完了に変更することはできない', function () {
+test('キャンセル済み予約を完了に変更することはできない', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -966,7 +966,7 @@ it('キャンセル済み予約を完了に変更することはできない', f
     ]))->toThrow(ValidationException::class);
 });
 
-it('完了済み予約を予約済みに戻すことはできない', function () {
+test('完了済み予約を予約済みに戻すことはできない', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([
@@ -995,7 +995,7 @@ it('完了済み予約を予約済みに戻すことはできない', function (
     ]))->toThrow(ValidationException::class);
 });
 
-it('完了済み予約をキャンセルに変更することはできない', function () {
+test('完了済み予約をキャンセルに変更することはできない', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
 
     BusinessHour::create([

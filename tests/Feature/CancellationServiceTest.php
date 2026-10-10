@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Log;
 
 uses(RefreshDatabase::class);
 
-it('CancellationServiceが存在する', function () {
+test('CancellationServiceが存在する', function () {
     expect(class_exists(CancellationService::class))->toBeTrue();
 });
 
-it('予約をキャンセルできる', function () {
+test('予約をキャンセルできる', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -62,7 +62,7 @@ it('予約をキャンセルできる', function () {
         ->toBe(ReservationStatus::CANCELLED);
 });
 
-it('予約をキャンセルするとcancelled_atが設定される', function () {
+test('予約をキャンセルするとcancelled_atが設定される', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -105,7 +105,7 @@ it('予約をキャンセルするとcancelled_atが設定される', function (
         ->not->toBeNull();
 });
 
-it('キャンセル期限である前日23時59分59秒まではキャンセルできる', function () {
+test('キャンセル期限である前日23時59分59秒まではキャンセルできる', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -150,7 +150,7 @@ it('キャンセル期限である前日23時59分59秒まではキャンセル�
         ->toBe(ReservationStatus::CANCELLED);
 });
 
-it('キャンセル期限を過ぎるとキャンセルできない', function () {
+test('キャンセル期限を過ぎるとキャンセルできない', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -195,7 +195,7 @@ it('キャンセル期限を過ぎるとキャンセルできない', function (
         ->toThrow(\Illuminate\Validation\ValidationException::class);
 });
 
-it('すでにキャンセル済みの予約は再度キャンセルできない', function () {
+test('すでにキャンセル済みの予約は再度キャンセルできない', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -241,7 +241,7 @@ it('すでにキャンセル済みの予約は再度キャンセルできない'
         ->toThrow(\Illuminate\Validation\ValidationException::class);
 });
 
-it('正しいキャンセルトークンで予約をキャンセルできる', function () {
+test('正しいキャンセルトークンで予約をキャンセルできる', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -293,7 +293,7 @@ it('正しいキャンセルトークンで予約をキャンセルできる', f
         ->toBe(ReservationStatus::CANCELLED);
 });
 
-it('不正なキャンセルトークンでは予約をキャンセルできない', function () {
+test('不正なキャンセルトークンでは予約をキャンセルできない', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -343,7 +343,7 @@ it('不正なキャンセルトークンでは予約をキャンセルできな�
         ->toBe(ReservationStatus::RESERVED);
 });
 
-it('存在しない予約番号では予約をキャンセルできない', function () {
+test('存在しない予約番号では予約をキャンセルできない', function () {
     $service = new CancellationService();
 
     expect(fn() => $service->cancelByToken(
@@ -352,7 +352,7 @@ it('存在しない予約番号では予約をキャンセルできない', func
     ))->toThrow(\Illuminate\Validation\ValidationException::class);
 });
 
-it('完了済みの予約はキャンセルできない', function () {
+test('完了済みの予約はキャンセルできない', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -402,7 +402,7 @@ it('完了済みの予約はキャンセルできない', function () {
         ->toBe(ReservationStatus::COMPLETED);
 });
 
-it('キャンセル期限を過ぎた予約は正しいTokenでもキャンセルできない', function () {
+test('キャンセル期限を過ぎた予約は正しいTokenでもキャンセルできない', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -457,7 +457,7 @@ it('キャンセル期限を過ぎた予約は正しいTokenでもキャンセ�
         ->toBeNull();
 });
 
-it('キャンセル処理でstatusとcancelled_atが同一トランザクションで保存される', function () {
+test('キャンセル処理でstatusとcancelled_atが同一トランザクションで保存される', function () {
     $user = User::create([
         'email' => 'staff@example.com',
         'password' => Hash::make('password'),
@@ -516,7 +516,7 @@ it('キャンセル処理でstatusとcancelled_atが同一トランザクショ�
     )->toBeTrue();
 });
 
-it('キャンセルがCommitされた後にキャンセル完了メールが送信される', function () {
+test('キャンセルがCommitされた後にキャンセル完了メールが送信される', function () {
     Mail::fake();
 
     $user = User::create([
@@ -571,7 +571,7 @@ it('キャンセルがCommitされた後にキャンセル完了メールが送�
         }
     );
 });
-it('キャンセル処理がロールバックされた場合はメールを送信しない', function () {
+test('キャンセル処理がロールバックされた場合はメールを送信しない', function () {
     Mail::fake();
 
     $user = User::create([
@@ -627,7 +627,7 @@ it('キャンセル処理がロールバックされた場合はメールを送�
     Mail::assertNothingSent();
 });
 
-it('キャンセル完了メールの送信に失敗してもキャンセル状態を維持しエラーをログに記録する', function () {
+test('キャンセル完了メールの送信に失敗してもキャンセル状態を維持しエラーをログに記録する', function () {
     Mail::shouldReceive('to')
         ->once()
         ->andReturnSelf();
