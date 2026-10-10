@@ -7,6 +7,14 @@ use App\Enums\StaffRole;
 use App\Enums\ReservationStatus;
 use Illuminate\Support\Facades\DB;
 
+test('未認証ユーザーは管理者スタッフ一覧にアクセスできない', function () {
+    $response = $this->get(
+        route('admin.staffs.index')
+    );
+
+    $response->assertRedirect(route('login'));
+});
+
 test('管理者スタッフ一覧を表示できる', function () {
     $user = User::factory()->create([
         'email' => 'admin@example.com',
