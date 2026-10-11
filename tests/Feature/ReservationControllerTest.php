@@ -10,6 +10,8 @@ use App\Models\BusinessHour;
 use App\Models\Reservation;
 use App\Models\Holiday;
 use Illuminate\Support\Facades\Mail;
+use App\Services\AvailabilityService;
+use Carbon\Carbon;
 
 test('メニュー選択画面を表示できる', function () {
     Menu::create([
@@ -101,6 +103,105 @@ test('選択したメニューとスタッフを指定して日付選択画面�
 
     $response->assertSee('カット');
     $response->assertSee('担当スタッフ');
+});
+
+test('希望日を指定して空き枠画面へ進める', function () {
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $user = User::factory()->create();
+
+    $staff = (new Staff())->forceFill([
+        'user_id' => $user->id,
+        'role' => StaffRole::STAFF,
+        'name' => '担当スタッフ',
+    ]);
+    $staff->save();
+
+    $selectedDate = '2026-10-20';
+
+    $availabilityService = Mockery::mock(AvailabilityService::class);
+
+    $availabilityService
+        ->shouldReceive('getAvailableSlots')
+        ->once()
+        ->with(
+            $menu->id,
+            $staff->id,
+            Mockery::on(function ($date) use ($selectedDate) {
+                return $date->format('Y-m-d') === $selectedDate;
+            })
+        )
+        ->andReturn([]);
+
+    $this->app->instance(
+        AvailabilityService::class,
+        $availabilityService
+    );
+
+    $response = $this->get(route('reservations.slots', [
+        'menu_id' => $menu->id,
+        'staff_id' => $staff->id,
+        'date' => $selectedDate,
+    ]));
+
+    $response->assertStatus(200);
+    $response->assertViewIs('reservations.slots');
+
+    $response->assertViewHas('menuId', $menu->id);
+    $response->assertViewHas('staffId', $staff->id);
+
+    $response->assertViewHas('date', function ($date) use ($selectedDate) {
+        return $date->format('Y-m-d') === $selectedDate;
+    });
+
+    $response->assertViewHas('slots', []);
+});
+
+test('営業時間に応じた空き枠を表示できる', function () {
+    $menu = Menu::create([
+        'name' => 'カット',
+        'duration' => 60,
+    ]);
+
+    $user = User::factory()->create();
+
+    $staff = (new Staff())->forceFill([
+        'user_id' => $user->id,
+        'role' => StaffRole::STAFF,
+        'name' => '担当スタッフ',
+    ]);
+    $staff->save();
+
+    StaffMenu::create([
+        'staff_id' => $staff->id,
+        'menu_id' => $menu->id,
+    ]);
+
+    $date = now()->addDays(7)->startOfDay();
+
+    BusinessHour::create([
+        'day_of_week' => $date->dayOfWeek,
+        'open_time' => '10:00',
+        'close_time' => '12:00',
+    ]);
+
+    $response = $this->get(route('reservations.slots', [
+        'menu_id' => $menu->id,
+        'staff_id' => $staff->id,
+        'date' => $date->format('Y-m-d'),
+    ]));
+
+    $response->assertStatus(200);
+    $response->assertViewIs('reservations.slots');
+
+    $response->assertSee('予約日：' . $date->format('Y年m月d日'));
+
+    $response->assertSee('10:00');
+    $response->assertSee('10:30');
+    $response->assertSee('11:00');
 });
 
 test('選択した予約情報を指定して顧客情報入力画面を表示できる', function () {
@@ -375,7 +476,25 @@ test('予約を登録して予約完了画面へリダイレクトできる', fu
 
     expect($reservation->status)->toBe(ReservationStatus::RESERVED);
 
-    Mail::assertSent(\App\Mail\ReservationConfirmationMail::class);
+    Mail::assertSent(
+        \App\Mail\ReservationConfirmationMail::class,
+        function ($mail) use ($reservation) {
+            $cancellationUrl = route('reservations.cancel.show', [
+                'reservation_number' => $reservation->reservation_number,
+                'token' => $mail->cancellationToken,
+            ]);
+
+            return $mail->reservation->is($reservation)
+                && \Illuminate\Support\Facades\Hash::check(
+                    $mail->cancellationToken,
+                    $reservation->cancellation_token,
+                )
+                && str_contains(
+                    $mail->render(),
+                    $cancellationUrl,
+                );
+        }
+    );
 });
 
 test('予約完了画面に予約情報を表示できる', function () {
