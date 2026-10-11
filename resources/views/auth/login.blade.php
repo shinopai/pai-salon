@@ -1,48 +1,66 @@
-<x-guest-layout>
-  <!-- Session Status -->
-  <x-auth-session-status class="mb-4" :status="session('status')" />
+<x-app-layout>
+  <div class="login">
+    <div class="u-wrap">
+      <header class="login__header">
+        <p class="login__eyebrow">WELCOME BACK</p>
+        <h1 class="login__title">ログイン</h1>
+        <p class="login__description">
+          メールアドレスとパスワードを入力してください。
+        </p>
+      </header>
 
-  <form method="POST" action="{{ route('login') }}" novalidate>
-    @csrf
+      <section class="login__section">
+        <x-auth-session-status class="login__status" :status="session('status')" />
 
-    <!-- Email Address -->
-    <div>
-      <x-input-label for="email" :value="__('Email')" />
-      <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
-        autofocus autocomplete="username" />
-      <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <form method="POST" action="{{ route('login') }}" class="login__form" novalidate>
+          @csrf
+
+          <div class="login__field">
+            <label for="email" class="login__label">
+              メールアドレス
+            </label>
+
+            @error('email')
+              <p class="u-error">{{ $message }}</p>
+            @enderror
+
+            <input id="email" type="email" name="email" value="{{ old('email') }}" class="login__input"
+              required autofocus autocomplete="username">
+          </div>
+
+          <div class="login__field">
+            <label for="password" class="login__label">
+              パスワード
+            </label>
+
+            @error('password')
+              <p class="u-error">{{ $message }}</p>
+            @enderror
+
+            <input id="password" type="password" name="password" class="login__input" required
+              autocomplete="current-password">
+          </div>
+
+          <div class="login__remember">
+            <label for="remember" class="login__remember-label">
+              <input id="remember" type="checkbox" name="remember" value="1" class="login__checkbox">
+              <span>ログイン状態を保持する</span>
+            </label>
+          </div>
+
+          <div class="login__actions u-flex">
+            @if (Route::has('password.request'))
+              <a href="{{ route('password.request') }}" class="login__forgot">
+                パスワードをお忘れですか？
+              </a>
+            @endif
+
+            <button type="submit" class="login__submit">
+              ログイン
+            </button>
+          </div>
+        </form>
+      </section>
     </div>
-
-    <!-- Password -->
-    <div class="mt-4">
-      <x-input-label for="password" :value="__('Password')" />
-
-      <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
-        autocomplete="current-password" />
-
-      <x-input-error :messages="$errors->get('password')" class="mt-2" />
-    </div>
-
-    <!-- Remember Me -->
-    <div class="block mt-4">
-      <label for="remember_me" class="inline-flex items-center">
-        <input id="remember_me" type="checkbox"
-          class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-        <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-      </label>
-    </div>
-
-    <div class="flex items-center justify-end mt-4">
-      @if (Route::has('password.request'))
-        <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          href="{{ route('password.request') }}">
-          {{ __('Forgot your password?') }}
-        </a>
-      @endif
-
-      <x-primary-button class="ms-3">
-        {{ __('Log in') }}
-      </x-primary-button>
-    </div>
-  </form>
-</x-guest-layout>
+  </div>
+</x-app-layout>
