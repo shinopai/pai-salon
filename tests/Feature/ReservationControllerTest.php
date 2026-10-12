@@ -301,7 +301,7 @@ test('入力した顧客情報を指定して予約確認画面を表示でき�
     $response->assertSee('customer@example.com');
 });
 
-test('予約確定時に既存予約と重複した場合は確認画面に戻り競合エラーを表示する', function () {
+test('予約確定時に既存予約と重複した場合は空き枠画面に戻り競合エラーを表示する', function () {
     Mail::fake();
 
     $menu = Menu::create([
@@ -351,17 +351,14 @@ test('予約確定時に既存予約と重複した場合は確認画面に戻�
         'customer_email' => 'customer@example.com',
     ]);
 
-    $response->assertRedirectToRoute('reservations.confirm', [
+    $response->assertRedirectToRoute('reservations.slots', [
         'menu_id' => $menu->id,
         'staff_id' => $staff->id,
         'date' => $startAt->format('Y-m-d'),
-        'start_at' => $startAt->format('Y-m-d H:i:s'),
-        'customer_name' => '新規顧客',
-        'customer_email' => 'customer@example.com',
     ]);
 
     $response->assertSessionHasErrors([
-        'start_at' => '選択した時間帯はすでに予約されています。',
+        'reservation_conflict' => 'この時間枠は他のお客様の予約が成立したため、現在ご予約いただけません。',
     ]);
 });
 

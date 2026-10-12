@@ -101,14 +101,25 @@ class ReservationController extends Controller
                 $request->validated()
             );
         } catch (ValidationException $e) {
+            if ($e->errors()['reservation_conflict'] ?? false) {
+                $data = $request->validated();
+
+                return redirect()
+                    ->route('reservations.slots', [
+                        'menu_id' => $data['menu_id'],
+                        'staff_id' => $data['staff_id'],
+                        'date' => Carbon::parse($data['start_at'])->format('Y-m-d'),
+                    ])
+                    ->withErrors($e->errors());
+            }
+
             $data = $request->validated();
 
             return redirect()
                 ->route('reservations.confirm', [
                     'menu_id' => $data['menu_id'],
                     'staff_id' => $data['staff_id'],
-                    'date' => Carbon::parse($data['start_at'])
-                        ->format('Y-m-d'),
+                    'date' => Carbon::parse($data['start_at'])->format('Y-m-d'),
                     'start_at' => $data['start_at'],
                     'customer_name' => $data['customer_name'],
                     'customer_email' => $data['customer_email'],
@@ -121,6 +132,7 @@ class ReservationController extends Controller
             'reservation_number' => $reservation->reservation_number,
         ]);
     }
+
     public function complete(Request $request)
     {
         $reservation = Reservation::query()

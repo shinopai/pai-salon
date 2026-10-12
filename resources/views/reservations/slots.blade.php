@@ -2,6 +2,11 @@
   <section class="reservations-slots">
     <div class="reservations-slots__inner u-wrap">
       <div class="reservations-slots__heading">
+        @if ($errors->has('reservation_conflict'))
+          <div class="u-error" role="alert">
+            {{ $errors->first('reservation_conflict') }}
+          </div>
+        @endif
         <p class="reservations-slots__eyebrow">WEB RESERVATION</p>
 
         <h1 class="reservations-slots__title">

@@ -73,7 +73,7 @@ class ReservationService
 
             if ($existingReservations->isNotEmpty()) {
                 throw ValidationException::withMessages([
-                    'start_at' => '選択した時間帯はすでに予約されています。',
+                    'reservation_conflict' => 'この時間枠は他のお客様の予約が成立したため、現在ご予約いただけません。',
                 ]);
             }
 
