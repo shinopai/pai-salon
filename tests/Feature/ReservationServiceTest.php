@@ -69,35 +69,108 @@ test('スタッフが対応できないメニューでは予約できない', fu
     ])))->toThrow(ValidationException::class);
 });
 
+test('存在しないメニューIDでは予約登録できない', function () {
+    $nonexistentMenuId = Menu::query()->max('id') + 1;
+
+    $startAt = now()->addDays(7)->setTime(10, 0);
+
+    expect(fn() => $this->service->reserve(validPayload([
+        'staff_id' => $this->staff->id,
+        'menu_id' => $nonexistentMenuId,
+        'start_at' => $startAt,
+    ])))->toThrow(
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class
+    );
+
+    expect(Reservation::query()->count())->toBe(0);
+});
+
+test('存在しないスタッフIDでは予約登録できない', function () {
+    $nonexistentStaffId = Staff::query()->max('id') + 1;
+
+    $startAt = now()->addDays(7)->setTime(10, 0);
+
+    expect(fn() => $this->service->reserve(validPayload([
+        'staff_id' => $nonexistentStaffId,
+        'menu_id' => $this->menu->id,
+        'start_at' => $startAt,
+    ])))->toThrow(
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class
+    );
+
+    expect(Reservation::query()->count())->toBe(0);
+});
+
 test('営業時間外の予約を拒否する', function () {
     $startAt = now()->addDays(7)->setTime(19, 30);
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '09:00:00',
+        'close_time' => '18:00:00',
+    ]);
 
     expect(fn() => $this->service->reserve(validPayload([
         'staff_id' => $this->staff->id,
         'menu_id' => $this->menu->id,
         'start_at' => $startAt,
     ])))->toThrow(ValidationException::class);
+
+    expect(Reservation::query()->count())->toBe(0);
+});
+
+test('営業時間が設定されていない曜日は予約できない', function () {
+    $startAt = now()->addDays(7)->setTime(10, 0);
+
+    BusinessHour::query()
+        ->where('day_of_week', $startAt->dayOfWeek)
+        ->delete();
+
+    expect(fn() => $this->service->reserve(validPayload([
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $startAt,
+    ])))->toThrow(ValidationException::class);
+
+    expect(Reservation::query()->count())->toBe(0);
 });
 
 test('2か月を超える予約を拒否する', function () {
     $startAt = now()->addMonthsNoOverflow(2)->addDay()->setTime(10, 0);
 
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '09:00:00',
+        'close_time' => '20:00:00',
+    ]);
+
     expect(fn() => $this->service->reserve(validPayload([
         'staff_id' => $this->staff->id,
         'menu_id' => $this->menu->id,
         'start_at' => $startAt,
     ])))->toThrow(ValidationException::class);
+
+    expect(Reservation::query()->count())->toBe(0);
 });
 
 test('当日の3時間未満の予約を拒否する', function () {
     Carbon::setTestNow('2026-09-05 09:00:00');
+
     $startAt = Carbon::parse('2026-09-05 11:30:00');
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '09:00:00',
+        'close_time' => '18:00:00',
+    ]);
 
     expect(fn() => $this->service->reserve(validPayload([
         'staff_id' => $this->staff->id,
         'menu_id' => $this->menu->id,
         'start_at' => $startAt,
     ])))->toThrow(ValidationException::class);
+
+    expect(Reservation::query()->count())->toBe(0);
 });
 
 test('既存予約と重複する予約を拒否する', function () {
@@ -504,6 +577,40 @@ test('予約確認メールの送信に失敗しても予約は登録されエ�
     )->toBeTrue();
 });
 
+test('予約登録時に予約情報をデータベースへ保存する', function () {
+    $startAt = now()->addDays(7)->setTime(10, 0);
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '09:00',
+        'close_time' => '20:00',
+    ]);
+
+    $reservation = $this->service->reserve(validPayload([
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $startAt,
+        'customer_name' => '予約登録テスト顧客',
+        'customer_email' => 'reservation-insert@example.com',
+    ]));
+
+    expect($reservation->exists)->toBeTrue();
+
+    $this->assertDatabaseHas('reservations', [
+        'id' => $reservation->id,
+        'reservation_number' => $reservation->reservation_number,
+        'customer_id' => $reservation->customer_id,
+        'customer_name' => '予約登録テスト顧客',
+        'customer_email' => 'reservation-insert@example.com',
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $startAt->toDateTimeString(),
+        'end_at' => $startAt->copy()->addMinutes($this->menu->duration)->toDateTimeString(),
+        'status' => ReservationStatus::RESERVED->value,
+    ]);
+});
+
+
 test('予約を更新できる', function () {
     $startAt = now()->addDays(7)->setTime(10, 0);
     $updatedStartAt = $startAt->copy()->addHours(2);
@@ -596,6 +703,24 @@ test('予約更新時にメニュー変更に応じて終了時刻を再計算�
     expect($updatedReservation->end_at->equalTo(
         $startAt->copy()->addHours(2)
     ))->toBeTrue();
+});
+
+test('メニューの所要時間を含めて閉店時刻を超える予約を拒否する', function () {
+    $startAt = now()->addDays(7)->setTime(17, 30);
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '09:00:00',
+        'close_time' => '18:00:00',
+    ]);
+
+    expect(fn() => $this->service->reserve(validPayload([
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $startAt,
+    ])))->toThrow(ValidationException::class);
+
+    expect(Reservation::query()->count())->toBe(0);
 });
 
 test('予約更新時に既存予約と重複する場合は拒否する', function () {
@@ -715,6 +840,23 @@ test('予約更新時にスタッフが対応していないメニューへの�
         'start_at' => $startAt,
         'status' => ReservationStatus::RESERVED,
     ]))->toThrow(ValidationException::class);
+});
+
+test('臨時休業日は予約できない', function () {
+    $startAt = now()->addDays(7)->setTime(10, 0);
+
+    Holiday::create([
+        'date' => $startAt->toDateString(),
+        'reason' => '臨時休業'
+    ]);
+
+    expect(fn() => $this->service->reserve(validPayload([
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $startAt,
+    ])))->toThrow(ValidationException::class);
+
+    expect(Reservation::query()->count())->toBe(0);
 });
 
 test('予約更新時に休業日への変更を拒否する', function () {
