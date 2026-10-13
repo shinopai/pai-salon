@@ -1165,3 +1165,83 @@ test('完了済み予約をキャンセルに変更することはできない',
         'status' => ReservationStatus::CANCELLED,
     ]))->toThrow(ValidationException::class);
 });
+
+test('完了済み予約は同じステータスのまま予約情報を更新できる', function () {
+    $startAt = now()->addDays(7)->setTime(10, 0);
+    $updatedStartAt = $startAt->copy()->addDays(1);
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    BusinessHour::create([
+        'day_of_week' => $updatedStartAt->dayOfWeek,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $reservation = createReservation([
+        'customer_name' => 'テスト顧客',
+        'customer_email' => 'completed-same-status@example.com',
+        'reservation_number' => 'SVC-TEST-UPDATE-017',
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $startAt,
+        'end_at' => $startAt->copy()->addHour(),
+        'status' => ReservationStatus::COMPLETED,
+        'cancellation_token' => 'hashed-token-update-017',
+    ]);
+
+    $updatedReservation = $this->service->update($reservation, [
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $updatedStartAt,
+        'status' => ReservationStatus::COMPLETED,
+    ]);
+
+    expect($updatedReservation->status)->toBe(ReservationStatus::COMPLETED)
+        ->and($updatedReservation->start_at->toDateTimeString())
+        ->toBe($updatedStartAt->toDateTimeString());
+});
+
+test('キャンセル済み予約は同じステータスのまま予約情報を更新できる', function () {
+    $startAt = now()->addDays(7)->setTime(10, 0);
+    $updatedStartAt = $startAt->copy()->addDays(1);
+
+    BusinessHour::create([
+        'day_of_week' => $startAt->dayOfWeek,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    BusinessHour::create([
+        'day_of_week' => $updatedStartAt->dayOfWeek,
+        'open_time' => '10:00',
+        'close_time' => '20:00',
+    ]);
+
+    $reservation = createReservation([
+        'customer_name' => 'テスト顧客',
+        'customer_email' => 'cancelled-same-status@example.com',
+        'reservation_number' => 'SVC-TEST-UPDATE-018',
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $startAt,
+        'end_at' => $startAt->copy()->addHour(),
+        'status' => ReservationStatus::CANCELLED,
+        'cancellation_token' => 'hashed-token-update-018',
+    ]);
+
+    $updatedReservation = $this->service->update($reservation, [
+        'staff_id' => $this->staff->id,
+        'menu_id' => $this->menu->id,
+        'start_at' => $updatedStartAt,
+        'status' => ReservationStatus::CANCELLED,
+    ]);
+
+    expect($updatedReservation->status)->toBe(ReservationStatus::CANCELLED)
+        ->and($updatedReservation->start_at->toDateTimeString())
+        ->toBe($updatedStartAt->toDateTimeString());
+});
