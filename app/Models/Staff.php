@@ -34,7 +34,7 @@ class Staff extends Model
     }
 
     /**
-     * ユーザー情報とのリレーション（1対多）
+     * ユーザー情報とのリレーション（1対1）
      */
     public function user(): BelongsTo
     {
@@ -51,6 +51,6 @@ class Staff extends Model
 
     public function menus(): BelongsToMany
     {
-        return $this->belongsToMany(Menu::class, 'staff_menus');
+        return $this->belongsToMany(Menu::class, 'staff_menus')->withTimestamps();
     }
 }

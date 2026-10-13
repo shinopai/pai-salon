@@ -23,7 +23,7 @@ class Menu extends Model
      */
     public function staffs(): BelongsToMany
     {
-        return $this->belongsToMany(Staff::class, 'staff_menus');
+        return $this->belongsToMany(Staff::class, 'staff_menus')->withTimestamps();
     }
 
     /**
