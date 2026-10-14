@@ -54,3 +54,47 @@ test('不正なハッシュではメールアドレスを認証できない', fu
 
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
+
+test('署名が無効なURLではメールアドレスを認証できない', function () {
+    $user = User::factory()->unverified()->create();
+
+    $url = URL::temporarySignedRoute(
+        'verification.verify',
+        now()->addMinutes(60),
+        [
+            'id' => $user->id,
+            'hash' => sha1($user->email),
+        ]
+    );
+
+    $tamperedUrl = str_replace(
+        'signature=',
+        'signature=invalid',
+        $url
+    );
+
+    $response = $this->actingAs($user)->get($tamperedUrl);
+
+    $response->assertStatus(403);
+
+    expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
+});
+
+test('期限切れのURLではメールアドレスを認証できない', function () {
+    $user = User::factory()->unverified()->create();
+
+    $url = URL::temporarySignedRoute(
+        'verification.verify',
+        now()->subMinute(),
+        [
+            'id' => $user->id,
+            'hash' => sha1($user->email),
+        ]
+    );
+
+    $response = $this->actingAs($user)->get($url);
+
+    $response->assertStatus(403);
+
+    expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
+});

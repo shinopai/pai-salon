@@ -331,30 +331,10 @@ test('管理者は他のユーザーが使用中のメールアドレスには�
     ]);
 });
 
-test('一般スタッフは管理者スタッフ一覧にアクセスできない', function () {
-    $user = User::factory()->create([
-        'email' => 'staff@example.com',
-    ]);
-
-    Staff::forceCreate([
-        'user_id' => $user->id,
-        'name' => '一般スタッフ',
-        'role' => StaffRole::STAFF,
-    ]);
-
-    $this->actingAs($user);
-
-    $response = $this->get(
-        route('admin.staffs.index')
-    );
-
-    $response->assertForbidden();
-});
-
 test('管理者は管理者スタッフ一覧にアクセスできる', function () {
     $user = User::factory()->create([
         'email' => 'admin@example.com',
-    ]);
+    ]);q
 
     Staff::forceCreate([
         'user_id' => $user->id,
@@ -481,4 +461,24 @@ test('管理者は予約があるスタッフを削除できない', function ()
         ->delete(route('admin.staffs.destroy', $staff));
 
     expect(Staff::find($staff->id))->not->toBeNull();
+});
+
+test('一般スタッフは管理者スタッフ一覧にアクセスできない', function () {
+    $user = User::factory()->create([
+        'email' => 'staff@example.com',
+    ]);
+
+    Staff::forceCreate([
+        'user_id' => $user->id,
+        'name' => 'テストスタッフ',
+        'role' => StaffRole::STAFF,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->get(
+        route('admin.staffs.index')
+    );
+
+    $response->assertForbidden();
 });
