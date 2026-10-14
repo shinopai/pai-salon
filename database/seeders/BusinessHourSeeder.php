@@ -51,7 +51,13 @@ class BusinessHourSeeder extends Seeder
         ];
 
         foreach ($businessHours as $businessHour) {
-            BusinessHour::create($businessHour);
+            BusinessHour::updateOrCreate(
+                ['day_of_week' => $businessHour['day_of_week']],
+                [
+                    'open_time' => $businessHour['open_time'],
+                    'close_time' => $businessHour['close_time'],
+                ],
+            );
         }
     }
 }

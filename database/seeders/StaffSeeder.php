@@ -7,6 +7,7 @@ use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use RuntimeException;
 
 class StaffSeeder extends Seeder
 {
@@ -15,6 +16,16 @@ class StaffSeeder extends Seeder
      */
     public function run(): void
     {
+        $password = app()->environment('production')
+            ? env('PAISALON_INITIAL_STAFF_PASSWORD')
+            : 'password';
+
+        if (! is_string($password) || $password === '') {
+            throw new RuntimeException(
+                '本番環境では PAISALON_INITIAL_STAFF_PASSWORD の設定が必要です。'
+            );
+        }
+
         $staffs = [
             [
                 'name' => '佐藤',
@@ -39,16 +50,22 @@ class StaffSeeder extends Seeder
         ];
 
         foreach ($staffs as $staffData) {
-            $user = User::create([
-                'email' => $staffData['email'],
-                'password' => Hash::make('password'),
+            $user = User::firstOrCreate(
+                ['email' => $staffData['email']],
+                ['password' => Hash::make($password)],
+            );
+
+            $staff = Staff::query()->firstOrNew([
+                'user_id' => $user->id,
             ]);
 
-            Staff::create([
-                'user_id' => $user->id,
-                'name' => $staffData['name'],
-                'role' => $staffData['role'],
-            ]);
+            if (! $staff->exists) {
+                $staff->forceFill([
+                    'user_id' => $user->id,
+                    'name' => $staffData['name'],
+                    'role' => $staffData['role'],
+                ])->save();
+            }
         }
     }
 }

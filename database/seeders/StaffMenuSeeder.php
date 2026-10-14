@@ -52,7 +52,7 @@ class StaffMenuSeeder extends Seeder
             foreach ($menuNames as $menuName) {
                 $menu = Menu::where('name', $menuName)->firstOrFail();
 
-                $staff->menus()->attach($menu->id);
+                $staff->menus()->syncWithoutDetaching([$menu->id]);
             }
         }
     }
