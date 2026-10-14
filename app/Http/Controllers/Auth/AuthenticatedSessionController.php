@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\StaffRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -29,7 +30,7 @@ class AuthenticatedSessionController extends Controller
 
         $user = $request->user();
 
-        $defaultRoute = $user?->staff?->role->value === 'admin'
+        $defaultRoute = $user?->staff?->role === StaffRole::ADMIN
             ? route('admin.dashboard', absolute: false)
             : route('staff.dashboard', absolute: false);
 
