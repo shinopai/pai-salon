@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\staff;
-use Illuminate\Auth\Access\Response;
 
 class StaffPolicy
 {
@@ -43,7 +42,7 @@ class StaffPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, staff $staff): bool
+    public function delete(User $user, Staff $staff): bool
     {
         return false;
     }
@@ -51,7 +50,7 @@ class StaffPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, staff $staff): bool
+    public function restore(User $user, Staff $staff): bool
     {
         return false;
     }
@@ -59,7 +58,7 @@ class StaffPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, staff $staff): bool
+    public function forceDelete(User $user, Staff $staff): bool
     {
         return false;
     }

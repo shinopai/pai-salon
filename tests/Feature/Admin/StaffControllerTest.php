@@ -334,7 +334,7 @@ test('管理者は他のユーザーが使用中のメールアドレスには�
 test('管理者は管理者スタッフ一覧にアクセスできる', function () {
     $user = User::factory()->create([
         'email' => 'admin@example.com',
-    ]);q
+    ]);
 
     Staff::forceCreate([
         'user_id' => $user->id,
