@@ -58,3 +58,41 @@ test('データベース例外の詳細がログに記録される', function ()
     expect($log)
         ->toContain('テスト用のデータベース接続エラー');
 });
+
+test('予期しない例外のログにセッション情報やDB認証情報が含まれない', function () {
+    config(['app.debug' => false]);
+
+    $logPath = storage_path('logs/laravel.log');
+    $originalSize = file_exists($logPath) ? filesize($logPath) : 0;
+
+    $sensitiveValues = [
+        'ERR013_TEST_DB_PASSWORD_7xK9',
+        'ERR013_TEST_DB_USERNAME_4pR2',
+        'ERR013_TEST_SESSION_SECRET_8mQ5',
+    ];
+
+    config([
+        'database.connections.mysql.username' => $sensitiveValues[1],
+        'database.connections.mysql.password' => $sensitiveValues[0],
+    ]);
+
+    session(['err013_test_session_secret' => $sensitiveValues[2]]);
+
+    Route::get('/test-sensitive-error-log', function () {
+        throw new RuntimeException('ERR013_TEST_EXCEPTION');
+    });
+
+    $response = $this->get('/test-sensitive-error-log');
+
+    $response->assertStatus(500);
+
+    clearstatcache(true, $logPath);
+
+    $log = file_exists($logPath)
+        ? file_get_contents($logPath, false, null, $originalSize)
+        : '';
+
+    foreach ($sensitiveValues as $sensitiveValue) {
+        expect($log)->not->toContain($sensitiveValue);
+    }
+});
