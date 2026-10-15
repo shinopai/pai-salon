@@ -473,7 +473,7 @@ test('予約登録時にキャンセル用トークンをハッシュ化して�
     expect($reservation->cancellation_token)
         ->not->toBeNull()
         ->not->toBeEmpty();
-})->skip('トークンのハッシュ化仕様確定まで保留');
+});
 
 test('予約登録が成功すると予約確認メールを送信する', function () {
     Mail::fake();
