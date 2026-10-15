@@ -30,3 +30,31 @@ test('予期しない例外が発生した場合はシステムエラー画面�
     $response->assertSee('時間をおいて、もう一度お試しください。');
     $response->assertDontSee('テスト用の内部エラー');
 });
+
+test('データベース例外の詳細がログに記録される', function () {
+    config(['app.debug' => false]);
+
+    $logPath = storage_path('logs/laravel.log');
+    $originalSize = file_exists($logPath) ? filesize($logPath) : 0;
+
+    Route::get('/test-database-error-log', function () {
+        throw new \Illuminate\Database\QueryException(
+            'test_connection',
+            'select * from test_table',
+            [],
+            new \PDOException('テスト用のデータベース接続エラー'),
+        );
+    });
+
+    $response = $this->get('/test-database-error-log');
+
+    $response->assertStatus(500);
+
+    clearstatcache(true, $logPath);
+    $log = file_exists($logPath)
+        ? file_get_contents($logPath, false, null, $originalSize)
+        : '';
+
+    expect($log)
+        ->toContain('テスト用のデータベース接続エラー');
+});
