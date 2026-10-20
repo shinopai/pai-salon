@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -42,7 +43,35 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $credentials = $this->only('email', 'password');
+
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
+            $provider = Auth::getProvider();
+
+            $user = $provider->retrieveByCredentials($credentials);
+
+            $diagnostic = [
+                'message' => 'Login diagnostic',
+                'database_connection' => DB::connection()->getName(),
+                'database_name' => DB::connection()->getDatabaseName(),
+                'auth_guard' => config('auth.defaults.guard'),
+                'auth_provider_model' => config('auth.providers.users.model'),
+                'email_exists' => DB::table('users')
+                    ->where('email', $this->input('email'))
+                    ->exists(),
+                'provider_user_found' => $user !== null,
+                'password_matches' => $user !== null
+                    ? $provider->validateCredentials($user, [
+                        'password' => $this->input('password'),
+                    ])
+                    : false,
+            ];
+
+            error_log(json_encode(
+                $diagnostic,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            ));
+
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -77,10 +106,12 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Get the rate limiting throttle key for the request.
+     * Get the rate limiting throttle key for the login request.
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(
+            Str::lower($this->string('email')) . '|' . $this->ip()
+        );
     }
 }
