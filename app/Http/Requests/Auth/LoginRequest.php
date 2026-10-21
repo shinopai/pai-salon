@@ -65,6 +65,12 @@ class LoginRequest extends FormRequest
                         'password' => $this->input('password'),
                     ])
                     : false,
+                'hash_driver' => config('hashing.driver'),
+                'bcrypt_rounds' => config('hashing.bcrypt.rounds'),
+                'hash_verify' => config('hashing.verify'),
+                'password_length' => mb_strlen($this->input('password')),
+                'password_has_outer_whitespace' =>
+                $this->input('password') !== trim($this->input('password'))
             ];
 
             error_log(json_encode(
