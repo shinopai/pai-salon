@@ -46,38 +46,6 @@ class LoginRequest extends FormRequest
         $credentials = $this->only('email', 'password');
 
         if (! Auth::attempt($credentials, $this->boolean('remember'))) {
-            $provider = Auth::getProvider();
-
-            $user = $provider->retrieveByCredentials($credentials);
-
-            $diagnostic = [
-                'message' => 'Login diagnostic',
-                'database_connection' => DB::connection()->getName(),
-                'database_name' => DB::connection()->getDatabaseName(),
-                'auth_guard' => config('auth.defaults.guard'),
-                'auth_provider_model' => config('auth.providers.users.model'),
-                'email_exists' => DB::table('users')
-                    ->where('email', $this->input('email'))
-                    ->exists(),
-                'provider_user_found' => $user !== null,
-                'password_matches' => $user !== null
-                    ? $provider->validateCredentials($user, [
-                        'password' => $this->input('password'),
-                    ])
-                    : false,
-                'hash_driver' => config('hashing.driver'),
-                'bcrypt_rounds' => config('hashing.bcrypt.rounds'),
-                'hash_verify' => config('hashing.verify'),
-                'password_length' => mb_strlen($this->input('password')),
-                'password_has_outer_whitespace' =>
-                $this->input('password') !== trim($this->input('password'))
-            ];
-
-            error_log(json_encode(
-                $diagnostic,
-                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-            ));
-
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
